@@ -1,0 +1,9 @@
+#!/bin/sh
+#
+
+set -e
+
+echo '+cargo test --all'
+cargo test --all
+echo '+cargo clippy --all -- -D warnings'
+cargo clippy --all -- -D warnings
