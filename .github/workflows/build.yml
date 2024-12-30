@@ -1,0 +1,48 @@
+name: Build
+
+on:
+ pull_request:
+   branches: [ "main" ]
+
+env:
+ CARGO_TERM_COLOR: always
+
+jobs:
+ build:
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v4
+     
+     - name: Restore Cargo cache
+       uses: actions/cache/restore@v4
+       with:
+         path: |
+           ~/.cargo/bin/
+           ~/.cargo/registry/index/
+           ~/.cargo/registry/cache/
+           ~/.cargo/git/db/
+           target/
+         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+         
+     - name: Build
+       run: |
+         cargo build --verbose
+         cargo clippy --all -- -D warnings
+         cargo fmt -- --check
+         cargo test --all
+         
+     - name: Run tests
+       run: |
+         cargo test --verbose
+         cargo test --all-features
+         
+     - name: Cache Cargo artifacts
+       uses: actions/cache@v4
+       with:
+         path: |
+           ~/.cargo/bin/
+           ~/.cargo/registry/index/
+           ~/.cargo/registry/cache/
+           ~/.cargo/git/db/
+           target/
+         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
