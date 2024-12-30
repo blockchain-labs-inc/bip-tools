@@ -1,0 +1,70 @@
+name: Release
+
+on:
+ push:
+   tags:
+     - "v*.*.*"
+
+jobs:
+ publish:
+   name: Publish for ${{ matrix.os }}
+   runs-on: ${{ matrix.os }}
+   permissions:
+     contents: write
+   strategy:
+     fail-fast: false
+     matrix:
+       include:
+         - os: ubuntu-latest
+           artifact_name: bip-tools
+           asset_name: bip-tools-linux-amd64
+         - os: windows-latest
+           artifact_name: bip-tools.exe
+           asset_name: bip-tools-windows-amd64.exe
+         - os: macos-latest
+           artifact_name: bip-tools
+           asset_name: bip-tools-darwin-amd64.dmg
+
+   steps:
+     - uses: actions/checkout@v4
+
+     - name: Restore Cargo cache
+       uses: actions/cache/restore@v4
+       with:
+         path: |
+           ~/.cargo/bin/
+           ~/.cargo/registry/index/
+           ~/.cargo/registry/cache/
+           ~/.cargo/git/db/
+           target/
+         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+     - name: Install Rust GNU toolchain
+       if: matrix.os == 'windows-latest'
+       run: rustup default stable-x86_64-pc-windows-gnu
+
+     - name: Build
+       run: |
+         cargo build --release --verbose
+         cargo clippy --all -- -D warnings
+         cargo fmt -- --check
+         cargo test --all
+
+     - name: Cache Cargo artifacts
+       uses: actions/cache@v4
+       with:
+         path: |
+           ~/.cargo/bin/
+           ~/.cargo/registry/index/
+           ~/.cargo/registry/cache/
+           ~/.cargo/git/db/
+           target/
+         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+     - name: Upload binaries to release
+       uses: svenstaro/upload-release-action@v2
+       with:
+         repo_token: ${{ secrets.GITHUB_TOKEN }}
+         file: target/release/${{ matrix.artifact_name }}
+         asset_name: ${{ matrix.asset_name }}
+         tag: ${{ github.ref }}
