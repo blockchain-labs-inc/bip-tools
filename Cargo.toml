@@ -1,0 +1,23 @@
+[package]
+name = "bip-tools"
+version = "0.1.1"
+authors = ["Yigit Gurbulak, yigitgurbulak4@gmail.com"]
+edition = "2021"
+description = "A simple command-line tool to derive Bitcoin addresses from an extended public key"
+
+[dependencies]
+secp256k1 = "0.27"
+hmac = "0.12"
+sha2 = "0.10"
+ripemd = "0.1"
+base58 = "0.2"
+clap = { version = "4.5.16", features = ["derive"] }
+
+[dev-dependencies.cargo-husky]
+version = "1.5.0"
+# Disable features which are enabled by default
+default-features = true
+features = ["user-hooks"]
+
+[package.metadata.bin]
+commitlint-rs = { version = "0.1.11", bins = ["commitlint"] }
