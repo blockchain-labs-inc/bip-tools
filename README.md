@@ -68,7 +68,7 @@ bip-tools bip32
 
 Example:
 ```bash
-bip-tools bip32 "xpub6CUGRUo..." 5
+cargo run bip32 "xpub6CUGRUo..." 5
 ```
 
 ### BIP44 Address Generation
@@ -79,7 +79,7 @@ bip-tools bip44
 
 Example:
 ```bash
-bip-tools bip44 "xpub6CUGRUo..." 5
+cargo run bip44 "xpub6CUGRUo..." 5
 ```
 
 ### CLI Options
