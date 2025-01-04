@@ -5,6 +5,10 @@ authors = ["Yigit Gurbulak, yigitgurbulak4@gmail.com"]
 edition = "2021"
 description = "A simple command-line tool to derive Bitcoin addresses from an extended public key"
 
+[[bin]]
+name = "bip-tools"
+path = "src/main.rs"
+
 [dependencies]
 secp256k1 = "0.27"
 hmac = "0.12"
