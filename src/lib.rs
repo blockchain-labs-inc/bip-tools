@@ -89,7 +89,10 @@ impl Xpub {
         // Add public key (33 bytes)
         data.extend_from_slice(&self.public_key.serialize());
 
+        // Calculate double SHA256 checksum (first 4 bytes)
         let checksum = &Sha256::digest(Sha256::digest(&data))[..4];
+        
+        // Append checksum to data
         data.extend_from_slice(checksum);
 
         // Encode as Base58
