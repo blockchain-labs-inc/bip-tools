@@ -89,6 +89,9 @@ impl Xpub {
         // Add public key (33 bytes)
         data.extend_from_slice(&self.public_key.serialize());
 
+        let checksum = &Sha256::digest(Sha256::digest(&data))[..4];
+        data.extend_from_slice(checksum);
+
         // Encode as Base58
         data.to_base58()
     }
@@ -188,7 +191,7 @@ impl Xpub {
     pub fn derive_bip44_addresses(&self, count: u32) -> Result<Vec<String>, String> {
         let mut addresses = Vec::with_capacity(count as usize);
         
-        // BIP44 path: m/44'/0'/0'/0/i
+        //BIP44 path: m/44'/0'/0'/0/i
         let account = match self.derive_non_hardened(0) {
             Ok(acc) => acc,
             Err(e) => return Err(format!("Error deriving account: {}", e)),
@@ -211,7 +214,7 @@ impl Xpub {
 
     /// Calculates the fingerprint (first 4 bytes of HASH160) of the current public key.
     /// Used for child key derivation and parent identification.
-    fn fingerprint(&self) -> u32 {
+    pub fn fingerprint(&self) -> u32 {
         let hash = Sha256::digest(self.public_key.serialize());
         let hash160 = ripemd::Ripemd160::digest(hash);
 
