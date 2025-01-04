@@ -117,11 +117,11 @@ biptools/
 │ ├── CONTRIBUTING.md      # Development workflow and contribution rules
 │ └── SECURITY.md          # Security policies and vulnerability reporting
 ├── src/
-│   ├── lib.rs     - Core library implementation (Xpub struct and functionality)
-│   └── main.rs    - CLI implementation
+│ ├── lib.rs     - Core library implementation (Xpub struct and functionality)
+│ └── main.rs    - CLI implementation
 ├── tests/
-│   ├── bip32_vectors.rs     
-│   └── bip44_vectors.rs  
+│ ├── bip32_vectors.rs     
+│ └── bip44_vectors.rs  
 ├── Cargo.toml     - Project dependencies and metadata
 └── README.md      - This file
 ```
