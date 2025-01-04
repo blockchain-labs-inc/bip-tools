@@ -19,6 +19,14 @@ mod bip44_test {
     // Version bytes for mainnet xpub
     const MAINNET_VERSION: [u8; 4] = [0x04, 0x88, 0xB2, 0x1E];
 
+    // Helper function to get test public key
+    fn get_test_public_key() -> secp256k1::PublicKey {
+        let decoded = TEST_XPUB.from_base58().unwrap();
+        secp256k1::PublicKey::from_slice(&decoded[45..78]).unwrap()
+    }
+
+
+
     #[test]
     fn test_bip44_xpub_from_base58() {
         // Test valid and invalid xpub parsing
@@ -27,6 +35,10 @@ mod bip44_test {
 
         let invalid_xpub: &str = "invalid_xpub_string";
         assert!(Xpub::from_base58(invalid_xpub).is_err(), "Should fail with invalid xpub");
+
+        // Test invalid length
+        let short_xpub = "xpub6CQrEh7fCh2";
+        assert!(Xpub::from_base58(short_xpub).is_err(), "Should fail with short xpub");
     }
 
     #[test]
@@ -36,6 +48,11 @@ mod bip44_test {
         let encoded = xpub.to_base58();
 
         assert_eq!(encoded, TEST_XPUB, "Base58 encoding should match original xpub");
+
+        // Additional encoding checks
+        let decoded = encoded.from_base58().unwrap();
+        assert_eq!(decoded[4], xpub.depth, "Depth should be preserved in encoding");
+        assert_eq!(&decoded[0..4], &MAINNET_VERSION, "Version bytes should be preserved");
     }
 
     #[test]
