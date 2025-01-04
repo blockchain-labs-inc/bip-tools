@@ -119,6 +119,9 @@ biptools/
 ├── src/
 │   ├── lib.rs     - Core library implementation (Xpub struct and functionality)
 │   └── main.rs    - CLI implementation
+├── tests/
+│   ├── bip32_vectors.rs     
+│   └── bip44_vectors.rs  
 ├── Cargo.toml     - Project dependencies and metadata
 └── README.md      - This file
 ```
