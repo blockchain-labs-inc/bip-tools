@@ -4,6 +4,7 @@ use bip_tools::Xpub;
 mod bip32_tests {
     use crate::Xpub;
     use base58::FromBase58;
+    use secp256k1::PublicKey;
     use sha2::{Sha256, Digest};
 
     // Test data for mainnet BIP32 derivation
@@ -19,14 +20,43 @@ mod bip32_tests {
     // Version bytes for mainnet xpub
     const MAINNET_VERSION: [u8; 4] = [0x04, 0x88, 0xB2, 0x1E];
 
+    // Helper function to get test public key 
+    fn get_test_public_key() -> PublicKey {
+        let decoded = TEST_XPUB.from_base58().unwrap();
+        PublicKey::from_slice(&decoded[45..78]).unwrap()
+    }
+
+    #[test]
+    fn test_xpub_new() {
+        let depth: u8 = 0;
+        let parent_fingerprint: u32 = 0;
+        let child_number: u32 = 0;
+        let chain_code: [u8; 32] = [0; 32];
+        let public_key = get_test_public_key();
+
+        let xpub = Xpub::new(depth, parent_fingerprint, child_number, chain_code, public_key);
+
+        assert_eq!(xpub.depth, depth, "Depth should match");
+        assert_eq!(xpub.parent_fingerprint, parent_fingerprint, "Parent fingerprint should match");
+        assert_eq!(xpub.child_number, child_number, "Child number should match");
+        assert_eq!(xpub.chain_code, chain_code, "Chain code should match");
+        assert_eq!(xpub.public_key, public_key, "Public key should match");
+
+    }
+
     #[test]
     fn test_xpub_from_base58() {
         // Test valid and invalid xpub parsing
         let xpub = Xpub::from_base58(TEST_XPUB);
         assert!(xpub.is_ok(), "Failed to parse valid xpub");
 
+        // Test invalid xpub string
         let invalid_xpub: &str = "invalid_xpub_string";
         assert!(Xpub::from_base58(invalid_xpub).is_err(), "Should fail with invalid xpub");
+
+        // Test invalid length
+        let short_xpub: &str = "invalid_xpub_string";
+        assert!(Xpub::from_base58(short_xpub).is_err(), "Should fail with invalid xpub");
     }
 
     #[test]
@@ -35,24 +65,25 @@ mod bip32_tests {
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
         let derived_addresses = xpub.derive_bip32_addresses(3).unwrap();
         
-        println!("Base58 Comparison:");
-        println!("Expected XPUB: {}", TEST_XPUB);
-        println!("Actual XPUB:   {}\n", xpub.to_base58());
-        
-        assert_eq!(
-            derived_addresses[0], 
-            EXPECTED_BIP32_ADDRESSES[0],
-            "\nExpected address: {}\nGenerated address: {}", 
-            EXPECTED_BIP32_ADDRESSES[0],
-            derived_addresses[0]
-    );
+        for (i, addr) in derived_addresses.iter().enumerate() {
+            assert_eq!(
+                addr, 
+                EXPECTED_BIP32_ADDRESSES[i],
+                "Address {} mismatch. Expected: {}, Got: {}", 
+                i, EXPECTED_BIP32_ADDRESSES[i], addr
+            );
+        }
 }
 
     #[test]
     fn test_invalid_derivation_index() {
         // Verify hardened derivation is rejected for xpub
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+        // Test hardened index
         assert!(xpub.derive_non_hardened(0x80000000).is_err(), "Should fail with hardened index");
+        
+        // Test maximum allowed index
+        assert!(xpub.derive_non_hardened(0x7FFFFFFF).is_ok(), "Should accept max non-hardened index");
     }
 
     #[test]
@@ -60,8 +91,13 @@ mod bip32_tests {
         // Check fingerprint calculation is non-zero
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
         let fingerprint = xpub.fingerprint();
-
+        
+        // Test non-zero
         assert!(fingerprint > 0, "Fingerprint should be not zero");
+        
+        // Test deterministic
+        let second_fingerprint = xpub.fingerprint();
+        assert_eq!(fingerprint, second_fingerprint, "Fingerprint should be deterministic");
     }
     
     #[test]
@@ -71,6 +107,11 @@ mod bip32_tests {
         let encoded = xpub.to_base58();
 
         assert_eq!(encoded, TEST_XPUB, "Base58 encoding should match original");
+
+        // Additional encoding checks
+        let decoded = encoded.from_base58().unwrap();
+        assert_eq!(decoded[4], xpub.depth, "Depth should match");
+        assert_eq!(&decoded[0..4], &MAINNET_VERSION, "Version bytes should match");
     }
 
     #[test]
@@ -97,8 +138,13 @@ mod bip32_tests {
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
         let address = xpub.to_bitcoin_address();
 
-        assert!(address.starts_with('1'), "Invalid P2PKH address format");
-        assert!(address.len() >= 26 && address.len() <= 35, "Invalif address length");
+        // Format checks
+        assert!(address.starts_with('1'), "Should be P2PKH address");
+        assert!(address.len() >= 26 && address.len() <= 35, "Address length should be valid");
+
+        // Decode and verify version byte
+        let decoded = address.from_base58().unwrap();
+        assert_eq!(decoded[0], 0x00, "Should use P2PKH version byte");
     }
 
     #[test]
@@ -136,7 +182,6 @@ mod bip32_tests {
         // Test derivation with maximum allowed non-hardened index
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
         let large_index = 0x7FFFFFFF;
-
         let result = xpub.derive_non_hardened(large_index);
         assert!(result.is_ok(), "Should handle large non-hardened index");
     }
@@ -147,12 +192,14 @@ mod bip32_tests {
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
         let addresses = xpub.derive_bip32_addresses(10).unwrap();
         
+        // Check uniqueness of all addresses
         for i in 0..addresses.len() {
             for j in i+1..addresses.len() {
                 assert_ne!(
                     addresses[i],
                     addresses[j],
-                    "BIP32 addresses should be unique"
+                    "Addresses at indices {} and {} should be unique",
+                    i, j
                 );
             }
         }
