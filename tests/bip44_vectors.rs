@@ -19,14 +19,6 @@ mod bip44_test {
     // Version bytes for mainnet xpub
     const MAINNET_VERSION: [u8; 4] = [0x04, 0x88, 0xB2, 0x1E];
 
-    // Helper function to get test public key
-    fn get_test_public_key() -> secp256k1::PublicKey {
-        let decoded = TEST_XPUB.from_base58().unwrap();
-        secp256k1::PublicKey::from_slice(&decoded[45..78]).unwrap()
-    }
-
-
-
     #[test]
     fn test_bip44_xpub_from_base58() {
         // Test valid and invalid xpub parsing
