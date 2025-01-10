@@ -204,4 +204,14 @@ mod bip32_tests {
             }
         }
     }
+
+    #[test]
+    fn test_bip32_max_limit_derivation() {
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+        let max_count = 100;
+
+        let result = xpub.derive_bip32_addresses(max_count);
+        assert!(result.is_ok(), "Should handle maximum allowed number of addresses");
+        assert_eq!(result.unwrap().len(), 100, "Should generate exactly 100 addresses");
+    }
 }
