@@ -41,7 +41,25 @@ mod bip32_tests {
         assert_eq!(xpub.child_number, child_number, "Child number should match");
         assert_eq!(xpub.chain_code, chain_code, "Chain code should match");
         assert_eq!(xpub.public_key, public_key, "Public key should match");
+    }
 
+    #[test]
+    fn test_xpub_invalid_base58() {
+        // Test invalid Base58 characters 
+        let result = Xpub::from_base58("invalid!base58@string");
+        assert!(result.is_err());
+        assert!(result.as_ref().err().unwrap().contains("Base58 decode error"));
+
+        // Test invalid lenght 
+        let result = Xpub::from_base58("1aaaaaaaa");
+        assert!(result.is_err());
+        assert!(result.as_ref().err().unwrap().contains("Invalid xpub length"));
+
+        // Test invalid public key
+        let invalid_xpub = "xpub6CUGRUonZSQ4zHWHPYWmGLs3ySaVP7envEXHHYQFDvD85JQBY6kw5VexFge6qcCYwQFhbgFLRqCzq3JHcthYMSLf1r3kzjqFiGN1ZNDSqLv";
+        let result = Xpub::from_base58(&invalid_xpub);
+        assert!(result.is_err());
+        assert!(result.as_ref().err().unwrap().contains("Invalid public key"));
     }
 
     #[test]
