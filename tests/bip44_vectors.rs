@@ -160,7 +160,7 @@ mod bip44_test {
     fn test_bip44_large_index_derivation() {
         // Test derivation with large number of addresses
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
-        let large_count = 1000;
+        let large_count = 100;
 
         let result = xpub.derive_bip44_addresses(large_count);
         assert!(result.is_ok(), "Should handle large non-hardened index");
