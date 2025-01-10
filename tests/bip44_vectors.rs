@@ -204,4 +204,14 @@ mod bip44_test {
         let addresses = xpub.derive_bip44_addresses(3).unwrap();
         assert_eq!(addresses, EXPECTED_BIP44_ADDRESSES, "Derived addresses should match expected values");
     }
+
+    #[test]
+    fn test_bip44_max_limit_derivation() {
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+        let max_count = 100;
+
+        let result = xpub.derive_bip44_addresses(max_count);
+        assert!(result.is_ok(), "Should handle maximum allowed number of addresses");
+        assert_eq!(result.unwrap().len(), 100, "Should generate exactly 100 addresses");
+    }
 }
