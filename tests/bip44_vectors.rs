@@ -86,6 +86,20 @@ mod bip44_test {
     }
 
     #[test]
+    fn test_bip44_error_handling() {
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+
+        // Test error when count exceeds limit
+        let invalid_count = xpub.derive_bip44_addresses(101);
+        assert!(invalid_count.is_err());
+        assert!(invalid_count.unwrap_err().contains("Can't generate more than 100 addresses"));
+
+        // Test error with hardened index
+        let invalid_account = xpub.derive_bip44_addresses(0x80000000);  // Hardened index should fail
+        assert!(invalid_account.is_err());
+    }
+
+    #[test]
     fn test_bip44_zero_address() {
         // Test handling of zero address request
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
