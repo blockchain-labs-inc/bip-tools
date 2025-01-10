@@ -7,7 +7,7 @@ use clap::{Args, Parser, Subcommand};
     arg_required_else_help(true),          // Show help if no arguments provided
     version,                               // Enables automatic version flag
     about,                                 // Short description from Cargo.toml
-    long_about = None                    
+    long_about = None
 )]
 struct Cli {
     /// Subcommands for different address generation methods
