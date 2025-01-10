@@ -86,6 +86,20 @@ mod bip44_test {
     }
 
     #[test]
+    fn test_bip44_error_handling() {
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+
+        // Test error when count exceeds limit
+        let invalid_count = xpub.derive_bip44_addresses(101);
+        assert!(invalid_count.is_err());
+        assert!(invalid_count.unwrap_err().contains("Can't generate more than 100 addresses"));
+
+        // Test error with hardened index
+        let invalid_account = xpub.derive_bip44_addresses(0x80000000);  // Hardened index should fail
+        assert!(invalid_account.is_err());
+    }
+
+    #[test]
     fn test_bip44_zero_address() {
         // Test handling of zero address request
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
@@ -160,7 +174,7 @@ mod bip44_test {
     fn test_bip44_large_index_derivation() {
         // Test derivation with large number of addresses
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
-        let large_count = 1000;
+        let large_count = 100;
 
         let result = xpub.derive_bip44_addresses(large_count);
         assert!(result.is_ok(), "Should handle large non-hardened index");
@@ -189,5 +203,15 @@ mod bip44_test {
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
         let addresses = xpub.derive_bip44_addresses(3).unwrap();
         assert_eq!(addresses, EXPECTED_BIP44_ADDRESSES, "Derived addresses should match expected values");
+    }
+
+    #[test]
+    fn test_bip44_max_limit_derivation() {
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+        let max_count = 100;
+
+        let result = xpub.derive_bip44_addresses(max_count);
+        assert!(result.is_ok(), "Should handle maximum allowed number of addresses");
+        assert_eq!(result.unwrap().len(), 100, "Should generate exactly 100 addresses");
     }
 }
