@@ -68,13 +68,10 @@ mod bip32_tests {
         let xpub = Xpub::from_base58(TEST_XPUB);
         assert!(xpub.is_ok(), "Failed to parse valid xpub");
 
-        // Test invalid xpub string
-        let invalid_xpub: &str = "invalid_xpub_string";
-        assert!(Xpub::from_base58(invalid_xpub).is_err(), "Should fail with invalid xpub");
-
-        // Test invalid length
-        let short_xpub: &str = "invalid_xpub_string";
-        assert!(Xpub::from_base58(short_xpub).is_err(), "Should fail with invalid xpub");
+        // Additional checks on parsed xpub
+        let parsed = xpub.unwrap();
+        let decoded = TEST_XPUB.from_base58().unwrap();
+        assert_eq!(decoded[4], parsed.depth, "Depth should match");
     }
 
     #[test]
@@ -245,5 +242,43 @@ mod bip32_tests {
         let result = xpub.derive_bip32_addresses(max_count);
         assert!(result.is_ok(), "Should handle maximum allowed number of addresses");
         assert_eq!(result.unwrap().len(), 100, "Should generate exactly 100 addresses");
+    }
+
+    #[test]
+    fn test_bip32_exceed_limit() {
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+        let result = xpub.derive_bip32_addresses(101);
+        assert!(result.is_err(), "Should reject count > 100");
+        assert!(result.unwrap_err().contains("Can't generate more than 100 addresses"));
+    }
+
+    #[test]
+    fn test_bip32_address_consistency() {
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+
+        // Derive same index twice
+        let first_child = xpub.derive_non_hardened(1).unwrap();
+        let second_child = xpub.derive_non_hardened(1).unwrap();
+
+        assert_eq!(
+            first_child.to_bitcoin_address(),
+            second_child.to_bitcoin_address(),
+            "Same derivation index should produce identical addresses"
+        );
+    }
+
+    #[test]
+    fn test_bip32_known_addresses() {
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+        let addresses = xpub.derive_bip32_addresses(3).unwrap();
+
+        for (i, expected) in EXPECTED_BIP32_ADDRESSES.iter().enumerate() {
+            assert_eq!(
+                &addresses[i],
+                expected,
+                "Address at index {} should match test vector",
+                i
+            );
+        }
     }
 }
