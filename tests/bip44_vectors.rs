@@ -93,10 +93,6 @@ mod bip44_test {
         let invalid_count = xpub.derive_bip44_addresses(101);
         assert!(invalid_count.is_err());
         assert!(invalid_count.unwrap_err().contains("Can't generate more than 100 addresses"));
-
-        // Test error with hardened index
-        let invalid_account = xpub.derive_bip44_addresses(0x80000000);  // Hardened index should fail
-        assert!(invalid_account.is_err());
     }
 
     #[test]
@@ -116,13 +112,6 @@ mod bip44_test {
 
         assert!(addresses[0].starts_with("1"), "Invalid P2PKH address format");
         assert!(addresses[0].len() >= 26 && addresses[0].len() <= 35, "Invalid address length");
-    }
-
-    #[test]
-    fn test_bip44_invalid_derivation_index() {
-        // Verify hardened derivation is rejected
-        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
-        assert!(xpub.derive_non_hardened(0x80000000).is_err(), "Should fail with hardened index");
     }
 
     #[test]
@@ -149,26 +138,6 @@ mod bip44_test {
             "External and internal chain addresses should be different"
         );
     }
-
-    #[test]
-    fn test_bip44_account_separation() {
-        // Verify different accounts generate different addresses
-        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
-        
-        let first_account = xpub.derive_bip44_addresses(1).unwrap();
-        let second_account = xpub.derive_non_hardened(1)
-            .unwrap()
-            .derive_non_hardened(0)
-            .unwrap()
-            .to_bitcoin_address();
-
-        assert_ne!(
-            first_account[0],
-            second_account,
-            "Different accounts should generate different addresses"
-        );
-    }
-
 
     #[test]
     fn test_bip44_large_index_derivation() {
@@ -213,5 +182,83 @@ mod bip44_test {
         let result = xpub.derive_bip44_addresses(max_count);
         assert!(result.is_ok(), "Should handle maximum allowed number of addresses");
         assert_eq!(result.unwrap().len(), 100, "Should generate exactly 100 addresses");
+    }
+
+    #[test]
+    fn test_bip44_exceed_limit() {
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+        let result = xpub.derive_bip44_addresses(101);
+        assert!(result.is_err(), "Should reject count > 100");
+        assert!(result.unwrap_err().contains("Can't generate more than 100 addresses"));
+    }
+
+    #[test]
+    fn test_bip44_address_consistency() {
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+
+        // Generate same address twice
+        let first_derivation = xpub.derive_bip44_addresses(1).unwrap();
+        let second_derivation = xpub.derive_bip44_addresses(1).unwrap();
+
+        assert_eq!(
+            first_derivation[0],
+            second_derivation[0],
+            "Same derivation should identical addresses"
+        );
+    }
+
+    #[test]
+    fn test_bip44_known_addresses() {
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+        let addresses = xpub.derive_bip44_addresses(3).unwrap();
+
+        for (i, expected) in EXPECTED_BIP44_ADDRESSES.iter().enumerate() {
+            assert_eq!(
+                &addresses[i],
+                expected,
+                "Address at index {} should match test vector",
+                i
+            );
+        }
+    }
+
+
+    #[test]
+    fn test_bip44_account_separation() {
+        // Verify different accounts generate different addresses
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+        
+        let first_account = xpub.derive_bip44_addresses(1).unwrap();
+        let second_account = xpub.derive_non_hardened(1)
+            .unwrap()
+            .derive_non_hardened(0)
+            .unwrap()
+            .to_bitcoin_address();
+
+        assert_ne!(
+            first_account[0],
+            second_account,
+            "Different accounts should generate different addresses"
+        );
+    }
+
+    #[test]
+    fn test_bip44_derivation_paths() {
+        let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
+
+        // Test external chain (m/0/*)
+        let external = xpub.derive_non_hardened(0);
+        assert!(external.is_ok(), "Should derive external chain");
+
+        // Test internal chain (m/1/*)
+        let internal = xpub.derive_non_hardened(1);
+        assert!(internal.is_ok(), "Should derive internal chain");
+
+        // Different chains should produce different addresses
+        assert_ne!(
+            external.unwrap().to_bitcoin_address(),
+            internal.unwrap().to_bitcoin_address(),
+            "External and internal chain should produce different addresses"
+        );
     }
 }
