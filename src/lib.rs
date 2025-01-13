@@ -171,11 +171,6 @@ impl Xpub {
 
      /// Generates multiple Bitcoin addresses using BIP32 derivation path
     pub fn derive_bip32_addresses(&self, count: u32) -> Result<Vec<String>, String> {
-        // Add limit check 
-        if count > 100 {
-            return Err("Can't generate more than 100 addresses".to_string());
-        }
-
         let mut addresses = Vec::with_capacity(count as usize);
         let current = self.clone();
 
@@ -197,10 +192,6 @@ impl Xpub {
     /// Generates multiple Bitcoin addresses using BIP44 derivation path
     /// Follows m/44'/0'/0'/0/i path structure
     pub fn derive_bip44_addresses(&self, count: u32) -> Result<Vec<String>, String> {
-        // Add limit check
-        if count > 100 {
-            return Err("Can't generate more than 100 addresses".to_string());
-        }
         let mut addresses = Vec::with_capacity(count as usize);
         
         //BIP44 path: m/44'/0'/0'/0/i
