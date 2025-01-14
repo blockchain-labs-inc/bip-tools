@@ -106,6 +106,24 @@ cargo run bip44 "xpub6CUGRUo..." 5
 - Uses secure cryptographic primitives
 - No private key handling - focused on public key operations only
 
+### Error Types
+
+- Invalid xpub format
+- Base58 decode errors
+- Invalid derivation path
+- Checksum validation failures
+
+### Performance
+Benchmark results on standard hardware (Intel i5, 8GB RAM):
+
+#### BIP32:
+- Single address generation: ~0.035ms (34.907 microseconds)
+- Batch of 100 addresses: ~3.57ms (3.5683 milliseconds)
+
+#### BIP44:
+- Single address generation: ~0.069ms (68.628 microseconds)
+- Batch of 100 addresses: ~3.59ms (3.5930 milliseconds)
+
 ## Project Structure
 
 ```
