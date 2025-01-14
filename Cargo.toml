@@ -14,7 +14,7 @@ output-dir = "coverage"
 html = true
 
 [dependencies]
-secp256k1 = "0.27"
+secp256k1 = "0.29"
 hmac = "0.12"
 sha2 = "0.10"
 ripemd = "0.1"
