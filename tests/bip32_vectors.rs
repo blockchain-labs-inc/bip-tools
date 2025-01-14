@@ -5,7 +5,7 @@ mod bip32_tests {
     use crate::Xpub;
     use base58::FromBase58;
     use secp256k1::PublicKey;
-    use sha2::{Sha256, Digest};
+    use sha2::{Digest, Sha256};
 
     // Test data for mainnet BIP32 derivation
     const TEST_XPUB: &str = "xpub681vrYy1g8k1xtcNPi2WN9pGiHDejoCvUT4GG2Mbs9rcs98VWvoQXmgT2J1umYQs9p2qp6xdMjJ2AU1rNcCMq9RmtKNhowJKYvVgKwS59xX";

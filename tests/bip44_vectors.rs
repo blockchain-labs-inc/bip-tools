@@ -1,6 +1,6 @@
-use bip_tools::Xpub;
 use base58::FromBase58;
-use sha2::{Sha256, Digest};
+use bip_tools::Xpub;
+use sha2::{Digest, Sha256};
 
 #[cfg(test)]
 mod bip44_test {
