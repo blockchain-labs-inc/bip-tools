@@ -20,13 +20,11 @@ mod bip32_tests {
     // Version bytes for mainnet xpub
     const MAINNET_VERSION: [u8; 4] = [0x04, 0x88, 0xB2, 0x1E];
 
-    // Helper function to get test public key 
+    // Helper function to get test public key
     fn get_test_public_key() -> PublicKey {
         let decoded = TEST_XPUB.from_base58().unwrap();
         PublicKey::from_slice(&decoded[45..78]).unwrap()
     }
-
-
 
     // Basic Structure Tests
 
@@ -38,10 +36,19 @@ mod bip32_tests {
         let chain_code: [u8; 32] = [0; 32];
         let public_key = get_test_public_key();
 
-        let xpub = Xpub::new(depth, parent_fingerprint, child_number, chain_code, public_key);
+        let xpub = Xpub::new(
+            depth,
+            parent_fingerprint,
+            child_number,
+            chain_code,
+            public_key,
+        );
 
         assert_eq!(xpub.depth, depth, "Depth should match");
-        assert_eq!(xpub.parent_fingerprint, parent_fingerprint, "Parent fingerprint should match");
+        assert_eq!(
+            xpub.parent_fingerprint, parent_fingerprint,
+            "Parent fingerprint should match"
+        );
         assert_eq!(xpub.child_number, child_number, "Child number should match");
         assert_eq!(xpub.chain_code, chain_code, "Chain code should match");
         assert_eq!(xpub.public_key, public_key, "Public key should match");
@@ -61,24 +68,34 @@ mod bip32_tests {
 
     #[test]
     fn test_bip32_xpub_invalid_base58() {
-        // Test invalid Base58 characters 
+        // Test invalid Base58 characters
         let result = Xpub::from_base58("invalid!base58@string");
         assert!(result.is_err());
-        assert!(result.as_ref().err().unwrap().contains("Base58 decode error"));
+        assert!(result
+            .as_ref()
+            .err()
+            .unwrap()
+            .contains("Base58 decode error"));
 
-        // Test invalid lenght 
+        // Test invalid lenght
         let result = Xpub::from_base58("1aaaaaaaa");
         assert!(result.is_err());
-        assert!(result.as_ref().err().unwrap().contains("Invalid xpub length"));
+        assert!(result
+            .as_ref()
+            .err()
+            .unwrap()
+            .contains("Invalid xpub length"));
 
         // Test invalid public key
         let invalid_xpub = "xpub6CUGRUonZSQ4zHWHPYWmGLs3ySaVP7envEXHHYQFDvD85JQBY6kw5VexFge6qcCYwQFhbgFLRqCzq3JHcthYMSLf1r3kzjqFiGN1ZNDSqLv";
         let result = Xpub::from_base58(&invalid_xpub);
         assert!(result.is_err());
-        assert!(result.as_ref().err().unwrap().contains("Invalid public key"));
+        assert!(result
+            .as_ref()
+            .err()
+            .unwrap()
+            .contains("Invalid public key"));
     }
-
-
 
     // Format and Structural Checks
 
@@ -111,9 +128,12 @@ mod bip32_tests {
         // Additional encoding checks
         let decoded = encoded.from_base58().unwrap();
         assert_eq!(decoded[4], xpub.depth, "Depth should match");
-        assert_eq!(&decoded[0..4], &MAINNET_VERSION, "Version bytes should match");
+        assert_eq!(
+            &decoded[0..4],
+            &MAINNET_VERSION,
+            "Version bytes should match"
+        );
     }
-    
 
     #[test]
     fn test_bip32_bitcoin_address_format() {
@@ -123,7 +143,10 @@ mod bip32_tests {
 
         // Format checks
         assert!(address.starts_with('1'), "Should be P2PKH address");
-        assert!(address.len() >= 26 && address.len() <= 35, "Address length should be valid");
+        assert!(
+            address.len() >= 26 && address.len() <= 35,
+            "Address length should be valid"
+        );
 
         // Decode and verify version byte
         let decoded = address.from_base58().unwrap();
@@ -135,30 +158,30 @@ mod bip32_tests {
         // Check fingerprint calculation is non-zero
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
         let fingerprint = xpub.fingerprint();
-        
+
         // Test non-zero
         assert!(fingerprint > 0, "Fingerprint should be not zero");
-        
+
         // Test deterministic
         let second_fingerprint = xpub.fingerprint();
-        assert_eq!(fingerprint, second_fingerprint, "Fingerprint should be deterministic");
+        assert_eq!(
+            fingerprint, second_fingerprint,
+            "Fingerprint should be deterministic"
+        );
     }
 
-
-
     // Address Derivation Tests
-    
+
     #[test]
     fn test_bip32_address_derivation() {
         // Verify address derivation matches expected test vectors
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
         let derived_addresses = xpub.derive_bip32_addresses(3).unwrap();
-        
+
         for (i, addr) in derived_addresses.iter().enumerate() {
             assert_eq!(
-                addr, 
-                EXPECTED_BIP32_ADDRESSES[i],
-                "Address {} mismatch. Expected: {}, Got: {}", 
+                addr, EXPECTED_BIP32_ADDRESSES[i],
+                "Address {} mismatch. Expected: {}, Got: {}",
                 i, EXPECTED_BIP32_ADDRESSES[i], addr
             );
         }
@@ -170,7 +193,11 @@ mod bip32_tests {
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
         let result = xpub.derive_bip32_addresses(0);
         assert!(result.is_ok(), "Should handle zero address request");
-        assert_eq!(result.unwrap().len(), 0, "Should return empty vector for zero count");
+        assert_eq!(
+            result.unwrap().len(),
+            0,
+            "Should return empty vector for zero count"
+        );
     }
 
     #[test]
@@ -178,16 +205,20 @@ mod bip32_tests {
         // Verify hardened derivation is rejected for xpub
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
         // Test hardened index
-        assert!(xpub.derive_non_hardened(0x80000000).is_err(), "Should fail with hardened index");
-        
+        assert!(
+            xpub.derive_non_hardened(0x80000000).is_err(),
+            "Should fail with hardened index"
+        );
+
         // Test maximum allowed index
-        assert!(xpub.derive_non_hardened(0x7FFFFFFF).is_ok(), "Should accept max non-hardened index");
+        assert!(
+            xpub.derive_non_hardened(0x7FFFFFFF).is_ok(),
+            "Should accept max non-hardened index"
+        );
     }
 
-
-
     // Advanced Derivation Tests
-    
+
     #[test]
     fn test_bip32_address_consistency() {
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
@@ -204,11 +235,17 @@ mod bip32_tests {
         // Alternative derivation method check
         let first_address = xpub.derive_non_hardened(1).unwrap().to_bitcoin_address();
         let second_address = xpub.derive_non_hardened(1).unwrap().to_bitcoin_address();
-        assert_eq!(first_address, second_address, "Same index should produce same address regardless of derivation method");
+        assert_eq!(
+            first_address, second_address,
+            "Same index should produce same address regardless of derivation method"
+        );
 
         // Verify different indices produce different addresses
         let different_address = xpub.derive_non_hardened(2).unwrap().to_bitcoin_address();
-        assert_ne!(first_address, different_address, "Different index should produce different address");
+        assert_ne!(
+            first_address, different_address,
+            "Different index should produce different address"
+        );
     }
 
     #[test]
@@ -220,8 +257,6 @@ mod bip32_tests {
         assert!(result.is_ok(), "Should handle large non-hardened index");
     }
 
-
-
     // Multiple Address Tests
 
     #[test]
@@ -232,13 +267,12 @@ mod bip32_tests {
         let addresses = xpub.derive_bip32_addresses(count).unwrap();
 
         println!("Testing uniqueness for {} addresses", count);
-        
+
         // Check uniqueness of all addresses
         for i in 0..addresses.len() {
-            for j in i+1..addresses.len() {
+            for j in i + 1..addresses.len() {
                 assert_ne!(
-                    addresses[i],
-                    addresses[j],
+                    addresses[i], addresses[j],
                     "Addresses at indices {} and {} should be unique",
                     i, j
                 );
@@ -253,8 +287,7 @@ mod bip32_tests {
 
         for (i, expected) in EXPECTED_BIP32_ADDRESSES.iter().enumerate() {
             assert_eq!(
-                &addresses[i],
-                expected,
+                &addresses[i], expected,
                 "Address at index {} should match test vector",
                 i
             );
@@ -267,18 +300,23 @@ mod bip32_tests {
 
         // Test with exactly 100 addresses
         let result_100 = xpub.derive_bip32_addresses(100);
-        assert!(result_100.is_ok(), "Should succesfully generate 100 addresses");
+        assert!(
+            result_100.is_ok(),
+            "Should succesfully generate 100 addresses"
+        );
         assert_eq!(
-            result_100.unwrap().len(), 
-            100, 
-            "Should generate exactly 100 addresses");
+            result_100.unwrap().len(),
+            100,
+            "Should generate exactly 100 addresses"
+        );
 
         // Test with more than 100 addresses - add warning
         println!("Warning: Attemping to generate more than 100 addresses in test environment");
         let result_101 = xpub.derive_bip32_addresses(101);
         assert!(
             result_101.is_ok(),
-            "Should still work for more than 100 addresses");
+            "Should still work for more than 100 addresses"
+        );
         println!("Warning: Successfully generated more than 100 addresses. Consider limiting address generation in tests");
     }
 }
