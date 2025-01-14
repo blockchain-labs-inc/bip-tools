@@ -8,10 +8,10 @@ use ripemd::Ripemd160;
 /// This structure contains all necessary components to derive child keys and generate Bitcoin addresses
 pub struct Xpub {
     pub depth: u8,                 // Depth in the HD tree
-    pub parent_fingerprint: u32,  // Fingerprint of the parent key
-    pub child_number: u32,        // Index of this key
-    pub chain_code: [u8; 32],     // Chain code (32 bytes)
-    pub public_key: PublicKey,    // Compressed public key (33 bytes)
+    pub parent_fingerprint: u32,   // Fingerprint of the parent key
+    pub child_number: u32,         // Index of this key
+    pub chain_code: [u8; 32],      // Chain code (32 bytes)
+    pub public_key: PublicKey,     // Compressed public key (33 bytes)
 }
 
 impl Xpub {

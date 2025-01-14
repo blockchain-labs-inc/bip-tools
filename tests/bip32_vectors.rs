@@ -14,7 +14,7 @@ mod bip32_tests {
     const EXPECTED_BIP32_ADDRESSES: [&str; 3] = [
         "1FvSF5syVSTnsbNzFpPd4mNFcSvwtTxqLw",
         "175AcMJAwppLkCKAGkazkM9ygTbvPc5Cn5",
-        "1GZZ8iuVo1BwfGei132MTRmNoBRDt7Lfvf"
+        "1GZZ8iuVo1BwfGei132MTRmNoBRDt7Lfvf",
     ];
 
     // Version bytes for mainnet xpub
@@ -268,12 +268,17 @@ mod bip32_tests {
         // Test with exactly 100 addresses
         let result_100 = xpub.derive_bip32_addresses(100);
         assert!(result_100.is_ok(), "Should succesfully generate 100 addresses");
-        assert_eq!(result_100.unwrap().len(), 100, "Should generate exactly 100 addresses");
+        assert_eq!(
+            result_100.unwrap().len(), 
+            100, 
+            "Should generate exactly 100 addresses");
 
         // Test with more than 100 addresses - add warning
         println!("Warning: Attemping to generate more than 100 addresses in test environment");
         let result_101 = xpub.derive_bip32_addresses(101);
-        assert!(result_101.is_ok(), "Should still work for more than 100 addresses");
+        assert!(
+            result_101.is_ok(),
+            "Should still work for more than 100 addresses");
         println!("Warning: Successfully generated more than 100 addresses. Consider limiting address generation in tests");
     }
 }

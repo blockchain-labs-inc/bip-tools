@@ -13,7 +13,7 @@ mod bip44_test {
     const EXPECTED_BIP44_ADDRESSES: [&str; 3] = [
         "1AkcymbeHtiufKa1EgC1TY4E36ehdKVEDt",
         "1BNedVV6nTX9oN77tMtoToFQ6FGQf8A3sY",
-        "176FPbVE5GScCh7jvMcj6TjBwrecs8BeAR"
+        "176FPbVE5GScCh7jvMcj6TjBwrecs8BeAR",
     ];
 
     // Version bytes for mainnet xpub
