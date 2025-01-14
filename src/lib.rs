@@ -1,17 +1,17 @@
-use secp256k1::PublicKey; 
 use base58::{FromBase58, ToBase58};
-use sha2::{Digest, Sha256};
 use ripemd::Ripemd160;
+use secp256k1::PublicKey;
+use sha2::{Digest, Sha256};
 
 #[derive(Clone)]
 /// Represents an extended public key (xpub) following the BIP32 specification
 /// This structure contains all necessary components to derive child keys and generate Bitcoin addresses
 pub struct Xpub {
-    pub depth: u8,                 // Depth in the HD tree
-    pub parent_fingerprint: u32,   // Fingerprint of the parent key
-    pub child_number: u32,         // Index of this key
-    pub chain_code: [u8; 32],      // Chain code (32 bytes)
-    pub public_key: PublicKey,     // Compressed public key (33 bytes)
+    pub depth: u8,               // Depth in the HD tree
+    pub parent_fingerprint: u32, // Fingerprint of the parent key
+    pub child_number: u32,       // Index of this key
+    pub chain_code: [u8; 32],    // Chain code (32 bytes)
+    pub public_key: PublicKey,   // Compressed public key (33 bytes)
 }
 
 impl Xpub {
@@ -34,7 +34,6 @@ impl Xpub {
 
     /// Converts a Base58 encoded xpub string into an Xpub instance.
     pub fn from_base58(xpub: &str) -> Result<Self, String> {
-
         // Decode the xpub from Base58
         let decoded = xpub
             .from_base58()
@@ -91,7 +90,7 @@ impl Xpub {
 
         // Calculate double SHA256 checksum (first 4 bytes)
         let checksum = &Sha256::digest(Sha256::digest(&data))[..4];
-        
+
         // Append checksum to data
         data.extend_from_slice(checksum);
 
@@ -116,7 +115,7 @@ impl Xpub {
         // Create address bytes
         // version (1 byte) + pubkey_hash (20 bytes) + checksum (4 bytes)
         let mut data = Vec::with_capacity(25);
-        data.push(0x00);                                    // Version byte for mainnet addresses
+        data.push(0x00); // Version byte for mainnet addresses
         data.extend_from_slice(&pubkey_hash);
 
         // Add 4-byte chekcsum (first 4 bytes of double SHA256)
@@ -142,10 +141,11 @@ impl Xpub {
         // parent_pubkey (33 bytes) || child_index (4 bytes)
         let mut data = Vec::with_capacity(37);
         data.extend_from_slice(&self.public_key.serialize()); // Parent public key (33 bytes)
-        data.extend_from_slice(&index.to_be_bytes());         // Child index (4 bytes)
+        data.extend_from_slice(&index.to_be_bytes()); // Child index (4 bytes)
 
         // Generate child key material using HMAC-SHA512
-        let mut mac = HmacSha512::new_from_slice(&self.chain_code).expect("HMAC can take a key of any size");
+        let mut mac =
+            HmacSha512::new_from_slice(&self.chain_code).expect("HMAC can take a key of any size");
         mac.update(&data);
         let result = mac.finalize().into_bytes();
 
@@ -155,9 +155,10 @@ impl Xpub {
         // Compute the child public key
         let secp = secp256k1::Secp256k1::new();
         let tweak = secp256k1::SecretKey::from_slice(i_l)?;
-        let child_pubkey = self.public_key
-        .add_exp_tweak(&secp, &tweak.into())
-        .map_err(|_| secp256k1::Error::InvalidTweak)?;
+        let child_pubkey = self
+            .public_key
+            .add_exp_tweak(&secp, &tweak.into())
+            .map_err(|_| secp256k1::Error::InvalidTweak)?;
 
         // Create the child Xpub
         Ok(Self {
@@ -169,7 +170,7 @@ impl Xpub {
         })
     }
 
-     /// Generates multiple Bitcoin addresses using BIP32 derivation path
+    /// Generates multiple Bitcoin addresses using BIP32 derivation path
     pub fn derive_bip32_addresses(&self, count: u32) -> Result<Vec<String>, String> {
         let mut addresses = Vec::with_capacity(count as usize);
         let current = self.clone();
@@ -193,7 +194,7 @@ impl Xpub {
     /// Follows m/44'/0'/0'/0/i path structure
     pub fn derive_bip44_addresses(&self, count: u32) -> Result<Vec<String>, String> {
         let mut addresses = Vec::with_capacity(count as usize);
-        
+
         //BIP44 path: m/44'/0'/0'/0/i
         let account = match self.derive_non_hardened(0) {
             Ok(acc) => acc,
