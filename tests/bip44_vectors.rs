@@ -27,18 +27,18 @@ mod bip44_test {
         let xpub = Xpub::from_base58(TEST_XPUB);
         assert!(xpub.is_ok(), "Failed to parse valid xpub");
 
-        let invalid_xpub: &str = "invalid_xpub_string";
-        assert!(
-            Xpub::from_base58(invalid_xpub).is_err(),
-            "Should fail with invalid xpub"
-        );
+        let test_cases = [
+            ("invalid_xpub_string,", "Should fail with invalid xpub"),
+            ("xpub6CQrEh7fCh2", "Should fail with short xpub")
+        ];
 
-        // Test invalid length
-        let short_xpub = "xpub6CQrEh7fCh2";
-        assert!(
-            Xpub::from_base58(short_xpub).is_err(),
-            "Should fail with short xpub"
-        );
+        for (invalid_xpub, error_msg) in &test_cases {
+            assert!(
+                Xpub::from_base58(*invalid_xpub).is_err(),
+                "{}",
+                error_msg
+            );
+        }
     }
 
     #[test]
@@ -54,13 +54,17 @@ mod bip44_test {
 
         // Additional encoding checks
         let decoded = encoded.from_base58().unwrap();
+
+        let mut version_check = [0u8; 4];
+        version_check.copy_from_slice(&decoded[0..4]);
+
         assert_eq!(
             decoded[4], xpub.depth,
             "Depth should be preserved in encoding"
         );
         assert_eq!(
-            &decoded[0..4],
-            &MAINNET_VERSION,
+            version_check,
+            MAINNET_VERSION,
             "Version bytes should be preserved"
         );
     }
