@@ -69,34 +69,33 @@ impl Xpub {
     /// Serializes the Xpub into its Base58 string representation
     pub fn to_base58(&self) -> String {
         let mut serialized = [0u8; 78];
-    
+
         // Version bytes (4 bytes)
         serialized[0] = 0x04;
         serialized[1] = 0x88;
         serialized[2] = 0xB2;
         serialized[3] = 0x1E;
-    
+
         // Depth (1 byte)
         serialized[4] = self.depth;
-        
+
         // Parent fingerprint (4 bytes)
         serialized[5..9].copy_from_slice(&self.parent_fingerprint.to_be_bytes());
-        
+
         // Child number (4 bytes)
-        serialized[9..13].copy_from_slice(&self.child_number.to_be_bytes());  // Bu satır önemli
-        
+        serialized[9..13].copy_from_slice(&self.child_number.to_be_bytes());
         // Chain code (32 bytes)
         serialized[13..45].copy_from_slice(&self.chain_code);
-        
+
         // Public key (33 bytes)
         serialized[45..78].copy_from_slice(&self.public_key.serialize());
-    
+
         // Calculate checksum and create final data
         let checksum = Sha256::digest(Sha256::digest(serialized));
         let mut final_data = [0u8; 82];
         final_data[..78].copy_from_slice(&serialized);
         final_data[78..82].copy_from_slice(&checksum[..4]);
-        
+
         final_data.to_base58()
     }
 
@@ -195,7 +194,9 @@ impl Xpub {
         let mut addresses = Vec::with_capacity(count as usize);
 
         //BIP44 path: m/44'/0'/0'/0/i
-        let account = self.derive_non_hardened(0).map_err(|e| format!("Error deriving account: {}", e))?;
+        let account = self
+            .derive_non_hardened(0)
+            .map_err(|e| format!("Error deriving account: {}", e))?;
 
         // Generate addresses at m/44'/0'/0'/0/i
         for i in 0..count {
