@@ -68,34 +68,35 @@ impl Xpub {
 
     /// Serializes the Xpub into its Base58 string representation
     pub fn to_base58(&self) -> String {
-        let mut data = Vec::with_capacity(78);
+        let mut serialized = [0u8; 78];
 
-        // Add version (4 bytes for xpub)
-        data.extend_from_slice(&[0x04, 0x88, 0xB2, 0x1E]);
+        // Version bytes (4 bytes)
+        serialized[0] = 0x04;
+        serialized[1] = 0x88;
+        serialized[2] = 0xB2;
+        serialized[3] = 0x1E;
 
-        // Add depth (1 byte)
-        data.push(self.depth);
+        // Depth (1 byte)
+        serialized[4] = self.depth;
 
-        // Add parent fingerprint (4 bytes)
-        data.extend_from_slice(&self.parent_fingerprint.to_be_bytes());
+        // Parent fingerprint (4 bytes)
+        serialized[5..9].copy_from_slice(&self.parent_fingerprint.to_be_bytes());
 
-        // Add child number (4 bytes)
-        data.extend_from_slice(&self.child_number.to_be_bytes());
+        // Child number (4 bytes)
+        serialized[9..13].copy_from_slice(&self.child_number.to_be_bytes());
+        // Chain code (32 bytes)
+        serialized[13..45].copy_from_slice(&self.chain_code);
 
-        // Add chain code (32 bytes)
-        data.extend_from_slice(&self.chain_code);
+        // Public key (33 bytes)
+        serialized[45..78].copy_from_slice(&self.public_key.serialize());
 
-        // Add public key (33 bytes)
-        data.extend_from_slice(&self.public_key.serialize());
+        // Calculate checksum and create final data
+        let checksum = Sha256::digest(Sha256::digest(serialized));
+        let mut final_data = [0u8; 82];
+        final_data[..78].copy_from_slice(&serialized);
+        final_data[78..82].copy_from_slice(&checksum[..4]);
 
-        // Calculate double SHA256 checksum (first 4 bytes)
-        let checksum = &Sha256::digest(Sha256::digest(&data))[..4];
-
-        // Append checksum to data
-        data.extend_from_slice(checksum);
-
-        // Encode as Base58
-        data.to_base58()
+        final_data.to_base58()
     }
 
     /// Generates a legacy P2PKH (Pay to Public Key Hash) Bitcoin address from the public key
@@ -104,26 +105,20 @@ impl Xpub {
     /// 3. Adds double SHA256 checksum
     /// 4. Encodes in Base58Check format
     pub fn to_bitcoin_address(&self) -> String {
-        use base58::ToBase58;
+        let mut hasher = Sha256::new();
+        hasher.update(self.public_key.serialize());
+        let sha256 = hasher.finalize();
 
-        // Generate HASH160 (RIPEMD160(SHA256(public_key)))
-        let pubkey_hash = {
-            let sha256 = Sha256::digest(self.public_key.serialize());
-            Ripemd160::digest(sha256)
-        };
+        let pubkey_hash = Ripemd160::digest(sha256);
 
-        // Create address bytes
-        // version (1 byte) + pubkey_hash (20 bytes) + checksum (4 bytes)
-        let mut data = Vec::with_capacity(25);
-        data.push(0x00); // Version byte for mainnet addresses
-        data.extend_from_slice(&pubkey_hash);
+        let mut address_bytes = [0u8; 25];
+        address_bytes[0] = 0x00;
+        address_bytes[1..21].copy_from_slice(&pubkey_hash);
 
-        // Add 4-byte chekcsum (first 4 bytes of double SHA256)
-        let checksum = &Sha256::digest(Sha256::digest(&data))[..4];
-        data.extend_from_slice(checksum);
+        let checksum = &Sha256::digest(Sha256::digest(&address_bytes[..21]))[..4];
+        address_bytes[21..].copy_from_slice(checksum);
 
-        // Encode as Base58Check
-        data.to_base58()
+        address_bytes.to_base58()
     }
 
     /// Derives a non-hardened child Xpub from the current Xpub
@@ -139,9 +134,9 @@ impl Xpub {
 
         // Prepare data for HMAC-SHA512
         // parent_pubkey (33 bytes) || child_index (4 bytes)
-        let mut data = Vec::with_capacity(37);
-        data.extend_from_slice(&self.public_key.serialize()); // Parent public key (33 bytes)
-        data.extend_from_slice(&index.to_be_bytes()); // Child index (4 bytes)
+        let mut data = [0u8; 37];
+        data[..33].copy_from_slice(&self.public_key.serialize());
+        data[33..].copy_from_slice(&index.to_be_bytes());
 
         // Generate child key material using HMAC-SHA512
         let mut mac =
@@ -160,12 +155,15 @@ impl Xpub {
             .add_exp_tweak(&secp, &tweak.into())
             .map_err(|_| secp256k1::Error::InvalidTweak)?;
 
+        let mut chain_code = [0u8; 32];
+        chain_code.copy_from_slice(i_r);
+
         // Create the child Xpub
         Ok(Self {
             depth: self.depth + 1,
             parent_fingerprint: self.fingerprint(),
             child_number: index,
-            chain_code: i_r.try_into().unwrap(),
+            chain_code,
             public_key: child_pubkey,
         })
     }
@@ -196,10 +194,9 @@ impl Xpub {
         let mut addresses = Vec::with_capacity(count as usize);
 
         //BIP44 path: m/44'/0'/0'/0/i
-        let account = match self.derive_non_hardened(0) {
-            Ok(acc) => acc,
-            Err(e) => return Err(format!("Error deriving account: {}", e)),
-        };
+        let account = self
+            .derive_non_hardened(0)
+            .map_err(|e| format!("Error deriving account: {}", e))?;
 
         // Generate addresses at m/44'/0'/0'/0/i
         for i in 0..count {
@@ -219,7 +216,7 @@ impl Xpub {
     /// Used for child key derivation and parent identification.
     pub fn fingerprint(&self) -> u32 {
         let hash = Sha256::digest(self.public_key.serialize());
-        let hash160 = ripemd::Ripemd160::digest(hash);
+        let hash160 = Ripemd160::digest(hash);
 
         u32::from_be_bytes(hash160[0..4].try_into().unwrap())
     }
