@@ -120,22 +120,25 @@ mod bip32_tests {
     #[test]
     fn test_bip32_to_base58() {
         let decoded_test = TEST_XPUB.from_base58().unwrap();
-        println!("Original version bytes: {:02x} {:02x} {:02x} {:02x}", 
-            decoded_test[0], decoded_test[1], decoded_test[2], decoded_test[3]);
+        println!(
+            "Original version bytes: {:02x} {:02x} {:02x} {:02x}",
+            decoded_test[0], decoded_test[1], decoded_test[2], decoded_test[3]
+        );
         println!("Original all bytes: {:?}", decoded_test);
-    
+
         let xpub = Xpub::from_base58(TEST_XPUB).unwrap();
         let encoded = xpub.to_base58();
         let decoded = encoded.from_base58().unwrap();
-        
-        println!("Encoded version bytes: {:02x} {:02x} {:02x} {:02x}", 
-            decoded[0], decoded[1], decoded[2], decoded[3]);
+
+        println!(
+            "Encoded version bytes: {:02x} {:02x} {:02x} {:02x}",
+            decoded[0], decoded[1], decoded[2], decoded[3]
+        );
         println!("Encoded all bytes: {:?}", decoded);
-    
+
         assert_eq!(encoded, TEST_XPUB, "Base58 encoding should match original");
 
         assert_eq!(decoded[4], xpub.depth, "Depth should match");
-    
 
         assert_eq!(decoded[0], 0x04, "Version bytes 1 should match");
         assert_eq!(decoded[1], 0x88, "Version bytes 2 should match");
