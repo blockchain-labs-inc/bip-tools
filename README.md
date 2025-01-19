@@ -165,7 +165,7 @@ cargo test
 
 ## License
 
-[MIT License](LICENSE)
+[MIT License](https://github.com/yigitraphy/bip-tools/blob/main/LICENSE)
 
 ## References
 
