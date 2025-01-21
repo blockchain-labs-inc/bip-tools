@@ -181,4 +181,4 @@ cargo test
 ## Support
 
 For support, custom development, and consulting services, please contact:
-Email: @
+Email: william@chainlabs.io
