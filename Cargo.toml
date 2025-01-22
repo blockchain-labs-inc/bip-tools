@@ -1,9 +1,9 @@
 [package]
 name = "bip-tools"
-version = "0.1.1"
-authors = ["Yigit Gurbulak, yigitgurbulak4@gmail.com"]
+version = "0.1.0"
+authors = ["Blockchain Labs, Inc., william@chainlabs.io"]
 edition = "2021"
-description = "A simple command-line tool to derive Bitcoin addresses from an extended public key"
+description = "A Rust library and CLI tool for Bitcoin address generation and management using extended public keys (xpub)"
 
 [[bin]]
 name = "bip-tools"
