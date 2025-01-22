@@ -4,7 +4,7 @@
 
 Please send a description of the issue to:
 
-**Email:** @
+**Email:** william@chainlabs.io
 
 Please include the following information:
 
