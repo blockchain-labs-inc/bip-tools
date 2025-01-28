@@ -215,11 +215,10 @@ impl Xpub {
     /// Generates multiple Bitcoin addresses using BIP32 derivation path
     pub fn derive_bip32_addresses(&self, count: u32) -> Result<Vec<String>, String> {
         let mut addresses = Vec::with_capacity(count as usize);
-        let current = self.clone();
 
         // Generate sequential addresses
         for i in 0..count {
-            match current.derive_non_hardened(i) {
+            match self.derive_non_hardened(i) {
                 Ok(child) => {
                     addresses.push(child.to_bitcoin_address());
                 }
