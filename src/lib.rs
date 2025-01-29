@@ -88,32 +88,14 @@ impl Xpub {
         let mut serialized = [0u8; 78];
 
         // Version bytes (4 bytes) based on coin type
-        match self.coin_type {
-            CoinType::Bitcoin => {
-                serialized[0] = 0x04;
-                serialized[1] = 0x88;
-                serialized[2] = 0xB2;
-                serialized[3] = 0x1E;
-            }
-            CoinType::Litecoin => {
-                serialized[0] = 0x01;
-                serialized[1] = 0x9D;
-                serialized[2] = 0x9C;
-                serialized[3] = 0xFE;
-            }
-            CoinType::Dogecoin => {
-                serialized[0] = 0x02;
-                serialized[1] = 0xFA;
-                serialized[2] = 0x92;
-                serialized[3] = 0x8C;
-            }
-            CoinType::BitcoinCash => {
-                serialized[0] = 0x04;
-                serialized[1] = 0x88;
-                serialized[2] = 0xB2;
-                serialized[3] = 0x1E;
-            }
-        }
+        let version_bytes = match self.coin_type {
+            CoinType::Bitcoin => [0x04, 0x88, 0xB2, 0x1E],
+            CoinType::Litecoin => [0x01, 0x9D, 0x9C, 0xFE],
+            CoinType::Dogecoin => [0x02, 0xFA, 0x92, 0x8C],
+            CoinType::BitcoinCash => [0x04, 0x88, 0xB2, 0x1E],
+        };
+
+        serialized[0..4].copy_from_slice(&version_bytes);
 
         // Depth (1 byte)
         serialized[4] = self.depth;
@@ -252,7 +234,6 @@ impl Xpub {
     pub fn fingerprint(&self) -> u32 {
         let hash = Sha256::digest(self.public_key.serialize());
         let hash160 = Ripemd160::digest(hash);
-
         u32::from_be_bytes(hash160[0..4].try_into().unwrap())
     }
 }
