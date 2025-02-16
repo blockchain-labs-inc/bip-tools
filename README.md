@@ -16,7 +16,7 @@ The compiled binary will be available at `target/release/bip-tools`
 
 ## Using Cargo
 ```bash
-cargo install --git https://github.com/yigitraphy/biptools.git
+cargo install --git https://github.com/blockchain-labs-inc/bip-tools.git
 ```
 
 ### Building from Source
@@ -27,7 +27,7 @@ cargo install --git https://github.com/yigitraphy/biptools.git
 - Cargo package manager
 
 ```bash
-git clone https://github.com/yigitraphy/biptools.git
+git clone https://github.com/blockchain-labs-inc/bip-tools.git
 cd bip-tools
 cargo build --release
 ```
