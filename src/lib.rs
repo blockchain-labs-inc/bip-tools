@@ -142,7 +142,7 @@ impl Xpub {
                 CashAddress::from_pubkey(&self.public_key.serialize(), format)
             }
             _ => {
-                let mut address_bytes = vec![0u8; 25];
+                let mut address_bytes = [0u8; 25];
                 address_bytes[0] = match self.coin_type {
                     CoinType::Bitcoin => 0x00,
                     CoinType::Litecoin => 0x30,

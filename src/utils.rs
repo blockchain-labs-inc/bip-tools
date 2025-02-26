@@ -54,7 +54,6 @@ impl CashAddress {
     }
 
     /// Helper Functions
-
     fn build_payload(hash: &[u8]) -> Vec<u8> {
         let mut payload = vec![0x00];
         payload.extend_from_slice(hash);
