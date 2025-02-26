@@ -1,4 +1,4 @@
-use bip_tools::{CoinType, Xpub};
+use bip_tools::{utils, CoinType, Xpub};
 use clap::{Args, Parser, Subcommand};
 
 #[derive(Debug, Parser)]
@@ -35,6 +35,10 @@ struct AddressGeneratorArgs {
 
     /// Coin type (e.g., Bitcoin, Litecoin, Dogecoin)
     coin_type: String,
+
+    /// Address format (optional, only used for Bitcoin Cash)
+    #[arg(short, long)]
+    format: Option<String>,
 }
 
 /// Main entry point of the application
@@ -59,20 +63,33 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "litecoin" => CoinType::Litecoin,
                 "dogecoin" => CoinType::Dogecoin,
                 "bitcoincash" => CoinType::BitcoinCash,
-                _ => return Err("Unsopported coin type".into()),
+                _ => {
+                eprintln!("Unsupported coin type: {}", args.coin_type); // Added more detailed error reporting
+                return Err("Unsupported coin type".into());
+            }
             };
 
             let xpub = Xpub::from_base58(&args.extended_public_key, coin_type)?;
-            println!("Generating {} BIP-32 addresses for: {}", args.count, args.coin_type);
+            println!(
+                "Generating {} BIP-32 addresses for: {}",
+                args.count, args.coin_type
+            );
 
-            match xpub.derive_bip32_addresses(args.count) {
+            let format = match args.format.as_deref() {
+                Some("legacy") => Some(utils::AddressFormat::Legacy),
+                Some("cashaddr") => Some(utils::AddressFormat::CashAddr),
+                Some("cashaddr-p") => Some(utils::AddressFormat::CashAddrWithPrefix),
+                _ => None,
+            };
+
+            match xpub.derive_bip32_addresses(args.count, &format) {
                 Ok(addresses) => {
                     // Print each derived address with its index
                     for (i, address) in addresses.iter().enumerate() {
                         println!("Child {}: {}", i, address);
                     }
                 }
-                Err(e) => { 
+                Err(e) => {
                     eprintln!("Error: {}", e);
                 }
             }
@@ -87,16 +104,26 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             };
 
             let xpub = Xpub::from_base58(&args.extended_public_key, coin_type)?;
-            println!("Generating {} BIP-44 addresses for: {}", args.count, args.coin_type);
+            println!(
+                "Generating {} BIP-44 addresses for: {}",
+                args.count, args.coin_type
+            );
 
-            match xpub.derive_bip44_addresses(args.count) {
+            let format = match args.format.as_deref() {
+                Some("legacy") => Some(utils::AddressFormat::Legacy),
+                Some("cashaddr") => Some(utils::AddressFormat::CashAddr),
+                Some("cashaddr-p") => Some(utils::AddressFormat::CashAddrWithPrefix),
+                _ => None,
+            };
+
+            match xpub.derive_bip44_addresses(args.count, &format) {
                 Ok(addresses) => {
                     // Print each derived address with its index
                     for (i, address) in addresses.iter().enumerate() {
                         println!("Child {}: {}", i, address);
                     }
                 }
-                Err(e) => { 
+                Err(e) => {
                     eprintln!("Error: {}", e);
                 }
             }
