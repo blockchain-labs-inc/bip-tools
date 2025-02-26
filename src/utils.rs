@@ -36,7 +36,7 @@ impl CashAddress {
     fn legacy_address(hash: &[u8]) -> String {
         let mut address_byte = vec![0x00]; // P2PKH version
         address_byte.extend_from_slice(hash);
-        let checksum = Sha256::digest(&Sha256::digest(&address_byte));
+        let checksum = Sha256::digest(Sha256::digest(&address_byte));
         address_byte.extend_from_slice(&checksum[..4]);
         bs58::encode(address_byte).into_string()
     }

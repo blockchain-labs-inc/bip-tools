@@ -132,7 +132,7 @@ impl Xpub {
     pub fn to_address(&self, format: &Option<AddressFormat>) -> String {
         let hash160 = {
             let mut hasher = Sha256::new();
-            hasher.update(&self.public_key.serialize());
+            hasher.update(self.public_key.serialize());
             Ripemd160::digest(hasher.finalize())
         };
 
@@ -150,7 +150,7 @@ impl Xpub {
                     CoinType::BitcoinCash => unreachable!(),
                 };
                 address_bytes[1..21].copy_from_slice(&hash160);
-                let checksum = Sha256::digest(&Sha256::digest(&address_bytes[..21]));
+                let checksum = Sha256::digest(Sha256::digest(&address_bytes[..21]));
                 address_bytes[21..25].copy_from_slice(&checksum[..4]);
                 address_bytes.to_base58()
             }
