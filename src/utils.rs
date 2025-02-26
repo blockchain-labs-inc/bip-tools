@@ -1,4 +1,4 @@
-use std::{panic, vec};
+use std::vec;
 
 use bs58;
 use ripemd::Ripemd160;
@@ -28,7 +28,6 @@ impl CashAddress {
             AddressFormat::Legacy => Self::legacy_address(&hash),
             AddressFormat::CashAddr => Self::cashaddr(&hash, false),
             AddressFormat::CashAddrWithPrefix => Self::cashaddr(&hash, true),
-            _ => panic!("Unsupported format"),
         }
     }
 
