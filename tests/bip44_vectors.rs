@@ -29,6 +29,17 @@ mod test {
             }
         }
 
+        /// Test generating BIP44 addresses
+        #[test]
+        fn test_bip44_multiple_addresses() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, &None).expect("BIP44 derivation failed");
+            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            for (i, addr) in addresses.iter().enumerate() {
+                assert_eq!(addr, BIP44_EXPECTED_ADDRESS_BTC[i], "Address at index {} mismatch", i);
+            }
+        }
+
         /// Test consisteny of BIP44 derivation
         #[test]
         fn test_bip44_derivation_consistency() {
@@ -46,5 +57,14 @@ mod test {
             assert!(addresses.is_empty(), "Should return an empty vector for zero addresses");
         }
 
+        /// Test Bitcoin-spesific BIP44 address format
+        #[test]
+        fn test_bip44_address_format() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            for addr in addresses.iter() {
+                assert!(addr.starts_with("1") || addr.starts_with("3") || addr.starts_with("bc1"), "Invalid BIP44 address format");
+            }
+        }
     }
 }
