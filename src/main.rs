@@ -64,9 +64,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "dogecoin" => CoinType::Dogecoin,
                 "bitcoincash" => CoinType::BitcoinCash,
                 _ => {
-                eprintln!("Unsupported coin type: {}", args.coin_type); // Added more detailed error reporting
-                return Err("Unsupported coin type".into());
-            }
+                    eprintln!("Unsupported coin type: {}", args.coin_type); // Added more detailed error reporting
+                    return Err("Unsupported coin type".into());
+                }
             };
 
             let xpub = Xpub::from_base58(&args.extended_public_key, coin_type)?;
