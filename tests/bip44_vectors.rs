@@ -29,7 +29,14 @@ mod test {
             }
         }
 
+        /// Test consisteny of BIP44 derivation
+        #[test]
+        fn test_bip44_derivation_consistency() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
+            let addresses1 = xpub.derive_bip44_addresses(2, &None).unwrap();
+            let addresses2 = xpub.derive_bip44_addresses(2, &None).unwrap();
+            assert_eq!(addresses1, addresses2, "BIP44 addresses should be consistent");
+        }
         
-
     }
 }
