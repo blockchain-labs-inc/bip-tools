@@ -37,6 +37,14 @@ mod test {
             let addresses2 = xpub.derive_bip44_addresses(2, &None).unwrap();
             assert_eq!(addresses1, addresses2, "BIP44 addresses should be consistent");
         }
-        
+
+        /// Test generating zero BIP44 addresses
+        #[test]
+        fn test_bip44_zero_address() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip44_addresses(0, &None).unwrap();
+            assert!(addresses.is_empty(), "Should return an empty vector for zero addresses");
+        }
+
     }
 }
