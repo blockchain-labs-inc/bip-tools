@@ -83,5 +83,16 @@ mod tests {
             let addresses = xpub.derive_bip32_addresses(count, &None).expect("BIP32 large index derivation failed");
             assert_eq!(addresses.len(), count as usize, "Should generate 1000 addresses");
         }
+
+        /// Test Litecoin-spesific BIP32 address format
+        #[test]
+        fn test_bip32_address_format() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip32_addresses(3, &None).expect("BIP32 address derivation failed");
+            for (i, addr) in addresses.iter().enumerate() {
+                assert!(addr.starts_with("L"),
+                "BIP32 address {} should start with 'L'", i);
+            }
+        }
     }
 }
