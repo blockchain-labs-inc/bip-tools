@@ -134,5 +134,21 @@ mod test {
                 );
             }
         }
+
+        /// Test BIP44 derivation with large index range
+        #[test]
+        fn test_bip44_large_index_range() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
+            let large_count = 1000;
+            let addresses = xpub.derive_bip44_addresses(large_count, &None).expect("BIP44 large index derivation failed");
+            assert_eq!(addresses.len(), large_count as usize, "Should generate 1000 addresses");
+            for (i, addr) in addresses.iter().take(3).enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_LTC[i],
+                    "BIP44 address at index {} does not match expected",
+                    i
+                );
+            }
+        }
     }
 }
