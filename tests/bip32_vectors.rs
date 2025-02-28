@@ -108,4 +108,28 @@ mod tests {
             }
         }
     }
+
+    mod dogecoin_bip32 {
+        use bip_tools::{CoinType, Xpub};
+        
+        // Constants
+        const COIN_TYPE: CoinType = CoinType::Dogecoin;
+        const XPUB_DOGE_BIP32: &str = "dgub8u3NcC3wtwJZFpsVP9Qg6GoTb6ik3i1BQXxCBbogozJk2jkXkMRwg286arkarfL8b998F1PnvkBRwnN5WR7PZcX1ir5yDrKWAMxfE7d4zjg";
+        const BIP32_EXPECTED_ADDRESS_DOGE: [&str; 3] =  [
+            "DP5Hghi5FngxamwXteyb7kckNimUYrnpCX",
+            "DCSSfERm2HyRcmHQojPkhqZ9TSqErEctcn",
+            "D5nVkhrtA1f2VJhtd2BZLdayiC3zZpsVLx",
+        ];
+
+        // Test BIP32 derivation for multiple addresses (for Dogecoin)
+        #[test]
+        fn test_bip32_multiple_addresses() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip32_addresses(3, &None).expect("BIP32 Multiple addresses derivation failed");
+            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            for (i, addr) in addresses.iter().enumerate() {
+                assert_eq!(addr, BIP32_EXPECTED_ADDRESS_DOGE[i], "Multiple BIP32 addresses do not match expected");
+            }
+        }
+    }
 }

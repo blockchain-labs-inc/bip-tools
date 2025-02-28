@@ -198,9 +198,9 @@ mod test {
         fn test_bip44_single_address() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
-                .derive_bip44_addresses(3, &None)
+                .derive_bip44_addresses(1, &None)
                 .expect("BIP44 single address derivation failed");
-            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            assert_eq!(addresses.len(), 1, "Should generate 1 addresses");
             assert_eq!(
                 addresses[0], BIP44_EXPECTED_ADDRESS_DOGE[0],
                 "First BIP44 address does not match expected"
