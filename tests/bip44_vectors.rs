@@ -245,4 +245,51 @@ mod test {
             }
         }
     }
+
+    /// Bitcoin Cash (BCH) BIP44 Tests
+    mod bitcoincash_bip44 {
+        use bip_tools::{utils, CoinType, Xpub};
+        use utils::AddressFormat;
+
+        // Constants
+        const COIN_TYPE: CoinType = CoinType::BitcoinCash;
+        const XPUB_BCH_BIP44: &str = "xpub6BewxLEmwosTasa2dS9s74Ghiv7oTgTR6RP7kc5Ja4g57orTrZ3PGGfqm1tZTQhM4efmWgaKjJQnSDk6kGaGZufDevBFuajV9tD4tGXASFc";
+
+        /// Expected addresses for Legacy format (Base58)
+        const BIP44_EXPECTED_ADDRESS_BCH_LEGACY: [&str; 3] = [
+            "1F3XiYNWdoGqmKZR4HkTurx7DjFQt98usy",
+            "1JrTBgh3mjAEVLdnieqGkCEx8qjs4Q3pGj",
+            "13932dNkDD3ygCtsQopAKQEgPAuQvJdFtr",
+        ];
+
+        /// Expected addresses for CashAddr format (not prefix)
+        const BIP44_EXPECTED_ADDRESS_BCH_CASHADDR: [&str; 3] = [
+            "qzdqcw78ydvlvf3wzl93cshc7ezgz53e6qttgrgm0s",
+            "qrpagcxqyy0sdxhge9qpvqu5ly6vjfz7dcw5evy5x9",
+            "qqth23dw483yupmp6q97gvv6vukk0qez0c3uqp3zj0",
+        ];
+
+        /// Expected addresses for CashAddr format (with prefix)
+        const BIP44_EXPECTED_ADDRESS_BCH_CASHADDR_PREFIX: [&str; 3] = [
+            "bitcoincash:qzdqcw78ydvlvf3wzl93cshc7ezgz53e6qttgrgm0s",
+            "bitcoincash:qrpagcxqyy0sdxhge9qpvqu5ly6vjfz7dcw5evy5x9",
+            "bitcoincash:qqth23dw483yupmp6q97gvv6vukk0qez0c3uqp3zj0",
+        ];
+
+        /// Test BIP44 derivation for a single legacy address and verify
+        #[test]
+        fn test_bip44_single_legacy_address() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub
+                .derive_bip44_addresses(3, &Some(AddressFormat::Legacy))
+                .expect("Failed to derive single Legacy address with BIP44");
+            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            assert_eq!(
+                addresses[0], BIP44_EXPECTED_ADDRESS_BCH_LEGACY[0],
+                "First BIP44 Legacy address does not match expected"
+            );
+        }
+
+    }
+
 }

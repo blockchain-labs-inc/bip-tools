@@ -1,5 +1,4 @@
 use std::vec;
-
 use bs58;
 use ripemd::Ripemd160;
 use sha2::{Digest, Sha256};
