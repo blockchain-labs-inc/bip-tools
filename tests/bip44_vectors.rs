@@ -289,5 +289,28 @@ mod test {
                 "First BIP44 Legacy address does not match expected"
             );
         }
+
+        /// Verify BIP44 derivation consistency across format
+        #[test]
+        fn test_bip44_format_consistency() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
+            let addresses_legacy = xpub
+                .derive_bip44_addresses(3, &Some(AddressFormat::Legacy))
+                .expect("Failed to derive Legacy addresses");
+            let legacy_addresses_again = xpub
+                .derive_bip44_addresses(3, &Some(AddressFormat::Legacy))
+                .expect("Failed to derive Legacy addresses again");
+            assert_eq!(
+                addresses_legacy, legacy_addresses_again,
+                "Legacy BIP44 addresses format be consistent across derivation"
+            );
+            for (i, addr) in legacy_addresses_again.iter().enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_BCH_LEGACY[i],
+                    "Legacy BIP44 address at index {} does not match expected",
+                    i
+                );
+            }
+        }
     }
 }
