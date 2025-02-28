@@ -129,13 +129,13 @@ mod test {
         #[test]
         fn test_bip44_large_index_range() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
-            let large_count = 1000;
+            let count = 1000;
             let addresses = xpub
-                .derive_bip44_addresses(large_count, &None)
+                .derive_bip44_addresses(count, &None)
                 .expect("BIP44 large index derivation failed");
             assert_eq!(
                 addresses.len(),
-                large_count as usize,
+                count as usize,
                 "Should generate 1000 addresses"
             );
             for (i, addr) in addresses.iter().take(3).enumerate() {
@@ -305,6 +305,29 @@ mod test {
                 "Legacy BIP44 addresses format be consistent across derivation"
             );
             for (i, addr) in legacy_addresses_again.iter().enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_BCH_LEGACY[i],
+                    "Legacy BIP44 address at index {} does not match expected",
+                    i
+                );
+            }
+        }
+
+        /// Test large-scale BIP44 derivation for (1000 addresses, Legacy)
+        #[test]
+        fn test_bip44_large_scale_legacy_derivation() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
+            let count = 1000;
+            let addresses = xpub
+                .derive_bip44_addresses(count, &Some(AddressFormat::Legacy))
+                .expect("Failed to derive large-scale Legacy addresses with BIP44");
+            assert_eq!(
+                addresses.len(),
+                count as usize,
+                "Should derive exactly 1000 Legacy addresses"
+            );
+            // Verify the first 3 addresses
+            for (i, addr) in addresses.iter().take(3).enumerate() {
                 assert_eq!(
                     addr, BIP44_EXPECTED_ADDRESS_BCH_LEGACY[i],
                     "Legacy BIP44 address at index {} does not match expected",
