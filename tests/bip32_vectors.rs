@@ -36,5 +36,15 @@ mod tests {
             assert_eq!(addresses1, addresses2, "BIP32 addresses should be consistent across derivations");
         }
 
+        /// Test Bitcoin-spesific BIP32 address format
+        #[test]
+        fn test_bip32_address_format() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip32_addresses(3, &None).unwrap();
+            for addr in addresses.iter() {
+                assert!(addr.starts_with("1"),
+                "BIP32 address should start with '1'");
+            }
+        }
     }
 }
