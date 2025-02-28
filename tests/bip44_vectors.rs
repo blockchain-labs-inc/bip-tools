@@ -1,13 +1,8 @@
 #[cfg(test)]
 mod test {
-    use super::*;
-    use bip_tools::Xpub;
-    use secp256k1::PublicKey;
-
     /// Bitcoin (BTC) test module
     mod bitcoin {
         use bip_tools::{CoinType, Xpub};
-        use super::*;
 
         // Coin-spesific constants
         const COIN_TYPE: CoinType = CoinType::Bitcoin;
@@ -92,7 +87,6 @@ mod test {
     /// Litecoin (LTC) BIP44 Tests
     mod litecoin_bip44 {
         use bip_tools::{CoinType, Xpub};
-        use super::*;
 
         // Constants
         const COIN_TYPE: CoinType = CoinType::Litecoin;
@@ -158,7 +152,7 @@ mod test {
             for (i, addr) in addresses.iter().enumerate() {
                 assert!(
                     addr.starts_with("L"),
-                    "BIP44 address at index {} does not match expected format",
+                    "BIP44 address at index {} should start with 'L'",
                     i
                 );
                 assert_eq!(
@@ -181,7 +175,6 @@ mod test {
     /// Dogecoin (DOGE) BIP44 Tests
     mod dogecoin_bip44 {
         use bip_tools::{CoinType, Xpub};
-        use super::*;
 
         // Constants
         const COIN_TYPE: CoinType = CoinType::Dogecoin;
@@ -215,6 +208,25 @@ mod test {
                 .expect("BIP44 multiple addresses derivation failed");
             assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
             for (i, addr) in addresses.iter().enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_DOGE[i],
+                    "BIP44 address at index {} does not match expected",
+                    i
+                );
+            }
+        }
+
+        /// Test Dogecoin-specific address format for BIP44 derivation
+        #[test]
+        fn test_bip44_address_format() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, &None).expect("BIP44 address format derivation failed");
+            for (i, addr) in addresses.iter().enumerate() {
+                assert!(
+                    addr.starts_with("D"),
+                    "Dogecoin BIP44 address at index {} should start with 'D'", 
+                    i
+                );
                 assert_eq!(
                     addr, BIP44_EXPECTED_ADDRESS_DOGE[i],
                     "BIP44 address at index {} does not match expected",
