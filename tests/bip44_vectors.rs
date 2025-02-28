@@ -7,7 +7,6 @@ mod test {
     /// Bitcoin (BTC) test module
     mod bitcoin {
         use bip_tools::{CoinType, Xpub};
-
         use super::*;
 
         // Coin-spesific constants
@@ -93,7 +92,6 @@ mod test {
     /// Litecoin (LTC) BIP44 Tests
     mod litecoin_bip44 {
         use bip_tools::{CoinType, Xpub};
-
         use super::*;
 
         // Constants
@@ -177,6 +175,35 @@ mod test {
             let invalid_xpub = "invalid_ltc_xpub";
             let result = Xpub::from_base58(invalid_xpub, COIN_TYPE);
             assert!(result.is_err(), "Invalid xpub should fail for BIP44 derivation");
+        }
+    }
+
+    /// Dogecoin (DOGE) BIP44 Tests
+    mod dogecoin_bip44 {
+        use bip_tools::{CoinType, Xpub};
+        use super::*;
+
+        // Constants
+        const COIN_TYPE: CoinType = CoinType::Dogecoin;
+        const XPUB_DOGE_BIP44: &str = "dgub8ruYKJZx5Ki82KRujYrp8tvcN5tTYajBKj9sbFeeLqM4xKQGvFcqYntc4BYaXF7WPCY3Y1zdJ1VgdDrcWLyBp5GmobAiGuk672Qn4f4rtms";
+        const BIP44_EXPECTED_ADDRESS_DOGE: [&str; 3] = [
+            "DJ3U8pgzkU7q349B4kMyhkCH1ZpqnbRHtb",
+            "DTHWzjtctfj37pbPxBBdNPMZMHPZ4i7phC",
+            "DREHyEz5bwix16FzR3ALP1XYQiZh4MgVk7",
+        ];
+
+        /// Test BIP44 derivation for a single address
+        #[test]
+        fn test_bip44_single_address() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub
+                .derive_bip44_addresses(3, &None)
+                .expect("BIP44 single address derivation failed");
+            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            assert_eq!(
+                addresses[0], BIP44_EXPECTED_ADDRESS_DOGE[0],
+                "First BIP44 address does not match expected"
+            );
         }
     }
 }
