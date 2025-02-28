@@ -13,7 +13,7 @@ mod tests {
             "15Jz4V68onxWmdRdC2ZR8KDfghY1np1E9w",
         ];
 
-        /// Test generating a single BIP32 address
+        /// Test generating a multiple BIP32 address
         #[test]
         fn test_bip32_multiple_addresses() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
@@ -45,6 +45,34 @@ mod tests {
                 assert!(addr.starts_with("1"),
                 "BIP32 address should start with '1'");
             }
+        }
+    }
+
+    /// Litecoin (LTC) BIP32 Test Module
+    mod litecoin_bip32 {
+        use bip_tools::{CoinType, Xpub};
+
+        // Constants
+        const COIN_TYPE: CoinType = CoinType::Litecoin;
+        const XPUB_LTC_BIP32: &str = "Ltub2aDBHxW1JQKsKckPrXniDLiu8TG8HRsPMJJzTPbXgNwZVV4ccXoHqXTFxSHMtED518MZP3ukjaoyC71MivCHg3qj2NQAzfP3PcMnx1HxezW";
+        const BIP32_EXPECTED_ADDRESS_LTC: [&str; 3] = [
+            "LPs2CLDRwQuG6NTaYcqLFCAHseKcpred9m",
+            "LZrrce6ZWkfFWKreefxdX862eyuagabgF8",
+            "LNwSvqc7uudTKt4Gz8VevVJNJ7hGboxADY",
+        ];
+
+        /// Test generating a multiple BIP32 address
+        #[test]
+        fn test_bip32_multiple_addresses() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
+            let addresses = xpub
+                .derive_bip32_addresses(3, &None)
+                .expect("BIP32 multiple address derivation failed");
+            assert_eq!(addresses.len(), 3, "Should generate 3 address");
+            assert_eq!(
+                addresses[0], BIP32_EXPECTED_ADDRESS_LTC[0],
+                "Multiple BIP32 addresses do not match expected"
+            );
         }
     }
 }
