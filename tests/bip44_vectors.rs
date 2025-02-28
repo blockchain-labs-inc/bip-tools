@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod test {
     use super::*;
+    use bip_tools::Xpub;
     use secp256k1::PublicKey;
 
     /// Bitcoin (BTC) test module
@@ -82,7 +83,7 @@ mod test {
             let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
             for addr in addresses.iter() {
                 assert!(
-                    addr.starts_with("1") || addr.starts_with("3") || addr.starts_with("bc1"),
+                    addr.starts_with("1"),
                     "Invalid BIP44 address format"
                 );
             }
@@ -143,6 +144,25 @@ mod test {
             let addresses = xpub.derive_bip44_addresses(large_count, &None).expect("BIP44 large index derivation failed");
             assert_eq!(addresses.len(), large_count as usize, "Should generate 1000 addresses");
             for (i, addr) in addresses.iter().take(3).enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_LTC[i],
+                    "BIP44 address at index {} does not match expected",
+                    i
+                );
+            }
+        }
+
+        // Test Litecoin-specific address format for BIP44 derivation
+        #[test]
+        fn test_bip44_address_format() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, &None).expect("BIP44 address format derivation failed");
+            for (i, addr) in addresses.iter().enumerate() {
+                assert!(
+                    addr.starts_with("L"),
+                    "BIP44 address at index {} does not match expected format",
+                    i
+                );
                 assert_eq!(
                     addr, BIP44_EXPECTED_ADDRESS_LTC[i],
                     "BIP44 address at index {} does not match expected",
