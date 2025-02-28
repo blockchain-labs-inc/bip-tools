@@ -76,10 +76,7 @@ mod test {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
             for addr in addresses.iter() {
-                assert!(
-                    addr.starts_with("1"),
-                    "Invalid BIP44 address format"
-                );
+                assert!(addr.starts_with("1"), "Invalid BIP44 address format");
             }
         }
     }
@@ -133,8 +130,14 @@ mod test {
         fn test_bip44_large_index_range() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
             let large_count = 1000;
-            let addresses = xpub.derive_bip44_addresses(large_count, &None).expect("BIP44 large index derivation failed");
-            assert_eq!(addresses.len(), large_count as usize, "Should generate 1000 addresses");
+            let addresses = xpub
+                .derive_bip44_addresses(large_count, &None)
+                .expect("BIP44 large index derivation failed");
+            assert_eq!(
+                addresses.len(),
+                large_count as usize,
+                "Should generate 1000 addresses"
+            );
             for (i, addr) in addresses.iter().take(3).enumerate() {
                 assert_eq!(
                     addr, BIP44_EXPECTED_ADDRESS_LTC[i],
@@ -148,7 +151,9 @@ mod test {
         #[test]
         fn test_bip44_address_format() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, &None).expect("BIP44 address format derivation failed");
+            let addresses = xpub
+                .derive_bip44_addresses(3, &None)
+                .expect("BIP44 address format derivation failed");
             for (i, addr) in addresses.iter().enumerate() {
                 assert!(
                     addr.starts_with("L"),
@@ -163,12 +168,15 @@ mod test {
             }
         }
 
-        /// Test error handling for invalid 
+        /// Test error handling for invalid
         #[test]
-        fn test_bip44_invalid_xpub(){
+        fn test_bip44_invalid_xpub() {
             let invalid_xpub = "invalid_ltc_xpub";
             let result = Xpub::from_base58(invalid_xpub, COIN_TYPE);
-            assert!(result.is_err(), "Invalid xpub should fail for BIP44 derivation");
+            assert!(
+                result.is_err(),
+                "Invalid xpub should fail for BIP44 derivation"
+            );
         }
     }
 
@@ -220,11 +228,13 @@ mod test {
         #[test]
         fn test_bip44_address_format() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, &None).expect("BIP44 address format derivation failed");
+            let addresses = xpub
+                .derive_bip44_addresses(3, &None)
+                .expect("BIP44 address format derivation failed");
             for (i, addr) in addresses.iter().enumerate() {
                 assert!(
                     addr.starts_with("D"),
-                    "Dogecoin BIP44 address at index {} should start with 'D'", 
+                    "Dogecoin BIP44 address at index {} should start with 'D'",
                     i
                 );
                 assert_eq!(
@@ -234,6 +244,5 @@ mod test {
                 );
             }
         }
-
     }
 }
