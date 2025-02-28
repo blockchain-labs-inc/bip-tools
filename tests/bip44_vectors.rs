@@ -338,7 +338,7 @@ mod test {
 
         /// Derive a single CashAddr address and verify
         #[test]
-        fn test_bip44_single_cashaddr_address() {
+        fn test_bip44_multi_cashaddr_address() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, &Some(AddressFormat::CashAddr))
@@ -348,6 +348,23 @@ mod test {
                 addresses[0], BIP44_EXPECTED_ADDRESS_BCH_CASHADDR[0],
                 "First BIP44 CashAddr address does not match expected"
             );
+        }
+
+        // Derive multiple CashAddrWithPrefix addresses and verify
+        #[test]
+        fn test_bip44_multi_cash_addr_prefix_addresses() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub
+                .derive_bip44_addresses(3, &Some(AddressFormat::CashAddrWithPrefix))
+                .expect("Failed to derive multiple CashAddrWithPrefix addresses with BIP44");
+            assert_eq!(addresses.len(), 3, "Should derive exactly 3 addresses");
+            for (i, addr) in addresses.iter().enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_BCH_CASHADDR_PREFIX[i],
+                    "CashAddrWithPrefix BIP44 address at index {} does not match expected",
+                    i
+                )
+            }
         }
     }
 }
