@@ -335,5 +335,19 @@ mod test {
                 );
             }
         }
+
+        /// Derive a single CashAddr address and verify
+        #[test]
+        fn test_bip44_single_cashaddr_address() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub
+                .derive_bip44_addresses(3, &Some(AddressFormat::CashAddr))
+                .expect("Failed to derive single CashAddr address with BIP44");
+            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            assert_eq!(
+                addresses[0], BIP44_EXPECTED_ADDRESS_BCH_CASHADDR[0],
+                "First BIP44 CashAddr address does not match expected"
+            );
+        }
     }
 }
