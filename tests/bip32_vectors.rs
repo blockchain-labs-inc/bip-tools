@@ -74,5 +74,14 @@ mod tests {
                 "Multiple BIP32 addresses do not match expected"
             );
         }
+
+        /// Test BIP32 derivation consistency
+        #[test]
+        fn test_bip32_large_index_range() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
+            let count = 1000;
+            let addresses = xpub.derive_bip32_addresses(count, &None).expect("BIP32 large index derivation failed");
+            assert_eq!(addresses.len(), count as usize, "Should generate 1000 addresses");
+        }
     }
 }
