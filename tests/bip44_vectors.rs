@@ -289,7 +289,5 @@ mod test {
                 "First BIP44 Legacy address does not match expected"
             );
         }
-
     }
-
 }
