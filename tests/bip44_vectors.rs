@@ -117,5 +117,22 @@ mod test {
                 "First BIP44 address does not match expected"
             );
         }
+
+        /// Test BIP44 derivation for multiple addresses
+        #[test]
+        fn test_bip44_multiple_addresses() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub
+                .derive_bip44_addresses(3, &None)
+                .expect("BIP44 multiple addresses derivation failed");
+            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            for (i, addr) in addresses.iter().enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_LTC[i],
+                    "BIP44 address at index {} does not match expected",
+                    i
+                );
+            }
+        }
     }
 }
