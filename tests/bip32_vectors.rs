@@ -131,5 +131,15 @@ mod tests {
                 assert_eq!(addr, BIP32_EXPECTED_ADDRESS_DOGE[i], "Multiple BIP32 addresses do not match expected");
             }
         }
+
+        // Test Dogecoin-spesific address format for BIP44 derivation
+        #[test]
+        fn test_bip32_address_format() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip32_addresses(3, &None).expect("BIP32 address derivation failed");
+            for addr in addresses.iter() {
+                assert!(addr.starts_with("D"), "BIP32 address should start with 'D'");
+            }
+        }
     }
 }
