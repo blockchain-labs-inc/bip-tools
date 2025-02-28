@@ -170,5 +170,13 @@ mod test {
                 );
             }
         }
+
+        /// Test error handling for invalid 
+        #[test]
+        fn test_bip44_invalid_xpub(){
+            let invalid_xpub = "invalid_ltc_xpub";
+            let result = Xpub::from_base58(invalid_xpub, COIN_TYPE);
+            assert!(result.is_err(), "Invalid xpub should fail for BIP44 derivation");
+        }
     }
 }
