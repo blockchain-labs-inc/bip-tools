@@ -276,9 +276,9 @@ mod test {
             "bitcoincash:qqth23dw483yupmp6q97gvv6vukk0qez0c3uqp3zj0",
         ];
 
-        /// Test BIP44 derivation for a single legacy address and verify
+        /// Test BIP44 derivation for a multiple legacy address and verify
         #[test]
-        fn test_bip44_single_legacy_address() {
+        fn test_bip44_multiple_legacy_address() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, &Some(AddressFormat::Legacy))
@@ -338,7 +338,7 @@ mod test {
 
         /// Derive a single CashAddr address and verify
         #[test]
-        fn test_bip44_multi_cashaddr_address() {
+        fn test_bip44_multiple_cashaddr_address() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, &Some(AddressFormat::CashAddr))
@@ -352,7 +352,7 @@ mod test {
 
         // Derive multiple CashAddrWithPrefix addresses and verify
         #[test]
-        fn test_bip44_multi_cash_addr_prefix_addresses() {
+        fn test_bip44_multiple_cash_addr_prefix_addresses() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, &Some(AddressFormat::CashAddrWithPrefix))

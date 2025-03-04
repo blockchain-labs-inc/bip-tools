@@ -1,5 +1,7 @@
 #[cfg(test)]
 mod tests {
+    use bip_tools::Xpub;
+
     /// Bitcoin (BTC) BIP32 Test Module
     mod bitcoin {
         use bip_tools::{CoinType, Xpub};
@@ -179,5 +181,19 @@ mod tests {
             "bitcoincash:qq9hz9nujds8l205rvdvtcs480qqcpz0kclfd80zga",
             "bitcoincash:qz4svseqjyp72xge6pkwh26nsdna6z77fysuzg7ust",
         ];
+
+        // Test BIP32 derivation for multiple legacy addresses and verify
+        #[test]
+        fn test_bip32_multiple_legacy_addresses() {
+            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let addresses = xpub
+                .derive_bip32_addresses(3, &Some(AddressFormat::Legacy))
+                .expect("BIP32 Multiple addresses derivation failed");
+            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            assert_eq!(
+                addresses[0], BIP32_EXPECTED_ADDRESS_BHC_LEGACY[0],
+                "Multiple BIP32 addresses do not match expected"
+            );
+        }
     }
 }
