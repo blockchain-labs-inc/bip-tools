@@ -87,7 +87,6 @@ mod test {
             let result = Xpub::from_base58(invalid_xpub, CoinType::Bitcoin);
             assert!(result.is_err(), "Short xpub fail for BIP44 Bitcoin");
         }
-
     }
 
     /// Litecoin (LTC) BIP44 Tests
@@ -195,7 +194,6 @@ mod test {
             let result = Xpub::from_base58(invalid_xpub, CoinType::Litecoin);
             assert!(result.is_err(), "Short xpub fail for BIP32 Litecoin");
         }
-
     }
 
     /// Dogecoin (DOGE) BIP44 Tests
@@ -270,7 +268,6 @@ mod test {
             let result = Xpub::from_base58(invalid_xpub, CoinType::Dogecoin);
             assert!(result.is_err(), "Short xpub fail for BIP44 Dogecoin");
         }
-        
     }
 
     /// Bitcoin Cash (BCH) BIP44 Tests

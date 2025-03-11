@@ -56,7 +56,6 @@ mod tests {
             let result = Xpub::from_base58(invalid_xpub, CoinType::Bitcoin);
             assert!(result.is_err(), "Short xpub fail for BIP32 Bitcoin");
         }
-
     }
 
     /// Litecoin (LTC) BIP32 Test Module
@@ -124,7 +123,6 @@ mod tests {
             let result = Xpub::from_base58(invalid_xpub, CoinType::Litecoin);
             assert!(result.is_err(), "Short xpub fail for BIP32 Litecoin");
         }
-
     }
 
     mod dogecoin_bip32 {
@@ -174,7 +172,6 @@ mod tests {
             let result = Xpub::from_base58(invalid_xpub, CoinType::Dogecoin);
             assert!(result.is_err(), "Short xpub fail for BIP32 Dogecoin");
         }
-
     }
 
     // Bitcoin Cash (BCH) BIP32 Test Module
