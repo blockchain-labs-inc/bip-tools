@@ -195,5 +195,31 @@ mod tests {
                 "Multiple BIP32 addresses do not match expected"
             );
         }
+
+        #[test]
+        fn test_bip32_multiple_cashaddr_addresses() {
+            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let addresses = xpub
+                .derive_bip32_addresses(3, &Some(AddressFormat::CashAddr))
+                .expect("BIP32 Multiple addresses derivation failed");
+            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            assert_eq!(
+                addresses[0], BIP32_EXPECTED_ADDRESS_BHC_CASHADDR[0],
+                "Multiple BIP32 addresses do not match expected"
+            );
+        }
+
+        #[test]
+        fn test_bip32_multiple_cashaddr_prefix_addresses() {
+            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let addresses = xpub
+                .derive_bip32_addresses(3, &Some(AddressFormat::CashAddrWithPrefix))
+                .expect("BIP32 Multiple addresses derivation failed");
+            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            assert_eq!(
+                addresses[0], BIP32_EXPECTED_ADDRESS_BHC_CASHADDR_PREFIX[0],
+                "Multiple BIP32 addresses do not match expected"
+            );
+        }
     }
 }

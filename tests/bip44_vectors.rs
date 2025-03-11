@@ -352,7 +352,7 @@ mod test {
 
         // Derive multiple CashAddrWithPrefix addresses and verify
         #[test]
-        fn test_bip44_multiple_cash_addr_prefix_addresses() {
+        fn test_bip44_multiple_cashaddr_prefix_addresses() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, &Some(AddressFormat::CashAddrWithPrefix))
