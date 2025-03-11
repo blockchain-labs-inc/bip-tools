@@ -139,7 +139,7 @@ mod tests {
             "D5nVkhrtA1f2VJhtd2BZLdayiC3zZpsVLx",
         ];
 
-        // Test BIP32 derivation for multiple addresses (for Dogecoin)
+        /// Test BIP32 derivation for multiple addresses (for Dogecoin)
         #[test]
         fn test_bip32_multiple_addresses() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
@@ -155,7 +155,7 @@ mod tests {
             }
         }
 
-        // Test Dogecoin-spesific address format for BIP44 derivation
+        /// Test Dogecoin-spesific address format for BIP44 derivation
         #[test]
         fn test_bip32_address_format() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
@@ -166,6 +166,15 @@ mod tests {
                 assert!(addr.starts_with("D"), "BIP32 address should start with 'D'");
             }
         }
+
+        /// Test BIP32 Dogecoin xpub parsing with a short invalid xpub and checks if an error is returned
+        #[test]
+        fn test_bip32_doge_short_invalid_xpub() {
+            let invalid_xpub = "xpub123";
+            let result = Xpub::from_base58(invalid_xpub, CoinType::Dogecoin);
+            assert!(result.is_err(), "Short xpub fail for BIP32 Dogecoin");
+        }
+
     }
 
     // Bitcoin Cash (BCH) BIP32 Test Module
@@ -198,7 +207,7 @@ mod tests {
             "bitcoincash:qz4svseqjyp72xge6pkwh26nsdna6z77fysuzg7ust",
         ];
 
-        // Test BIP32 derivation for multiple legacy addresses and verify
+        /// Test BIP32 derivation for multiple legacy addresses and verify
         #[test]
         fn test_bip32_multiple_legacy_addresses() {
             let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
@@ -212,6 +221,7 @@ mod tests {
             );
         }
 
+        /// Test BIP32 derivation for multiple cashaddr addresses and verify
         #[test]
         fn test_bip32_multiple_cashaddr_addresses() {
             let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
@@ -225,6 +235,7 @@ mod tests {
             );
         }
 
+        /// Test BIP32 derivation for multiple cashaddr-prefix addresses and verify
         #[test]
         fn test_bip32_multiple_cashaddr_prefix_addresses() {
             let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();

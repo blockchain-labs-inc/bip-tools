@@ -262,6 +262,15 @@ mod test {
                 );
             }
         }
+
+        /// Test BIP44 Dogecoin xpub parsing with a short invalid xpub and checks if an error is returned
+        #[test]
+        fn test_bip44_doge_short_invalid_xpub() {
+            let invalid_xpub = "xpub123";
+            let result = Xpub::from_base58(invalid_xpub, CoinType::Dogecoin);
+            assert!(result.is_err(), "Short xpub fail for BIP44 Dogecoin");
+        }
+        
     }
 
     /// Bitcoin Cash (BCH) BIP44 Tests
