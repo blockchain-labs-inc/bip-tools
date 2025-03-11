@@ -79,6 +79,15 @@ mod test {
                 assert!(addr.starts_with("1"), "Invalid BIP44 address format");
             }
         }
+
+        /// Test BIP44 Bitcoin xpub parsing with a short invalid xpub and checks if an errors is returned
+        #[test]
+        fn test_bip44_btc_short_invalid_xpub() {
+            let invalid_xpub = "xpub123";
+            let result = Xpub::from_base58(invalid_xpub, CoinType::Bitcoin);
+            assert!(result.is_err(), "Short xpub fail for BIP44 Bitcoin");
+        }
+
     }
 
     /// Litecoin (LTC) BIP44 Tests

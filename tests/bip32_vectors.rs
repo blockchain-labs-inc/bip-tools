@@ -48,6 +48,15 @@ mod tests {
                 assert!(addr.starts_with("1"), "BIP32 address should start with '1'");
             }
         }
+
+        /// Test BIP44 Bitcoin xpub parsing with a short invalid xpub and checks if an error is returned
+        #[test]
+        fn test_bip32_btc_short_invalid_xpub() {
+            let invalid_xpub = "xpub123";
+            let result = Xpub::from_base58(invalid_xpub, CoinType::Bitcoin);
+            assert!(result.is_err(), "Short xpub fail for BIP32 Bitcoin");
+        }
+
     }
 
     /// Litecoin (LTC) BIP32 Test Module
