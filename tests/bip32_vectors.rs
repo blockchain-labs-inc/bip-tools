@@ -245,5 +245,13 @@ mod tests {
                 "Multiple BIP32 addresses do not match expected"
             );
         }
+
+        /// Test BIP32 Bitcoin Cash xpub parsing with a short invalid xpub and checks if an error is returned
+        #[test]
+        fn test_bip32_bhc_short_invalid_xpub() {
+            let invalid_xpub = "xpub123";
+            let result = Xpub::from_base58(invalid_xpub, CoinType::BitcoinCash);
+            assert!(result.is_err(), "Short xpub fail for BIP32 Bitcoin Cash");
+        }
     }
 }
