@@ -268,7 +268,6 @@ mod test {
                 assert!(addr.len() >= 26 && addr.len() <= 35, "BIP44 Dogecoin address lenght should be 26-35");
             }
         }
-
     }
 
     /// Bitcoin Cash (BCH) BIP44 Tests
@@ -399,5 +398,16 @@ mod test {
             let result = Xpub::from_base58(invalid_xpub, CoinType::BitcoinCash);
             assert!(result.is_err(), " Short xpub fail for BIP44 Bitcoin Cash");
         }
+
+        /// Test BIP44 Bitcoin Cash address format to ensure it start with 'q' (CashAddr)
+        #[test]
+        fn test_bip44_bhc_address_format() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, CoinType::BitcoinCash).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, &Some(AddressFormat::CashAddr)).unwrap();
+            for addr in addresses {
+                assert!(addr.starts_with("q"), "BIP44 Bitcoin Cash address should start with 'q' (CashAddr)");
+            }
+        }        
+
     }
 }

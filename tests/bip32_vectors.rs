@@ -289,5 +289,15 @@ mod tests {
             let result = Xpub::from_base58(invalid_xpub, CoinType::BitcoinCash);
             assert!(result.is_err(), "Short xpub fail for BIP32 Bitcoin Cash");
         }
+
+        /// Test BIP32 Bitcoin Cash address format to ensure it starts with 'q' (CashAddr)
+        #[test]
+        fn test_bip32_bhc_address_format() {
+            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, CoinType::BitcoinCash).unwrap();
+            let addresses = xpub.derive_bip32_addresses(3, &Some(AddressFormat::CashAddr)).unwrap();
+            for addr in addresses {
+                assert!(addr.starts_with("q"), "BIP32 Bitcoin Cash address should start with 'q' (CashAddr)");
+            }
+        }
     }
 }
