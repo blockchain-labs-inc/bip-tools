@@ -125,6 +125,18 @@ mod tests {
             let result = Xpub::from_base58(invalid_xpub, CoinType::Litecoin);
             assert!(result.is_err(), "Short xpub fail for BIP32 Litecoin");
         }
+
+        /// Test BIP32 Litecoin address format to ensure it start with 'L' and has correct lenght
+        #[test]
+        fn test_bip32_ltc_address_format() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP32, CoinType::Litecoin).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            for addr in addresses {
+                assert!(addr.starts_with("L"), "BIP32 Litecoin address should start with 'L'");
+                assert!(addr.len() >= 26 && addr.len() <= 35, "BIP32 Litecoin address lenght should be 26-35");
+            }
+        }
+
     }
 
     mod dogecoin_bip32 {
