@@ -77,8 +77,14 @@ mod test {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, CoinType::Bitcoin).unwrap();
             let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
             for addr in addresses {
-                assert!(addr.starts_with("1"), "BIP44 Bitcoin address should start '1'");
-                assert!(addr.len() >= 26 && addr.len() <= 35, "BIP44 Bitcoin address lenght should be 26-35");
+                assert!(
+                    addr.starts_with("1"),
+                    "BIP44 Bitcoin address should start '1'"
+                );
+                assert!(
+                    addr.len() >= 26 && addr.len() <= 35,
+                    "BIP44 Bitcoin address lenght should be 26-35"
+                );
             }
         }
     }
@@ -181,11 +187,16 @@ mod test {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, CoinType::Litecoin).unwrap();
             let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
             for addr in addresses {
-                assert!(addr.starts_with("L"), "BIP44 Litecoin address should start with 'L'");
-                assert!(addr.len() >= 26 && addr.len() <= 35, "BIP44 Litecoin address lenght should be 26-35");
+                assert!(
+                    addr.starts_with("L"),
+                    "BIP44 Litecoin address should start with 'L'"
+                );
+                assert!(
+                    addr.len() >= 26 && addr.len() <= 35,
+                    "BIP44 Litecoin address lenght should be 26-35"
+                );
             }
         }
-
     }
 
     /// Dogecoin (DOGE) BIP44 Tests
@@ -246,6 +257,18 @@ mod test {
             let result = Xpub::from_base58(invalid_xpub, CoinType::Dogecoin);
             assert!(result.is_err(), "Short xpub fail for BIP44 Dogecoin");
         }
+
+        /// Test BIP44 Dogecoin address format to ensure it start with 'D' and has correct lenght
+        #[test]
+        fn test_bip44_doge_address_format() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, CoinType::Dogecoin).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            for addr in addresses {
+                assert!(addr.starts_with("D"), "BIP44 Dogecoin address should start with 'D'");
+                assert!(addr.len() >= 26 && addr.len() <= 35, "BIP44 Dogecoin address lenght should be 26-35");
+            }
+        }
+
     }
 
     /// Bitcoin Cash (BCH) BIP44 Tests

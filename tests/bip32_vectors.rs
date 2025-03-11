@@ -53,11 +53,16 @@ mod tests {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP32, CoinType::Bitcoin).unwrap();
             let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
             for addr in addresses {
-                assert!(addr.starts_with("1"), "BIP32 Bitcoin address should start with '1'");
-                assert!(addr.len() >= 26 && addr.len() <= 35, "BIP32 Bitcoin address lenght should be 26-35");
+                assert!(
+                    addr.starts_with("1"),
+                    "BIP32 Bitcoin address should start with '1'"
+                );
+                assert!(
+                    addr.len() >= 26 && addr.len() <= 35,
+                    "BIP32 Bitcoin address lenght should be 26-35"
+                );
             }
         }
-
     }
 
     /// Litecoin (LTC) BIP32 Test Module
@@ -132,11 +137,16 @@ mod tests {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP32, CoinType::Litecoin).unwrap();
             let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
             for addr in addresses {
-                assert!(addr.starts_with("L"), "BIP32 Litecoin address should start with 'L'");
-                assert!(addr.len() >= 26 && addr.len() <= 35, "BIP32 Litecoin address lenght should be 26-35");
+                assert!(
+                    addr.starts_with("L"),
+                    "BIP32 Litecoin address should start with 'L'"
+                );
+                assert!(
+                    addr.len() >= 26 && addr.len() <= 35,
+                    "BIP32 Litecoin address lenght should be 26-35"
+                );
             }
         }
-
     }
 
     mod dogecoin_bip32 {
@@ -186,6 +196,18 @@ mod tests {
             let result = Xpub::from_base58(invalid_xpub, CoinType::Dogecoin);
             assert!(result.is_err(), "Short xpub fail for BIP32 Dogecoin");
         }
+
+        /// Test BIP32 Dogecoin address format to ensure it start with 'D' and has correct length
+        #[test]
+        fn test_bip32_doge_address_format() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, CoinType::Dogecoin).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            for addr in addresses {
+                assert!(addr.starts_with("D"), "BIP32 Dogecoin address should start with 'D'");
+                assert!(addr.len() >= 26 && addr.len() <= 35, "BIP32 Dogecoin address length should be 26-35");
+            }
+        }
+
     }
 
     // Bitcoin Cash (BCH) BIP32 Test Module
