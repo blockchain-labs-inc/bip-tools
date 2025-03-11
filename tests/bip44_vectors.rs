@@ -187,6 +187,15 @@ mod test {
                 "Invalid xpub should fail for BIP44 derivation"
             );
         }
+
+        /// Test BIP44 Litecoin xpub parsing with a short invalid xpub and checks if an error is returned
+        #[test]
+        fn test_bip44_ltc_short_invalid_xpub() {
+            let invalid_xpub = "xpub123";
+            let result = Xpub::from_base58(invalid_xpub, CoinType::Litecoin);
+            assert!(result.is_err(), "Short xpub fail for BIP32 Litecoin");
+        }
+
     }
 
     /// Dogecoin (DOGE) BIP44 Tests
