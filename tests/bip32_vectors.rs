@@ -1,7 +1,5 @@
 #[cfg(test)]
 mod tests {
-    use bip_tools::Xpub;
-
     /// Bitcoin (BTC) BIP32 Test Module
     mod bitcoin {
         use bip_tools::{CoinType, Xpub};
