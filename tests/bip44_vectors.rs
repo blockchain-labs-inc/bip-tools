@@ -87,6 +87,17 @@ mod test {
             let result = Xpub::from_base58(invalid_xpub, CoinType::Bitcoin);
             assert!(result.is_err(), "Short xpub fail for BIP44 Bitcoin");
         }
+
+        /// Test BIP44 Bitcoin address format to ensure it starts with '1' or '3' and has correct length
+        #[test]
+        fn test_bip44_btc_address_format() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, CoinType::Bitcoin).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            for addr in addresses {
+                assert!(addr.starts_with("1"), "BIP44 Bitcoin address should start '1'");
+                assert!(addr.len() >= 26 && addr.len() <= 35, "BIP44 Bitcoin address lenght should be 26-35");
+            }
+        }
     }
 
     /// Litecoin (LTC) BIP44 Tests

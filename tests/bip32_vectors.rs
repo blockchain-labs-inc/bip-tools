@@ -39,16 +39,6 @@ mod tests {
             );
         }
 
-        /// Test Bitcoin-spesific BIP32 address format
-        #[test]
-        fn test_bip32_address_format() {
-            let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
-            let addresses = xpub.derive_bip32_addresses(3, &None).unwrap();
-            for addr in addresses.iter() {
-                assert!(addr.starts_with("1"), "BIP32 address should start with '1'");
-            }
-        }
-
         /// Test BIP44 Bitcoin xpub parsing with a short invalid xpub and checks if an error is returned
         #[test]
         fn test_bip32_btc_short_invalid_xpub() {
@@ -56,6 +46,18 @@ mod tests {
             let result = Xpub::from_base58(invalid_xpub, CoinType::Bitcoin);
             assert!(result.is_err(), "Short xpub fail for BIP32 Bitcoin");
         }
+
+        /// Test BIP32 Bitcoin address format to ensure it start with '1' and has correct lenght
+        #[test]
+        fn test_bip32_btc_address_format() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP32, CoinType::Bitcoin).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            for addr in addresses {
+                assert!(addr.starts_with("1"), "BIP32 Bitcoin address should start with '1'");
+                assert!(addr.len() >= 26 && addr.len() <= 35, "BIP32 Bitcoin address lenght should be 26-35");
+            }
+        }
+
     }
 
     /// Litecoin (LTC) BIP32 Test Module
