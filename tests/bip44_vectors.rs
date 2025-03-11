@@ -13,23 +13,6 @@ mod test {
             "15Jz4V68onxWmdRdC2ZR8KDfghY1np1E9w",
         ];
 
-        /// Test generating a single BIP44 address
-        #[test]
-        fn test_bip44_single_address() {
-            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
-            let addresses = xpub
-                .derive_bip44_addresses(3, &None)
-                .expect("BIP44 derivation failed");
-            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
-            for (i, addr) in addresses.iter().enumerate() {
-                assert_eq!(
-                    addr, BIP44_EXPECTED_ADDRESS_BTC[i],
-                    "Address at index {} mismatch",
-                    i
-                );
-            }
-        }
-
         /// Test generating BIP44 addresses
         #[test]
         fn test_bip44_multiple_addresses() {
@@ -112,20 +95,6 @@ mod test {
             "LZrrce6ZWkfFWKreefxdX862eyuagabgF8",
             "LNwSvqc7uudTKt4Gz8VevVJNJ7hGboxADY",
         ];
-
-        /// Test BIP44 derivation for a single address
-        #[test]
-        fn test_bip44_single_address() {
-            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
-            let addresses = xpub
-                .derive_bip44_addresses(3, &None)
-                .expect("BIP44 single address derivation failed");
-            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
-            assert_eq!(
-                addresses[0], BIP44_EXPECTED_ADDRESS_LTC[0],
-                "First BIP44 address does not match expected"
-            );
-        }
 
         /// Test BIP44 derivation for multiple addresses
         #[test]
@@ -231,20 +200,6 @@ mod test {
             "DTHWzjtctfj37pbPxBBdNPMZMHPZ4i7phC",
             "DREHyEz5bwix16FzR3ALP1XYQiZh4MgVk7",
         ];
-
-        /// Test BIP44 derivation for a single address
-        #[test]
-        fn test_bip44_single_address() {
-            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
-            let addresses = xpub
-                .derive_bip44_addresses(1, &None)
-                .expect("BIP44 single address derivation failed");
-            assert_eq!(addresses.len(), 1, "Should generate 1 addresses");
-            assert_eq!(
-                addresses[0], BIP44_EXPECTED_ADDRESS_DOGE[0],
-                "First BIP44 address does not match expected"
-            );
-        }
 
         /// Test BIP44 derivation for multiple addresses
         #[test]
