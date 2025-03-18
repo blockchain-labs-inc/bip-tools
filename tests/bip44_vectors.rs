@@ -264,8 +264,14 @@ mod test {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, CoinType::Dogecoin).unwrap();
             let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
             for addr in addresses {
-                assert!(addr.starts_with("D"), "BIP44 Dogecoin address should start with 'D'");
-                assert!(addr.len() >= 26 && addr.len() <= 35, "BIP44 Dogecoin address lenght should be 26-35");
+                assert!(
+                    addr.starts_with("D"),
+                    "BIP44 Dogecoin address should start with 'D'"
+                );
+                assert!(
+                    addr.len() >= 26 && addr.len() <= 35,
+                    "BIP44 Dogecoin address lenght should be 26-35"
+                );
             }
         }
     }
@@ -403,11 +409,15 @@ mod test {
         #[test]
         fn test_bip44_bhc_address_format() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, CoinType::BitcoinCash).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, &Some(AddressFormat::CashAddr)).unwrap();
+            let addresses = xpub
+                .derive_bip44_addresses(3, &Some(AddressFormat::CashAddr))
+                .unwrap();
             for addr in addresses {
-                assert!(addr.starts_with("q"), "BIP44 Bitcoin Cash address should start with 'q' (CashAddr)");
+                assert!(
+                    addr.starts_with("q"),
+                    "BIP44 Bitcoin Cash address should start with 'q' (CashAddr)"
+                );
             }
-        }        
-
+        }
     }
 }

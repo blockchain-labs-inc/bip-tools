@@ -203,11 +203,16 @@ mod tests {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, CoinType::Dogecoin).unwrap();
             let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
             for addr in addresses {
-                assert!(addr.starts_with("D"), "BIP32 Dogecoin address should start with 'D'");
-                assert!(addr.len() >= 26 && addr.len() <= 35, "BIP32 Dogecoin address length should be 26-35");
+                assert!(
+                    addr.starts_with("D"),
+                    "BIP32 Dogecoin address should start with 'D'"
+                );
+                assert!(
+                    addr.len() >= 26 && addr.len() <= 35,
+                    "BIP32 Dogecoin address length should be 26-35"
+                );
             }
         }
-
     }
 
     // Bitcoin Cash (BCH) BIP32 Test Module
@@ -294,9 +299,14 @@ mod tests {
         #[test]
         fn test_bip32_bhc_address_format() {
             let xpub = Xpub::from_base58(XPUB_BHC_BIP32, CoinType::BitcoinCash).unwrap();
-            let addresses = xpub.derive_bip32_addresses(3, &Some(AddressFormat::CashAddr)).unwrap();
+            let addresses = xpub
+                .derive_bip32_addresses(3, &Some(AddressFormat::CashAddr))
+                .unwrap();
             for addr in addresses {
-                assert!(addr.starts_with("q"), "BIP32 Bitcoin Cash address should start with 'q' (CashAddr)");
+                assert!(
+                    addr.starts_with("q"),
+                    "BIP32 Bitcoin Cash address should start with 'q' (CashAddr)"
+                );
             }
         }
     }
