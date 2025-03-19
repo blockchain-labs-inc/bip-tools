@@ -2,6 +2,18 @@ use base58::{FromBase58, ToBase58};
 use ripemd::Ripemd160;
 use secp256k1::PublicKey;
 use sha2::{Digest, Sha256};
+use std::convert::TryInto;
+pub mod utils;
+use crate::utils::{AddressFormat, CashAddress};
+
+// Coin type following BIP44 specification
+#[derive(Clone, Copy, Debug)]
+pub enum CoinType {
+    Bitcoin = 0,
+    Litecoin = 2,
+    Dogecoin = 3,
+    BitcoinCash = 145,
+}
 
 #[derive(Clone)]
 /// Represents an extended public key (xpub) following the BIP32 specification
@@ -12,6 +24,7 @@ pub struct Xpub {
     pub child_number: u32,       // Index of this key
     pub chain_code: [u8; 32],    // Chain code (32 bytes)
     pub public_key: PublicKey,   // Compressed public key (33 bytes)
+    pub coin_type: CoinType,     // Coin type for address generation
 }
 
 impl Xpub {
@@ -22,6 +35,7 @@ impl Xpub {
         child_number: u32,
         chain_code: [u8; 32],
         public_key: PublicKey,
+        coin_type: CoinType,
     ) -> Self {
         Self {
             depth,
@@ -29,18 +43,23 @@ impl Xpub {
             child_number,
             chain_code,
             public_key,
+            coin_type,
         }
     }
 
     /// Converts a Base58 encoded xpub string into an Xpub instance.
-    pub fn from_base58(xpub: &str) -> Result<Self, String> {
-        // Decode the xpub from Base58
+    pub fn from_base58(xpub: &str, coin_type: CoinType) -> Result<Self, String> {
         let decoded = xpub
             .from_base58()
             .map_err(|e| format!("Base58 decode error: {:?}", e))?;
-
         if decoded.len() != 82 {
             return Err("Invalid xpub length".to_string());
+        }
+
+        let expected_checksum = &decoded[78..82];
+        let actual_checksum = &Sha256::digest(Sha256::digest(&decoded[..78]))[..4];
+        if expected_checksum != actual_checksum {
+            return Err("Invalid checksum".to_string());
         }
 
         // Extract components from the decoded xpub
@@ -63,6 +82,7 @@ impl Xpub {
             child_number,
             chain_code,
             public_key,
+            coin_type,
         ))
     }
 
@@ -70,11 +90,15 @@ impl Xpub {
     pub fn to_base58(&self) -> String {
         let mut serialized = [0u8; 78];
 
-        // Version bytes (4 bytes)
-        serialized[0] = 0x04;
-        serialized[1] = 0x88;
-        serialized[2] = 0xB2;
-        serialized[3] = 0x1E;
+        // Version bytes (4 bytes) based on coin type
+        let version_bytes = match self.coin_type {
+            CoinType::Bitcoin => [0x04, 0x88, 0xB2, 0x1E],
+            CoinType::Litecoin => [0x01, 0x9D, 0x9C, 0xFE],
+            CoinType::Dogecoin => [0x02, 0xFA, 0x92, 0x8C],
+            CoinType::BitcoinCash => [0x04, 0x88, 0xB2, 0x1E],
+        };
+
+        serialized[0..4].copy_from_slice(&version_bytes);
 
         // Depth (1 byte)
         serialized[4] = self.depth;
@@ -84,6 +108,7 @@ impl Xpub {
 
         // Child number (4 bytes)
         serialized[9..13].copy_from_slice(&self.child_number.to_be_bytes());
+
         // Chain code (32 bytes)
         serialized[13..45].copy_from_slice(&self.chain_code);
 
@@ -104,21 +129,32 @@ impl Xpub {
     /// 2. Adds version byte (0x00 for mainnet)
     /// 3. Adds double SHA256 checksum
     /// 4. Encodes in Base58Check format
-    pub fn to_bitcoin_address(&self) -> String {
-        let mut hasher = Sha256::new();
-        hasher.update(self.public_key.serialize());
-        let sha256 = hasher.finalize();
+    pub fn to_address(&self, format: &Option<AddressFormat>) -> String {
+        let hash160 = {
+            let mut hasher = Sha256::new();
+            hasher.update(self.public_key.serialize());
+            Ripemd160::digest(hasher.finalize())
+        };
 
-        let pubkey_hash = Ripemd160::digest(sha256);
-
-        let mut address_bytes = [0u8; 25];
-        address_bytes[0] = 0x00;
-        address_bytes[1..21].copy_from_slice(&pubkey_hash);
-
-        let checksum = &Sha256::digest(Sha256::digest(&address_bytes[..21]))[..4];
-        address_bytes[21..].copy_from_slice(checksum);
-
-        address_bytes.to_base58()
+        match self.coin_type {
+            CoinType::BitcoinCash => {
+                let format = format.as_ref().unwrap_or(&AddressFormat::Legacy);
+                CashAddress::from_pubkey(&self.public_key.serialize(), format)
+            }
+            _ => {
+                let mut address_bytes = [0u8; 25];
+                address_bytes[0] = match self.coin_type {
+                    CoinType::Bitcoin => 0x00,
+                    CoinType::Litecoin => 0x30,
+                    CoinType::Dogecoin => 0x1E,
+                    CoinType::BitcoinCash => unreachable!(),
+                };
+                address_bytes[1..21].copy_from_slice(&hash160);
+                let checksum = Sha256::digest(Sha256::digest(&address_bytes[..21]));
+                address_bytes[21..25].copy_from_slice(&checksum[..4]);
+                address_bytes.to_base58()
+            }
+        }
     }
 
     /// Derives a non-hardened child Xpub from the current Xpub
@@ -165,19 +201,23 @@ impl Xpub {
             child_number: index,
             chain_code,
             public_key: child_pubkey,
+            coin_type: self.coin_type,
         })
     }
 
     /// Generates multiple Bitcoin addresses using BIP32 derivation path
-    pub fn derive_bip32_addresses(&self, count: u32) -> Result<Vec<String>, String> {
+    pub fn derive_bip32_addresses(
+        &self,
+        count: u32,
+        format: &Option<AddressFormat>,
+    ) -> Result<Vec<String>, String> {
         let mut addresses = Vec::with_capacity(count as usize);
-        let current = self.clone();
 
         // Generate sequential addresses
         for i in 0..count {
-            match current.derive_non_hardened(i) {
+            match self.derive_non_hardened(i) {
                 Ok(child) => {
-                    addresses.push(child.to_bitcoin_address());
+                    addresses.push(child.to_address(format));
                 }
                 Err(e) => {
                     return Err(format!("Error deriving child {}: {}", i, e));
@@ -190,26 +230,66 @@ impl Xpub {
 
     /// Generates multiple Bitcoin addresses using BIP44 derivation path
     /// Follows m/44'/0'/0'/0/i path structure
-    pub fn derive_bip44_addresses(&self, count: u32) -> Result<Vec<String>, String> {
+    pub fn derive_bip44_addresses(
+        &self,
+        count: u32,
+        chain_type: u32,
+        format: &Option<AddressFormat>,
+    ) -> Result<Vec<String>, String> {
         let mut addresses = Vec::with_capacity(count as usize);
 
-        //BIP44 path: m/44'/0'/0'/0/i
-        let account = self
-            .derive_non_hardened(0)
-            .map_err(|e| format!("Error deriving account: {}", e))?;
+        // Validate chain type: must be 0 (external) or 1 (change)
+        if chain_type > 1 {
+            return Err(format!(
+                "Invalid chain type: {}. Use 0 for external or 1 for change",
+                chain_type
+            ));
+        }
 
-        // Generate addresses at m/44'/0'/0'/0/i
+        // Derive chain type directly from the xpub (e.g., m/44'/0'/0'/0 or m/44'/0'/0'/1)
+        let chain = self
+            .derive_non_hardened(chain_type)
+            .map_err(|e| format!("Error deriving chain: {}", e))?;
+
         for i in 0..count {
-            match account.derive_non_hardened(i) {
-                Ok(child) => {
-                    addresses.push(child.to_bitcoin_address());
-                }
-                Err(e) => {
-                    return Err(format!("Error deriving child {}: {}", i, e));
-                }
+            match chain.derive_non_hardened(i) {
+                Ok(child) => addresses.push(child.to_address(format)),
+                Err(e) => return Err(format!("Error deriving child {}: {}", i, e)),
             }
         }
+
         Ok(addresses)
+    }
+
+    // Generates an address using a custom derivation path and chain type
+    pub fn derive_custom_path(
+        &self,
+        path: &[u32],
+        chain_type: u32,
+        format: &Option<AddressFormat>,
+    ) -> Result<String, String> {
+        let mut current = self.clone();
+
+        // If chain_type is 1, derive the change chain first (m/1)
+        if chain_type == 1 {
+            current = current
+                .derive_non_hardened(1)
+                .map_err(|e| format!("Error deriving change chain: {}", e))?;
+        } else if chain_type != 0 {
+            return Err(format!(
+                "Invalid chain type: {}. Use 0 for external or 1 for change.",
+                chain_type
+            ));
+        }
+
+        // Derive along the provided path
+        for &index in path {
+            current = current
+                .derive_non_hardened(index)
+                .map_err(|e| format!("Derivation error at index {}: {}", index, e))?;
+        }
+
+        Ok(current.to_address(format))
     }
 
     /// Calculates the fingerprint (first 4 bytes of HASH160) of the current public key.
@@ -217,7 +297,6 @@ impl Xpub {
     pub fn fingerprint(&self) -> u32 {
         let hash = Sha256::digest(self.public_key.serialize());
         let hash160 = Ripemd160::digest(hash);
-
         u32::from_be_bytes(hash160[0..4].try_into().unwrap())
     }
 }
