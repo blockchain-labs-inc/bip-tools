@@ -233,21 +233,60 @@ impl Xpub {
     pub fn derive_bip44_addresses(
         &self,
         count: u32,
+        chain_type: u32,
         format: &Option<AddressFormat>,
     ) -> Result<Vec<String>, String> {
         let mut addresses = Vec::with_capacity(count as usize);
-        let account = self
-            .derive_non_hardened(0)
-            .map_err(|e| format!("Error deriving account: {}", e))?;
+
+        // Validate chain type: must be 0 (external) or 1 (change)
+        if chain_type > 1 {
+            return Err(format!("Invalid chain type: {}. Use 0 for external or 1 for change", chain_type));
+        }
+
+        // Derive chain type directly from the xpub (e.g., m/44'/0'/0'/0 or m/44'/0'/0'/1)
+        let chain = self
+            .derive_non_hardened(chain_type)
+            .map_err(|e| format!("Error deriving chain: {}", e))?;
 
         for i in 0..count {
-            match account.derive_non_hardened(i) {
+            match chain.derive_non_hardened(i) {
                 Ok(child) => addresses.push(child.to_address(format)),
                 Err(e) => return Err(format!("Error deriving child {}: {}", i, e)),
             }
         }
 
         Ok(addresses)
+    }
+
+    // Generates an address using a custom derivation path and chain type
+    pub fn derive_custom_path(
+        &self,
+        path: &[u32],
+        chain_type: u32,
+        format: &Option<AddressFormat>,
+    ) -> Result<String, String> {
+        let mut current = self.clone();
+
+        // If chain_type is 1, derive the change chain first (m/1)
+        if chain_type == 1 {
+            current = current
+                .derive_non_hardened(1)
+                .map_err(|e| format!("Error deriving change chain: {}", e))?;
+        } else if chain_type != 0 {
+            return Err(format!(
+                "Invalid chain type: {}. Use 0 for external or 1 for change.",
+                chain_type
+            ));
+        }
+
+        // Derive along the provided path
+        for &index in path {
+            current = current
+                .derive_non_hardened(index)
+                .map_err(|e| format!("Derivation error at index {}: {}", index, e))?;
+        }
+
+        Ok(current.to_address(format))
     }
 
     /// Calculates the fingerprint (first 4 bytes of HASH160) of the current public key.
