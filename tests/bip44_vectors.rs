@@ -349,7 +349,7 @@ mod test {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let count = 1000;
             let addresses = xpub
-                .derive_bip44_addresses(count, 0,&Some(AddressFormat::Legacy))
+                .derive_bip44_addresses(count, 0, &Some(AddressFormat::Legacy))
                 .expect("Failed to derive large-scale Legacy addresses with BIP44");
             assert_eq!(
                 addresses.len(),

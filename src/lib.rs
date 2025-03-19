@@ -240,7 +240,10 @@ impl Xpub {
 
         // Validate chain type: must be 0 (external) or 1 (change)
         if chain_type > 1 {
-            return Err(format!("Invalid chain type: {}. Use 0 for external or 1 for change", chain_type));
+            return Err(format!(
+                "Invalid chain type: {}. Use 0 for external or 1 for change",
+                chain_type
+            ));
         }
 
         // Derive chain type directly from the xpub (e.g., m/44'/0'/0'/0 or m/44'/0'/0'/1)

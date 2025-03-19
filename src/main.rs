@@ -22,7 +22,7 @@ enum Commands {
     /// Generate public addresses from a BIP44 extended public key
     Bip44(AddressGeneratorArgs),
     /// Generate a public address using a custom derivation path and chain type
-    Custom(CustomAddressArgs),    
+    Custom(CustomAddressArgs),
 }
 
 /// Common arguments for both BIP32 adn BIP44 address generation
@@ -193,7 +193,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 args.coin_type, args.path, args.chain_type
             );
 
-            let path: Result<Vec<u32>, _> = args.path.split(',').map(|s| s.trim().parse::<u32>()).collect();
+            let path: Result<Vec<u32>, _> = args
+                .path
+                .split(',')
+                .map(|s| s.trim().parse::<u32>())
+                .collect();
             let path = path.map_err(|e| format!("Invalid derivation path: {}", e))?;
 
             let format = match args.format.as_deref() {
