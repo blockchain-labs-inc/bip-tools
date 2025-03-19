@@ -51,7 +51,7 @@ mod tests {
         #[test]
         fn test_bip32_btc_address_format() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP32, CoinType::Bitcoin).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            let addresses = xpub.derive_bip32_addresses(3, &None).unwrap();
             for addr in addresses {
                 assert!(
                     addr.starts_with("1"),
@@ -135,7 +135,7 @@ mod tests {
         #[test]
         fn test_bip32_ltc_address_format() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP32, CoinType::Litecoin).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            let addresses = xpub.derive_bip32_addresses(3, &None).unwrap();
             for addr in addresses {
                 assert!(
                     addr.starts_with("L"),
@@ -201,7 +201,7 @@ mod tests {
         #[test]
         fn test_bip32_doge_address_format() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, CoinType::Dogecoin).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            let addresses = xpub.derive_bip32_addresses(3, &None).unwrap();
             for addr in addresses {
                 assert!(
                     addr.starts_with("D"),

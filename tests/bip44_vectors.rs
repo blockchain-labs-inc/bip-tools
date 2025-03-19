@@ -18,7 +18,7 @@ mod test {
         fn test_bip44_multiple_addresses() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
-                .derive_bip44_addresses(3, &None)
+                .derive_bip44_addresses(3, 0, &None)
                 .expect("BIP44 derivation failed");
             assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
             for (i, addr) in addresses.iter().enumerate() {
@@ -34,8 +34,8 @@ mod test {
         #[test]
         fn test_bip44_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
-            let addresses1 = xpub.derive_bip44_addresses(3, &None).unwrap();
-            let addresses2 = xpub.derive_bip44_addresses(3, &None).unwrap();
+            let addresses1 = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
+            let addresses2 = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
             assert_eq!(
                 addresses1, addresses2,
                 "BIP44 addresses should be consistent"
@@ -46,7 +46,7 @@ mod test {
         #[test]
         fn test_bip44_zero_address() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
-            let addresses = xpub.derive_bip44_addresses(0, &None).unwrap();
+            let addresses = xpub.derive_bip44_addresses(0, 0, &None).unwrap();
             assert!(
                 addresses.is_empty(),
                 "Should return an empty vector for zero addresses"
@@ -57,7 +57,7 @@ mod test {
         #[test]
         fn test_bip44_address_format() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
             for addr in addresses.iter() {
                 assert!(addr.starts_with("1"), "Invalid BIP44 address format");
             }
@@ -75,7 +75,7 @@ mod test {
         #[test]
         fn test_bip44_btc_address_format() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, CoinType::Bitcoin).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
             for addr in addresses {
                 assert!(
                     addr.starts_with("1"),
@@ -107,7 +107,7 @@ mod test {
         fn test_bip44_multiple_addresses() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
-                .derive_bip44_addresses(3, &None)
+                .derive_bip44_addresses(3, 0, &None)
                 .expect("BIP44 multiple addresses derivation failed");
             assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
             for (i, addr) in addresses.iter().enumerate() {
@@ -125,7 +125,7 @@ mod test {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
             let count = 1000;
             let addresses = xpub
-                .derive_bip44_addresses(count, &None)
+                .derive_bip44_addresses(count, 0, &None)
                 .expect("BIP44 large index derivation failed");
             assert_eq!(
                 addresses.len(),
@@ -146,7 +146,7 @@ mod test {
         fn test_bip44_address_format() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
-                .derive_bip44_addresses(3, &None)
+                .derive_bip44_addresses(3, 0, &None)
                 .expect("BIP44 address format derivation failed");
             for (i, addr) in addresses.iter().enumerate() {
                 assert!(
@@ -185,7 +185,7 @@ mod test {
         #[test]
         fn test_bip44_ltc_address_format() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, CoinType::Litecoin).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
             for addr in addresses {
                 assert!(
                     addr.starts_with("L"),
@@ -217,7 +217,7 @@ mod test {
         fn test_bip44_multiple_addresses() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
-                .derive_bip44_addresses(3, &None)
+                .derive_bip44_addresses(3, 0, &None)
                 .expect("BIP44 multiple addresses derivation failed");
             assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
             for (i, addr) in addresses.iter().enumerate() {
@@ -234,7 +234,7 @@ mod test {
         fn test_bip44_address_format() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
-                .derive_bip44_addresses(3, &None)
+                .derive_bip44_addresses(3, 0, &None)
                 .expect("BIP44 address format derivation failed");
             for (i, addr) in addresses.iter().enumerate() {
                 assert!(
@@ -262,7 +262,7 @@ mod test {
         #[test]
         fn test_bip44_doge_address_format() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, CoinType::Dogecoin).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, &None).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
             for addr in addresses {
                 assert!(
                     addr.starts_with("D"),
@@ -311,7 +311,7 @@ mod test {
         fn test_bip44_multiple_legacy_address() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
-                .derive_bip44_addresses(3, &Some(AddressFormat::Legacy))
+                .derive_bip44_addresses(3, 0, &Some(AddressFormat::Legacy))
                 .expect("Failed to derive single Legacy address with BIP44");
             assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
             assert_eq!(
@@ -325,10 +325,10 @@ mod test {
         fn test_bip44_format_consistency() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses_legacy = xpub
-                .derive_bip44_addresses(3, &Some(AddressFormat::Legacy))
+                .derive_bip44_addresses(3, 0, &Some(AddressFormat::Legacy))
                 .expect("Failed to derive Legacy addresses");
             let legacy_addresses_again = xpub
-                .derive_bip44_addresses(3, &Some(AddressFormat::Legacy))
+                .derive_bip44_addresses(3, 0, &Some(AddressFormat::Legacy))
                 .expect("Failed to derive Legacy addresses again");
             assert_eq!(
                 addresses_legacy, legacy_addresses_again,
@@ -349,7 +349,7 @@ mod test {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let count = 1000;
             let addresses = xpub
-                .derive_bip44_addresses(count, &Some(AddressFormat::Legacy))
+                .derive_bip44_addresses(count, 0,&Some(AddressFormat::Legacy))
                 .expect("Failed to derive large-scale Legacy addresses with BIP44");
             assert_eq!(
                 addresses.len(),
@@ -371,7 +371,7 @@ mod test {
         fn test_bip44_multiple_cashaddr_address() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
-                .derive_bip44_addresses(3, &Some(AddressFormat::CashAddr))
+                .derive_bip44_addresses(3, 0, &Some(AddressFormat::CashAddr))
                 .expect("Failed to derive single CashAddr address with BIP44");
             assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
             assert_eq!(
@@ -385,7 +385,7 @@ mod test {
         fn test_bip44_multiple_cashaddr_prefix_addresses() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
-                .derive_bip44_addresses(3, &Some(AddressFormat::CashAddrWithPrefix))
+                .derive_bip44_addresses(3, 0, &Some(AddressFormat::CashAddrWithPrefix))
                 .expect("Failed to derive multiple CashAddrWithPrefix addresses with BIP44");
             assert_eq!(addresses.len(), 3, "Should derive exactly 3 addresses");
             for (i, addr) in addresses.iter().enumerate() {
@@ -410,7 +410,7 @@ mod test {
         fn test_bip44_bhc_address_format() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, CoinType::BitcoinCash).unwrap();
             let addresses = xpub
-                .derive_bip44_addresses(3, &Some(AddressFormat::CashAddr))
+                .derive_bip44_addresses(3, 0, &Some(AddressFormat::CashAddr))
                 .unwrap();
             for addr in addresses {
                 assert!(
