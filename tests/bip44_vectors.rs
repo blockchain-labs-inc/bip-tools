@@ -13,6 +13,13 @@ mod test {
             "15Jz4V68onxWmdRdC2ZR8KDfghY1np1E9w",
         ];
 
+        const XPUB_BTC_BIP44_1: &str = "xpub6CB1R3PaHfGja4za4QgTzx7MD3tVDAySVeuBA6B94qNcb4PKSSRo68o6okuRseWgdW5zC9HNm9C5yCVgvVp2gLkFviuNZDAMhJndcN8UPc5";
+        const BIP44_EXPECTED_ADDRESS_BTC_1: [&str; 3] = [
+            "1FyBjxhfVcsCD93FNgd2d8EVZPVySsbVK5",
+            "1PV8Sgnh1ZkFKDG6dJB68mtvNiArUtZfeT",
+            "19BSRTWX1H5eEUmDdk4gsku9K3n3yjhZRp",
+        ];
+
         /// Test generating BIP44 addresses
         #[test]
         fn test_bip44_multiple_addresses() {
@@ -26,6 +33,19 @@ mod test {
                     addr, BIP44_EXPECTED_ADDRESS_BTC[i],
                     "Address at index {} mismatch",
                     i
+                );
+            }
+        }
+
+        #[test]
+        fn test_bip44_multiple_addresses_1() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP44_1, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, 1, &None).expect("BIP44 derivation failed");
+            assert_eq!(addresses.len(), 3, "Should generate 3 address");
+            for (i, addr) in addresses.iter().enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_BTC_1[i],
+                    "Multiple BIP44 addresses do not match expected"
                 );
             }
         }
@@ -102,6 +122,13 @@ mod test {
             "LNwSvqc7uudTKt4Gz8VevVJNJ7hGboxADY",
         ];
 
+        const XPUB_LTC_BIP44_1: &str = "Ltub2ZRKyakzGNxJqTkH7aPLCxoAKGrwt3r72Kb1AfBc6UEekHq4Y9PM8v4EhD5PPAcJqHARMd2BqJW9cuqSCdnM4LYLJKjSDasRamJg7MxEiVL";
+        const BIP44_EXPECTED_ADDRESS_LTC_1: [&str; 3] = [
+            "Lbjbea2HnikjZcddSBJjy3vChde9PKF6kD",
+            "LX2NBLYsmU4b4BbBKzksvDsbKApLB3sGA4",
+            "LgquNMwiqh1pEyqHsnvScU7CRizTwkko6y",
+        ];
+
         /// Test BIP44 derivation for multiple addresses
         #[test]
         fn test_bip44_multiple_addresses() {
@@ -116,6 +143,19 @@ mod test {
                     "BIP44 address at index {} does not match expected",
                     i
                 );
+            }
+        }
+
+        #[test]
+        fn test_ltc_bip44_multiple_addresses_1() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP44_1, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, 1, &None).expect("BIP44 derivation failed");
+            assert_eq!(addresses.len(), 3, "Should generate 3 address");
+            for (i, addr) in addresses.iter().enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_LTC_1[i],
+                    "Muliple BIP44 addresses do not match expected"
+                )
             }
         }
 
@@ -212,6 +252,13 @@ mod test {
             "DREHyEz5bwix16FzR3ALP1XYQiZh4MgVk7",
         ];
 
+        const XPUB_DOGE_BIP44_1: &str = "dgub8rmtrKBGg1ph9NxX1UmDr6sJaUHcwUmHWECHVXQyimyt1Gxkjhh4JaReFgsweqHWphNyEG6n5MtBYCBzfj1Z4FmWiftcUUdc5NTFJB8Sofg";
+        const BIP44_EXPECTED_ADDRESS_DOGE_1: [&str; 3] = [
+            "DCQRDgEVL55q7CokH86G3gc9YneumK5FDf",
+            "D6aNhV59wDSE5jUhe7xX1tgvU64orFP3WB",
+            "D811vA68rTcHnEDLEW4Psve7v5BoDNxtX1",
+        ];
+
         /// Test BIP44 derivation for multiple addresses
         #[test]
         fn test_bip44_multiple_addresses() {
@@ -225,6 +272,19 @@ mod test {
                     addr, BIP44_EXPECTED_ADDRESS_DOGE[i],
                     "BIP44 address at index {} does not match expected",
                     i
+                );
+            }
+        }
+
+        #[test]
+        fn test_doge_bip44_multiple_addresses_1() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44_1, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip44_addresses(3, 1, &None).expect("BIP44 derivaiton failed");
+            assert_eq!(addresses.len(), 3, "Should generate address");
+            for (i, addr) in addresses.iter().enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_DOGE_1[i],
+                    "Multiple BIP44 addresses do not match expected"
                 );
             }
         }
@@ -419,5 +479,72 @@ mod test {
                 );
             }
         }
+
+
+
+
+        const XPUB_BCH_BIP44_1: &str = "xpub6D1S8ySBPc2nQtT6LBcfzGyaxvfBsBdFpy1NmNiHJJdBv68JaTyqKpJv7sNLPkZndjo1UcXZLBGxj2gxPdx6EMygzsR3MCEVoqcnqvN8hi5";
+
+        /// Expected addresses for Legacy format (Base58)
+        const BIP44_EXPECTED_ADDRESS_BCH_LEGACY_1: [&str; 3] = [
+            "1EsDjnG5bH3eKH9frw6J38v2KScAyA8pHr",
+            "19ynvXx1QbNJg6W8YAUe2P32oPGHJHUBEc",
+            "1HqNMC9LwhY6vZoPMWuT3hdHY6FEh2yfoJ",
+        ];
+
+        /// Expected addresses for CashAddr format (not prefix)
+        const BIP44_EXPECTED_ADDRESS_BCH_CASHADDR_1: [&str; 3] = [
+            "qzvpjy827tsrevqka9a80uus2nwpcpfnygw45fr34c",
+            "qp38agnu540g3q7cyjvd4qev8eyez9tzju0r0lr5n8",
+            "qzu20ny6c97hkh9va2u25ngw8sprcdgq7uc4af4z87",
+        ];
+
+        /// Expected addresses for CashAddr format (with prefix)
+        const BIP44_EXPECTED_ADDRESS_BCH_CASHADDR_PREFIX_1: [&str; 3] = [
+            "bitcoincash:qzvpjy827tsrevqka9a80uus2nwpcpfnygw45fr34c",
+            "bitcoincash:qp38agnu540g3q7cyjvd4qev8eyez9tzju0r0lr5n8",
+            "bitcoincash:qzu20ny6c97hkh9va2u25ngw8sprcdgq7uc4af4z87",
+        ];
+
+        #[test]
+        fn test_bip44_multiple_legacy_address_1() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44_1, COIN_TYPE).unwrap();
+            let addresses = xpub
+                .derive_bip44_addresses(3, 1, &Some(AddressFormat::Legacy))
+                .expect("Failed to derive single Legacy address with BIP44");
+            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            assert_eq!(
+                addresses[0], BIP44_EXPECTED_ADDRESS_BCH_LEGACY_1[0],
+                "First BIP44 Legacy address does not match expected"
+            );
+        }
+
+        #[test]
+        fn test_bip44_multiple_cash_address_1() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44_1, COIN_TYPE).unwrap();
+            let addresses = xpub
+                .derive_bip44_addresses(3, 1, &Some(AddressFormat::CashAddr))
+                .expect("Failed to derive single Legacy address with BIP44");
+            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            assert_eq!(
+                addresses[0], BIP44_EXPECTED_ADDRESS_BCH_CASHADDR_1[0],
+                "First BIP44 Legacy address does not match expected"
+            );
+        }
+
+        #[test]
+        fn test_bip44_multiple_cash_prefix_address_1() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44_1, COIN_TYPE).unwrap();
+            let addresses = xpub
+                .derive_bip44_addresses(3, 1, &Some(AddressFormat::CashAddrWithPrefix))
+                .expect("Failed to derive single Legacy address with BIP44");
+            assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
+            assert_eq!(
+                addresses[0], BIP44_EXPECTED_ADDRESS_BCH_CASHADDR_PREFIX_1[0],
+                "First BIP44 Legacy address does not match expected"
+            );
+        }
+
+
     }
 }
