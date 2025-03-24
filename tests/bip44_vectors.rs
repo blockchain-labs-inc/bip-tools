@@ -40,7 +40,9 @@ mod test {
         #[test]
         fn test_bip44_multiple_addresses_1() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44_1, COIN_TYPE).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, 1, &None).expect("BIP44 derivation failed");
+            let addresses = xpub
+                .derive_bip44_addresses(3, 1, &None)
+                .expect("BIP44 derivation failed");
             assert_eq!(addresses.len(), 3, "Should generate 3 address");
             for (i, addr) in addresses.iter().enumerate() {
                 assert_eq!(
@@ -149,7 +151,9 @@ mod test {
         #[test]
         fn test_ltc_bip44_multiple_addresses_1() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44_1, COIN_TYPE).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, 1, &None).expect("BIP44 derivation failed");
+            let addresses = xpub
+                .derive_bip44_addresses(3, 1, &None)
+                .expect("BIP44 derivation failed");
             assert_eq!(addresses.len(), 3, "Should generate 3 address");
             for (i, addr) in addresses.iter().enumerate() {
                 assert_eq!(
@@ -279,7 +283,9 @@ mod test {
         #[test]
         fn test_doge_bip44_multiple_addresses_1() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44_1, COIN_TYPE).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, 1, &None).expect("BIP44 derivaiton failed");
+            let addresses = xpub
+                .derive_bip44_addresses(3, 1, &None)
+                .expect("BIP44 derivaiton failed");
             assert_eq!(addresses.len(), 3, "Should generate address");
             for (i, addr) in addresses.iter().enumerate() {
                 assert_eq!(
@@ -480,9 +486,6 @@ mod test {
             }
         }
 
-
-
-
         const XPUB_BCH_BIP44_1: &str = "xpub6D1S8ySBPc2nQtT6LBcfzGyaxvfBsBdFpy1NmNiHJJdBv68JaTyqKpJv7sNLPkZndjo1UcXZLBGxj2gxPdx6EMygzsR3MCEVoqcnqvN8hi5";
 
         /// Expected addresses for Legacy format (Base58)
@@ -544,7 +547,5 @@ mod test {
                 "First BIP44 Legacy address does not match expected"
             );
         }
-
-
     }
 }
