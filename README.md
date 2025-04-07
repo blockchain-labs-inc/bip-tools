@@ -1,14 +1,28 @@
 # bip-tools
 
-A Rust library and CLI tool for Bitcoin address generation and management using extended public keys (xpub). This project implements BIP32 and BIP44 specifications for hierarchical deterministic wallet address derivation.
+A robust Rust library and CLI for hierarchical deterministic wallet operations supporting multiple cryptocurrencies and address formats.
 
 ## Features
 
 - Extended Public Key (xpub) management
-- BIP32 hierarchical deterministic address generation
-- BIP44 compliant address derivation
+- BIP32/BIP44 compliant derivation
 - Command-line interface for easy address generation
 - Support for legacy Bitcoin addresses (P2PKH)
+- Multi-cryptocurrency support
+
+## Supported Coins
+| Coin | BIP32 Version | Address Formats |
+|------|---------------|-----------------|
+| Bitcoin | xpub | Legacy |
+| Litecoin | Ltub | Legacy |
+| Dogecoin | dgub | Legacy |
+| Bitcoin Cash | xpub | Legacy, CashAddr |
+
+### Address Formats
+- Legacy (P2PKH)
+- Bitcoin Cash:
+  - CashAddr (with/without prefix)
+  - Legacy Base58
 
 ## Installation
 
@@ -16,7 +30,7 @@ The compiled binary will be available at `target/release/bip-tools`
 
 ## Using Cargo
 ```bash
-cargo install --git https://github.com/yigitraphy/biptools.git
+cargo install --git https://github.com/blockchain-labs-inc/bip-tools.git
 ```
 
 ### Building from Source
@@ -27,7 +41,7 @@ cargo install --git https://github.com/yigitraphy/biptools.git
 - Cargo package manager
 
 ```bash
-git clone https://github.com/yigitraphy/biptools.git
+git clone https://github.com/blockchain-labs-inc/bip-tools.git
 cd bip-tools
 cargo build --release
 ```
@@ -44,16 +58,6 @@ bip-tools = "0.1.0"
 ### Example Code
 
 ```rust
-use bip_tools::Xpub;
-
-// Parse an xpub from its Base58 string representation
-let xpub = Xpub::from_base58("xpub6CUGRUo...").unwrap();
-
-// Generate 5 BIP44 addresses
-let addresses = xpub.derive_bip44_addresses(5).unwrap();
-for (i, address) in addresses.iter().enumerate() {
-    println!("Address {}: {}", i, address);
-}
 ```
 
 ## CLI Usage
@@ -62,30 +66,39 @@ The CLI tool provides two main commands for address generation:
 
 ### BIP32 Address Generation
 
+Generate BIP32 Addresses:
 ```bash
-bip-tools bip32  
+cargo run bip32 <XPUB> <COUNT> <COIN> [OPTIONS]
 ```
 
 Example:
 ```bash
-cargo run bip32 "xpub6CUGRUo..." 5
+cargo run bip32 "xpub6CUGRUo..." 5 bitcoin 0
 ```
 
 ### BIP44 Address Generation
 
 ```bash
-bip-tools bip44  
+cargo run bip44 <XPUB> <COUNT> <COIN> [OPTIONS] <0|1>
 ```
 
 Example:
 ```bash
-cargo run bip44 "xpub6CUGRUo..." 5
+cargo run bip44 "xpub6CUGRUo..." 5 bitcoin 0
+```
+
+Example 2:
+```bash
+cargo run bip44 xpub6CUGRUons... 3 bitcoincash --format cashaddr 0
 ```
 
 ### CLI Options
 
 - `<XPUB>`: Your extended public key in Base58 format
 - `<COUNT>`: Number of addresses to generate
+- `<COIN>`: Specifies which cryptocurrency to generate addresses for (bitcoin, litecoin, dogecoin, bitcoincash).
+- `<0|1>`: Determines address type - 0 for receiving addresses, 1 for change addresses
+- `--format`:  Selects address format for Bitcoin Cash (legacy for old-style, cashaddr for new format, cashaddr-p for new format with prefix).
 - `--help`: Display help information
 - `--version`: Display version information
 
@@ -136,7 +149,8 @@ biptools/
 │ └── SECURITY.md          # Security policies and vulnerability reporting
 ├── src/
 │ ├── lib.rs               # Core library implementation (Xpub struct and functionality)
-│ └── main.rs              # CLI implementation
+│ ├── main.rs              # CLI implementation
+| ├── utils.rs             # Handles Bitcoin Cash address formatting and conversions.
 ├── tests/
 │ ├── bip32_vectors.rs     # Test vectors and validation tests for BIP32 standard
 │ └── bip44_vectors.rs     # Test vectors and validation tests for BIP44 standard
