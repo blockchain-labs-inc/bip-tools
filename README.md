@@ -14,8 +14,8 @@ A robust Rust library and CLI for hierarchical deterministic wallet operations s
 | Coin | BIP32 Version | Address Formats |
 |------|---------------|-----------------|
 | Bitcoin | xpub | Legacy |
-| Litecoin | Ltub | Legacy |
-| Dogecoin | dgub | Legacy |
+| Litecoin | xub | Legacy |
+| Dogecoin | xub | Legacy |
 | Bitcoin Cash | xpub | Legacy, CashAddr |
 
 ### Address Formats
