@@ -106,7 +106,7 @@ Example 2:
 ```bash
 cargo run bip44 "xpub6BtoTpW..." 3 bitcoincash --format cashaddr 0
 ```
-Output:
+(Example 2) Output:
 ```bash
 Generating 3 BIP-44 addresses for: bitcoincash with chain type 0
 Child 0: qzmmuhsacaa...
