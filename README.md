@@ -104,7 +104,14 @@ cargo run bip44 "xpub6CUGRUo..." 5 bitcoin 0
 
 Example 2:
 ```bash
-cargo run bip44 xpub6CUGRUons... 3 bitcoincash --format cashaddr 0
+cargo run bip44 "xpub6BtoTpW..." 3 bitcoincash --format cashaddr 0
+```
+Output:
+```bash
+Generating 3 BIP-44 addresses for: bitcoincash with chain type 0
+Child 0: qzmmuhsacaa...
+Child 1: qpmypx075hz...
+Child 2: qram84egkfm...
 ```
 
 ### CLI Options
