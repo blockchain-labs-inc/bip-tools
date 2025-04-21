@@ -6,11 +6,11 @@ A robust Rust library and CLI tool for hierarchical deterministic (HD) wallet op
 
 ## Features
 
-- Extended Public Key (xpub) Management: Parse, serialize, and derive child keys from xpub strings.
-- BIP32 and BIP44 Compliance: Generate addresses using standard derivation paths for BIP32 and BIP44.
-- Multi-Cryptocurrency Support: Supports Bitcoin, Litecoin, Dogecoin, and Bitcoin Cash.
-- Flexible Address Formats: Generate legacy (P2PKH) addresses and Bitcoin Cash-specific formats (Legacy, CashAddr, CashAddr with prefix).
-- Command-Line Interface (CLI): User-friendly CLI for generating addresses with customizable options.
+- **Extended Public Key (xpub) Management:** Parse, serialize, and derive child keys from xpub strings.
+- **BIP32 and BIP44 Compliance:** Generate addresses using standard derivation paths for BIP32 and BIP44.
+- **Multi-Cryptocurrency Support:** Supports Bitcoin, Litecoin, Dogecoin, and Bitcoin Cash.
+- **Flexible Address Formats:** Generate legacy (P2PKH) addresses and Bitcoin Cash-specific formats (Legacy, CashAddr, CashAddr with prefix).
+- **Command-Line Interface (CLI):** User-friendly CLI for generating addresses with customizable options.
 
 ## Supported Coins
 | Coin | BIP32 Version | Address Formats |
