@@ -68,9 +68,7 @@ mod tests {
         #[test]
         fn test_btc_bip32_index_zero() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
-            let address = xpub
-                .derive_bip32_addresses(1, &None)
-                .unwrap();
+            let address = xpub.derive_bip32_addresses(1, &None).unwrap();
             assert_eq!(
                 address[0], BIP32_EXPECTED_ADDRESS_BTC[0],
                 "BIP32 address at index 0 does not match expected"
@@ -173,9 +171,7 @@ mod tests {
         #[test]
         fn test_ltc_bip32_index_zero() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
-            let address = xpub
-                .derive_bip32_addresses(1, &None)
-                .unwrap();
+            let address = xpub.derive_bip32_addresses(1, &None).unwrap();
             assert_eq!(
                 address[0], BIP32_EXPECTED_ADDRESS_LTC[0],
                 "BIP32 address at index 0 does not match expected"
@@ -260,9 +256,7 @@ mod tests {
         #[test]
         fn test_doge_bip32_index_zero() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
-            let address = xpub
-                .derive_bip32_addresses(1, &None)
-                .unwrap();
+            let address = xpub.derive_bip32_addresses(1, &None).unwrap();
             assert_eq!(
                 address[0], BIP32_EXPECTED_ADDRESS_DOGE[0],
                 "BIP32 address at index 0 does not match expected"
