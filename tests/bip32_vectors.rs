@@ -285,7 +285,7 @@ mod tests {
 
         // Expected addresses for Legacy format (Base58)
         const COIN_TYPE: CoinType = CoinType::BitcoinCash;
-        const XPUB_BHC_BIP32: &str = "xpub6DsYunNirm7J62yWYTVR4qKHfzyRwPoxRaJXDdFYLEGQSFFiDe5wpAXf7VcX5XP9A6mHv5b6qpcPrCtuqoJpkjwr45y6LqxHZxBm93akLDC";
+        const XPUB_BCH_BIP32: &str = "xpub6DsYunNirm7J62yWYTVR4qKHfzyRwPoxRaJXDdFYLEGQSFFiDe5wpAXf7VcX5XP9A6mHv5b6qpcPrCtuqoJpkjwr45y6LqxHZxBm93akLDC";
 
         /// Expected addresses for Legacy format (Base58)
         const BIP32_EXPECTED_ADDRESS_BHC_LEGACY: [&str; 3] = [
@@ -311,7 +311,7 @@ mod tests {
         /// Test BIP32 derivation for multiple legacy addresses and verify
         #[test]
         fn test_bip32_multiple_legacy_addresses() {
-            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip32_addresses(3, &Some(AddressFormat::Legacy))
                 .expect("BIP32 Multiple addresses derivation failed");
@@ -325,7 +325,7 @@ mod tests {
         /// Test BIP32 derivation for multiple cashaddr addresses and verify
         #[test]
         fn test_bip32_multiple_cashaddr_addresses() {
-            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip32_addresses(3, &Some(AddressFormat::CashAddr))
                 .expect("BIP32 Multiple addresses derivation failed");
@@ -339,7 +339,7 @@ mod tests {
         /// Test BIP32 derivation for multiple cashaddr-prefix addresses and verify
         #[test]
         fn test_bip32_multiple_cashaddr_prefix_addresses() {
-            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip32_addresses(3, &Some(AddressFormat::CashAddrWithPrefix))
                 .expect("BIP32 Multiple addresses derivation failed");
@@ -361,7 +361,7 @@ mod tests {
         /// Test BIP32 Bitcoin Cash address format to ensure it starts with 'q' (CashAddr)
         #[test]
         fn test_bip32_bhc_address_format() {
-            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, CoinType::BitcoinCash).unwrap();
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, CoinType::BitcoinCash).unwrap();
             let addresses = xpub
                 .derive_bip32_addresses(3, &Some(AddressFormat::CashAddr))
                 .unwrap();
@@ -376,7 +376,7 @@ mod tests {
         /// Verify address derivation at index 0 to ensure edge case is handled correctly.
         #[test]
         fn test_bhc_bip32_index_zero_legacy() {
-            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let address = xpub
                 .derive_bip32_addresses(1, &Some(AddressFormat::Legacy))
                 .unwrap();
@@ -389,7 +389,7 @@ mod tests {
         /// Verify address derivation at index 0 to ensure edge case is handled correctly.
         #[test]
         fn test_bhc_bip32_index_zero_cashaddr() {
-            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let address = xpub
                 .derive_bip32_addresses(1, &Some(AddressFormat::CashAddr))
                 .unwrap();
@@ -402,7 +402,7 @@ mod tests {
         /// Verify address derivation at index 0 to ensure edge case is handled correctly.
         #[test]
         fn test_bhc_bip32_index_zero_cashaddr_withprefix() {
-            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let address = xpub
                 .derive_bip32_addresses(1, &Some(AddressFormat::CashAddrWithPrefix))
                 .unwrap();
@@ -415,7 +415,7 @@ mod tests {
         /// Ensure hardened index derivation with xPub fails as per BIP32 rules.
         #[test]
         fn test_bhc_bip32_hardened_index() {
-            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let result = xpub.derive_non_hardened(0x80000000);
             assert!(result.is_err(), "Hardened index derivation should fail");
         }
