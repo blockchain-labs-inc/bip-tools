@@ -63,6 +63,19 @@ mod tests {
                 );
             }
         }
+
+        /// Verify address derivation at index 0 to ensure edge case is handled correctly.
+        #[test]
+        fn test_btc_bip32_index_zero() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
+            let address = xpub
+                .derive_bip32_addresses(1, &None)
+                .unwrap();
+            assert_eq!(
+                address[0], BIP32_EXPECTED_ADDRESS_BTC[0],
+                "BIP32 address at index 0 does not match expected"
+            );
+        }
     }
 
     /// Litecoin (LTC) BIP32 Test Module
@@ -147,6 +160,19 @@ mod tests {
                 );
             }
         }
+
+        /// Verify address derivation at index 0 to ensure edge case is handled correctly.
+        #[test]
+        fn test_ltc_bip32_index_zero() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
+            let address = xpub
+                .derive_bip32_addresses(1, &None)
+                .unwrap();
+            assert_eq!(
+                address[0], BIP32_EXPECTED_ADDRESS_LTC[0],
+                "BIP32 address at index 0 does not match expected"
+            );
+        }
     }
 
     mod dogecoin_bip32 {
@@ -212,6 +238,19 @@ mod tests {
                     "BIP32 Dogecoin address length should be 26-35"
                 );
             }
+        }
+
+        /// Verify address derivation at index 0 to ensure edge case is handled correctly.
+        #[test]
+        fn test_doge_bip32_index_zero() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
+            let address = xpub
+                .derive_bip32_addresses(1, &None)
+                .unwrap();
+            assert_eq!(
+                address[0], BIP32_EXPECTED_ADDRESS_DOGE[0],
+                "BIP32 address at index 0 does not match expected"
+            );
         }
     }
 
@@ -308,6 +347,45 @@ mod tests {
                     "BIP32 Bitcoin Cash address should start with 'q' (CashAddr)"
                 );
             }
+        }
+
+        /// Verify address derivation at index 0 to ensure edge case is handled correctly.
+        #[test]
+        fn test_bhc_bip32_index_zero_legacy() {
+            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let address = xpub
+                .derive_bip32_addresses(1, &Some(AddressFormat::Legacy))
+                .unwrap();
+            assert_eq!(
+                address[0], BIP32_EXPECTED_ADDRESS_BHC_LEGACY[0],
+                "BIP32 address at index 0 does not match expected"
+            );
+        }
+
+        /// Verify address derivation at index 0 to ensure edge case is handled correctly.
+        #[test]
+        fn test_bhc_bip32_index_zero_cashaddr() {
+            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let address = xpub
+                .derive_bip32_addresses(1, &Some(AddressFormat::CashAddr))
+                .unwrap();
+            assert_eq!(
+                address[0], BIP32_EXPECTED_ADDRESS_BHC_CASHADDR[0],
+                "BIP32 address at index 0 does not match expected"
+            );
+        }
+
+        /// Verify address derivation at index 0 to ensure edge case is handled correctly.
+        #[test]
+        fn test_bhc_bip32_index_zero_cashaddr_withprefix() {
+            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let address = xpub
+                .derive_bip32_addresses(1, &Some(AddressFormat::CashAddrWithPrefix))
+                .unwrap();
+            assert_eq!(
+                address[0], BIP32_EXPECTED_ADDRESS_BHC_CASHADDR_PREFIX[0],
+                "BIP32 address at index 0 does not match expected"
+            );
         }
     }
 }
