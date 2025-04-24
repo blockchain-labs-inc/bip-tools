@@ -109,6 +109,17 @@ mod test {
                 );
             }
         }
+
+        /// Ensure derive_bip44_addresses rejects invalid chain_type values.
+        #[test]
+        fn test_bip44_btc_invalid_chain_type() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
+            let result = xpub.derive_bip44_addresses(3, 2, &None);
+            assert!(
+                result.is_err(),
+                "Invalid chain_type should fail"
+            );
+        }
     }
 
     /// Litecoin (LTC) BIP44 Tests
@@ -241,6 +252,17 @@ mod test {
                 );
             }
         }
+
+        /// Ensure derive_bip44_addresses rejects invalid chain_type values.
+        #[test]
+        fn test_bip44_ltc_invalid_chain_type() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
+            let result = xpub.derive_bip44_addresses(3, 2, &None);
+            assert!(
+                result.is_err(),
+                "Invalid chain_type should fail"
+            );
+        }
     }
 
     /// Dogecoin (DOGE) BIP44 Tests
@@ -339,6 +361,17 @@ mod test {
                     "BIP44 Dogecoin address lenght should be 26-35"
                 );
             }
+        }
+
+        /// Ensure derive_bip44_addresses rejects invalid chain_type values.
+        #[test]
+        fn test_bip44_doge_invalid_chain_type() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
+            let result = xpub.derive_bip44_addresses(3, 2, &None);
+            assert!(
+                result.is_err(),
+                "Invalid chain_type should fail"
+            );
         }
     }
 
@@ -484,6 +517,17 @@ mod test {
                     "BIP44 Bitcoin Cash address should start with 'q' (CashAddr)"
                 );
             }
+        }
+
+        /// Ensure derive_bip44_addresses rejects invalid chain_type values.
+        #[test]
+        fn test_bip44_btc_invalid_chain_type() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
+            let result = xpub.derive_bip44_addresses(3, 2, &None);
+            assert!(
+                result.is_err(),
+                "Invalid chain_type should fail"
+            );
         }
 
         const XPUB_BCH_BIP44_1: &str = "xpub6D1S8ySBPc2nQtT6LBcfzGyaxvfBsBdFpy1NmNiHJJdBv68JaTyqKpJv7sNLPkZndjo1UcXZLBGxj2gxPdx6EMygzsR3MCEVoqcnqvN8hi5";
