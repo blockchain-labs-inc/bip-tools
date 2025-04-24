@@ -76,6 +76,14 @@ mod tests {
                 "BIP32 address at index 0 does not match expected"
             );
         }
+
+        /// Ensure hardened index derivation with xPub fails as per BIP32 rules.
+        #[test]
+        fn test_btc_bip32_hardened_index() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
+            let result = xpub.derive_non_hardened(0x80000000);
+            assert!(result.is_err(), "Hardened index derivation should fail");
+        }
     }
 
     /// Litecoin (LTC) BIP32 Test Module
@@ -173,6 +181,14 @@ mod tests {
                 "BIP32 address at index 0 does not match expected"
             );
         }
+
+        /// Ensure hardened index derivation with xPub fails as per BIP32 rules.
+        #[test]
+        fn test_ltc_bip32_hardened_index() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
+            let result = xpub.derive_non_hardened(0x80000000);
+            assert!(result.is_err(), "Hardened index derivation should fail");
+        }
     }
 
     mod dogecoin_bip32 {
@@ -251,6 +267,14 @@ mod tests {
                 address[0], BIP32_EXPECTED_ADDRESS_DOGE[0],
                 "BIP32 address at index 0 does not match expected"
             );
+        }
+
+        /// Ensure hardened index derivation with xPub fails as per BIP32 rules.
+        #[test]
+        fn test_doge_bip32_hardened_index() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
+            let result = xpub.derive_non_hardened(0x80000000);
+            assert!(result.is_err(), "Hardened index derivation should fail");
         }
     }
 
@@ -386,6 +410,14 @@ mod tests {
                 address[0], BIP32_EXPECTED_ADDRESS_BHC_CASHADDR_PREFIX[0],
                 "BIP32 address at index 0 does not match expected"
             );
+        }
+
+        /// Ensure hardened index derivation with xPub fails as per BIP32 rules.
+        #[test]
+        fn test_bhc_bip32_hardened_index() {
+            let xpub = Xpub::from_base58(XPUB_BHC_BIP32, COIN_TYPE).unwrap();
+            let result = xpub.derive_non_hardened(0x80000000);
+            assert!(result.is_err(), "Hardened index derivation should fail");
         }
     }
 }
