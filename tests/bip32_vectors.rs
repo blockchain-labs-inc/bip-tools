@@ -15,7 +15,7 @@ mod tests {
 
         /// Test generating a multiple BIP32 address
         #[test]
-        fn test_bip32_multiple_addresses() {
+        fn test_bip32_btc_multiple_addresses() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip32_addresses(3, &None)
@@ -66,7 +66,7 @@ mod tests {
 
         /// Verify address derivation at index 0 to ensure edge case is handled correctly.
         #[test]
-        fn test_btc_bip32_index_zero() {
+        fn test_bip32_btc_index_zero() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
             let address = xpub.derive_bip32_addresses(1, &None).unwrap();
             assert_eq!(
@@ -77,10 +77,18 @@ mod tests {
 
         /// Ensure hardened index derivation with xPub fails as per BIP32 rules.
         #[test]
-        fn test_btc_bip32_hardened_index() {
+        fn test_bip32_btc_hardened_index() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
             let result = xpub.derive_non_hardened(0x80000000);
             assert!(result.is_err(), "Hardened index derivation should fail");
+        }
+
+        /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin (BTC) 
+        #[test]
+        fn test_bip32_btc_max_index() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
+            let result = xpub.derive_non_hardened(0x7FFFFFFF);
+            assert!(result.is_ok(), "Max non-hardened index should succeed");
         }
     }
 
@@ -99,7 +107,7 @@ mod tests {
 
         /// Test generating a multiple BIP32 address
         #[test]
-        fn test_bip32_multiple_addresses() {
+        fn test_bip32_ltc_multiple_addresses() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip32_addresses(3, &None)
@@ -113,7 +121,7 @@ mod tests {
 
         /// Test BIP32 derivation consistency
         #[test]
-        fn test_bip32_large_index_range() {
+        fn test_bip32_ltc_large_index_range() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
             let count = 1000;
             let addresses = xpub
@@ -124,22 +132,6 @@ mod tests {
                 count as usize,
                 "Should generate 1000 addresses"
             );
-        }
-
-        /// Test Litecoin-spesific BIP32 address format
-        #[test]
-        fn test_bip32_address_format() {
-            let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
-            let addresses = xpub
-                .derive_bip32_addresses(3, &None)
-                .expect("BIP32 address derivation failed");
-            for (i, addr) in addresses.iter().enumerate() {
-                assert!(
-                    addr.starts_with("L"),
-                    "BIP32 address {} should start with 'L'",
-                    i
-                );
-            }
         }
 
         /// Test BIP32 Litecoin xpub parsing with a short invalid xpub and checks if an error is returned
@@ -169,7 +161,7 @@ mod tests {
 
         /// Verify address derivation at index 0 to ensure edge case is handled correctly.
         #[test]
-        fn test_ltc_bip32_index_zero() {
+        fn test_bip32_ltc_index_zero() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
             let address = xpub.derive_bip32_addresses(1, &None).unwrap();
             assert_eq!(
@@ -180,10 +172,18 @@ mod tests {
 
         /// Ensure hardened index derivation with xPub fails as per BIP32 rules.
         #[test]
-        fn test_ltc_bip32_hardened_index() {
+        fn test_bip32_ltc_hardened_index() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
             let result = xpub.derive_non_hardened(0x80000000);
             assert!(result.is_err(), "Hardened index derivation should fail");
+        }
+
+        /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Litecoin (LTC) 
+        #[test]
+        fn test_bip32_ltc_max_index() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
+            let result = xpub.derive_non_hardened(0x7FFFFFFF);
+            assert!(result.is_ok(), "Max non-hardened index should succeed");
         }
     }
 
@@ -201,7 +201,7 @@ mod tests {
 
         /// Test BIP32 derivation for multiple addresses (for Dogecoin)
         #[test]
-        fn test_bip32_multiple_addresses() {
+        fn test_bip32_doge_multiple_addresses() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip32_addresses(3, &None)
@@ -212,18 +212,6 @@ mod tests {
                     addr, BIP32_EXPECTED_ADDRESS_DOGE[i],
                     "Multiple BIP32 addresses do not match expected"
                 );
-            }
-        }
-
-        /// Test Dogecoin-spesific address format for BIP44 derivation
-        #[test]
-        fn test_bip32_address_format() {
-            let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
-            let addresses = xpub
-                .derive_bip32_addresses(3, &None)
-                .expect("BIP32 address derivation failed");
-            for addr in addresses.iter() {
-                assert!(addr.starts_with("D"), "BIP32 address should start with 'D'");
             }
         }
 
@@ -254,7 +242,7 @@ mod tests {
 
         /// Verify address derivation at index 0 to ensure edge case is handled correctly.
         #[test]
-        fn test_doge_bip32_index_zero() {
+        fn test_bip32_doge_index_zero() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
             let address = xpub.derive_bip32_addresses(1, &None).unwrap();
             assert_eq!(
@@ -265,10 +253,18 @@ mod tests {
 
         /// Ensure hardened index derivation with xPub fails as per BIP32 rules.
         #[test]
-        fn test_doge_bip32_hardened_index() {
+        fn test_bip32_doge_hardened_index() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
             let result = xpub.derive_non_hardened(0x80000000);
             assert!(result.is_err(), "Hardened index derivation should fail");
+        }
+
+        // Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Dogecoin (DOGE) 
+        #[test]
+        fn test_bip32_doge_max_index() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
+            let result = xpub.derive_non_hardened(0x7FFFFFFF);
+            assert!(result.is_ok(), "Max non-hardened index should succeed");
         }
     }
 
@@ -282,21 +278,21 @@ mod tests {
         const XPUB_BCH_BIP32: &str = "xpub6DsYunNirm7J62yWYTVR4qKHfzyRwPoxRaJXDdFYLEGQSFFiDe5wpAXf7VcX5XP9A6mHv5b6qpcPrCtuqoJpkjwr45y6LqxHZxBm93akLDC";
 
         /// Expected addresses for Legacy format (Base58)
-        const BIP32_EXPECTED_ADDRESS_BHC_LEGACY: [&str; 3] = [
+        const BIP32_EXPECTED_ADDRESS_BCH_LEGACY: [&str; 3] = [
             "1Cm5tkbJtJnxkFwho3wGhYdLDxgtS6EWRy",
             "123VubGmrM5jQA5QwWnkN3ELwxL97VwDrx",
             "1GbJ3uk8vyGwcxrpBYw2wWQMWGfzYJAPbp",
         ];
 
         // Expected addresses for CashAddr format (not prefix)
-        const BIP32_EXPECTED_ADDRESS_BHC_CASHADDR: [&str; 3] = [
+        const BIP32_EXPECTED_ADDRESS_BCH_CASHADDR: [&str; 3] = [
             "qzq0l3g35sh0dkvd4ukwy0xdt4wvnhgx3c5tv36l9w",
             "qq9hz9nujds8l205rvdvtcs480qqcpz0kclfd80zga",
             "qz4svseqjyp72xge6pkwh26nsdna6z77fysuzg7ust",
         ];
 
         // Expected addresses for CashAddr format (with prefix)
-        const BIP32_EXPECTED_ADDRESS_BHC_CASHADDR_PREFIX: [&str; 3] = [
+        const BIP32_EXPECTED_ADDRESS_BCH_CASHADDR_PREFIX: [&str; 3] = [
             "bitcoincash:qzq0l3g35sh0dkvd4ukwy0xdt4wvnhgx3c5tv36l9w",
             "bitcoincash:qq9hz9nujds8l205rvdvtcs480qqcpz0kclfd80zga",
             "bitcoincash:qz4svseqjyp72xge6pkwh26nsdna6z77fysuzg7ust",
@@ -304,49 +300,49 @@ mod tests {
 
         /// Test BIP32 derivation for multiple legacy addresses and verify
         #[test]
-        fn test_bip32_multiple_legacy_addresses() {
+        fn test_bip32_bch_multiple_legacy_addresses() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip32_addresses(3, &Some(AddressFormat::Legacy))
                 .expect("BIP32 Multiple addresses derivation failed");
             assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
             assert_eq!(
-                addresses[0], BIP32_EXPECTED_ADDRESS_BHC_LEGACY[0],
+                addresses[0], BIP32_EXPECTED_ADDRESS_BCH_LEGACY[0],
                 "Multiple BIP32 addresses do not match expected"
             );
         }
 
         /// Test BIP32 derivation for multiple cashaddr addresses and verify
         #[test]
-        fn test_bip32_multiple_cashaddr_addresses() {
+        fn test_bip32_bch_multiple_cashaddr_addresses() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip32_addresses(3, &Some(AddressFormat::CashAddr))
                 .expect("BIP32 Multiple addresses derivation failed");
             assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
             assert_eq!(
-                addresses[0], BIP32_EXPECTED_ADDRESS_BHC_CASHADDR[0],
+                addresses[0], BIP32_EXPECTED_ADDRESS_BCH_CASHADDR[0],
                 "Multiple BIP32 addresses do not match expected"
             );
         }
 
         /// Test BIP32 derivation for multiple cashaddr-prefix addresses and verify
         #[test]
-        fn test_bip32_multiple_cashaddr_prefix_addresses() {
+        fn test_bip32_bch_multiple_cashaddr_prefix_addresses() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip32_addresses(3, &Some(AddressFormat::CashAddrWithPrefix))
                 .expect("BIP32 Multiple addresses derivation failed");
             assert_eq!(addresses.len(), 3, "Should generate 3 addresses");
             assert_eq!(
-                addresses[0], BIP32_EXPECTED_ADDRESS_BHC_CASHADDR_PREFIX[0],
+                addresses[0], BIP32_EXPECTED_ADDRESS_BCH_CASHADDR_PREFIX[0],
                 "Multiple BIP32 addresses do not match expected"
             );
         }
 
         /// Test BIP32 Bitcoin Cash xpub parsing with a short invalid xpub and checks if an error is returned
         #[test]
-        fn test_bip32_bhc_short_invalid_xpub() {
+        fn test_bip32_bch_short_invalid_xpub() {
             let invalid_xpub = "xpub123";
             let result = Xpub::from_base58(invalid_xpub, CoinType::BitcoinCash);
             assert!(result.is_err(), "Short xpub fail for BIP32 Bitcoin Cash");
@@ -354,7 +350,7 @@ mod tests {
 
         /// Test BIP32 Bitcoin Cash address format to ensure it starts with 'q' (CashAddr)
         #[test]
-        fn test_bip32_bhc_address_format() {
+        fn test_bip32_bch_address_format() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP32, CoinType::BitcoinCash).unwrap();
             let addresses = xpub
                 .derive_bip32_addresses(3, &Some(AddressFormat::CashAddr))
@@ -369,49 +365,57 @@ mod tests {
 
         /// Verify address derivation at index 0 to ensure edge case is handled correctly.
         #[test]
-        fn test_bhc_bip32_index_zero_legacy() {
+        fn test_bip32_bch_index_zero_legacy() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let address = xpub
                 .derive_bip32_addresses(1, &Some(AddressFormat::Legacy))
                 .unwrap();
             assert_eq!(
-                address[0], BIP32_EXPECTED_ADDRESS_BHC_LEGACY[0],
+                address[0], BIP32_EXPECTED_ADDRESS_BCH_LEGACY[0],
                 "BIP32 address at index 0 does not match expected"
             );
         }
 
         /// Verify address derivation at index 0 to ensure edge case is handled correctly.
         #[test]
-        fn test_bhc_bip32_index_zero_cashaddr() {
+        fn test_bip32_bch_index_zero_cashaddr() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let address = xpub
                 .derive_bip32_addresses(1, &Some(AddressFormat::CashAddr))
                 .unwrap();
             assert_eq!(
-                address[0], BIP32_EXPECTED_ADDRESS_BHC_CASHADDR[0],
+                address[0], BIP32_EXPECTED_ADDRESS_BCH_CASHADDR[0],
                 "BIP32 address at index 0 does not match expected"
             );
         }
 
         /// Verify address derivation at index 0 to ensure edge case is handled correctly.
         #[test]
-        fn test_bhc_bip32_index_zero_cashaddr_withprefix() {
+        fn test_bip32_bch_index_zero_cashaddr_withprefix() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let address = xpub
                 .derive_bip32_addresses(1, &Some(AddressFormat::CashAddrWithPrefix))
                 .unwrap();
             assert_eq!(
-                address[0], BIP32_EXPECTED_ADDRESS_BHC_CASHADDR_PREFIX[0],
+                address[0], BIP32_EXPECTED_ADDRESS_BCH_CASHADDR_PREFIX[0],
                 "BIP32 address at index 0 does not match expected"
             );
         }
 
         /// Ensure hardened index derivation with xPub fails as per BIP32 rules.
         #[test]
-        fn test_bhc_bip32_hardened_index() {
+        fn test_bip32_bch_hardened_index() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let result = xpub.derive_non_hardened(0x80000000);
             assert!(result.is_err(), "Hardened index derivation should fail");
+        }
+
+        /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin Cash (BCH) 
+        #[test]
+        fn test_bip32_bch_max_index() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
+            let result = xpub.derive_non_hardened(0x7FFFFFFF);
+            assert!(result.is_ok(), "Max non-hardened index should succeed");
         }
     }
 }
