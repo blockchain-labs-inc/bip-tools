@@ -22,7 +22,7 @@ mod test {
 
         /// Test generating BIP44 addresses
         #[test]
-        fn test_bip44_multiple_addresses() {
+        fn test_bip44_btc_multiple_addresses() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 0, &None)
@@ -39,7 +39,7 @@ mod test {
 
         /// Test BIP44 address derivation for Bitcoin (BTC) - internal.
         #[test]
-        fn test_bip44_multiple_addresses_1() {
+        fn test_bip44_btc_multiple_addresses_1() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44_1, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 1, &None)
@@ -55,7 +55,7 @@ mod test {
 
         /// Test consisteny of BIP44 derivation
         #[test]
-        fn test_bip44_derivation_consistency() {
+        fn test_bip44_btc_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
             let addresses1 = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
             let addresses2 = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
@@ -67,23 +67,13 @@ mod test {
 
         /// Test generating zero BIP44 addresses
         #[test]
-        fn test_bip44_zero_address() {
+        fn test_bip44_btc_zero_address() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub.derive_bip44_addresses(0, 0, &None).unwrap();
             assert!(
                 addresses.is_empty(),
                 "Should return an empty vector for zero addresses"
             );
-        }
-
-        /// Test Bitcoin-spesific BIP44 address format
-        #[test]
-        fn test_bip44_address_format() {
-            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
-            let addresses = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
-            for addr in addresses.iter() {
-                assert!(addr.starts_with("1"), "Invalid BIP44 address format");
-            }
         }
 
         /// Test BIP44 Bitcoin xpub parsing with a short invalid xpub and checks if an errors is returned
@@ -121,7 +111,7 @@ mod test {
 
         /// Ensure hardened index derivation with xPub fails as per BIP44 rules.
         #[test]
-        fn test_btc_bip44_hardened_index() {
+        fn test_bip44_btc_hardened_index() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
             let result = xpub.derive_non_hardened(0x80000000);
             assert!(result.is_err(), "Hardened index derivation should fail");
@@ -150,7 +140,7 @@ mod test {
 
         /// Test BIP44 derivation for multiple addresses
         #[test]
-        fn test_bip44_multiple_addresses() {
+        fn test_bip44_ltc_multiple_addresses() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 0, &None)
@@ -167,7 +157,7 @@ mod test {
 
         /// Test BIP44 address derivation for Litecoin (LTC) - internal.
         #[test]
-        fn test_ltc_bip44_multiple_addresses_1() {
+        fn test_bip44_ltc_multiple_addresses_1() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44_1, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 1, &None)
@@ -183,7 +173,7 @@ mod test {
 
         /// Test BIP44 derivation with large index range
         #[test]
-        fn test_bip44_large_index_range() {
+        fn test_bip44_ltc_large_index_range() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
             let count = 1000;
             let addresses = xpub
@@ -203,30 +193,9 @@ mod test {
             }
         }
 
-        // Test Litecoin-specific address format for BIP44 derivation
-        #[test]
-        fn test_bip44_address_format() {
-            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
-            let addresses = xpub
-                .derive_bip44_addresses(3, 0, &None)
-                .expect("BIP44 address format derivation failed");
-            for (i, addr) in addresses.iter().enumerate() {
-                assert!(
-                    addr.starts_with("L"),
-                    "BIP44 address at index {} should start with 'L'",
-                    i
-                );
-                assert_eq!(
-                    addr, BIP44_EXPECTED_ADDRESS_LTC[i],
-                    "BIP44 address at index {} does not match expected",
-                    i
-                );
-            }
-        }
-
         /// Test error handling for invalid
         #[test]
-        fn test_bip44_invalid_xpub() {
+        fn test_bip44_ltc_invalid_xpub() {
             let invalid_xpub = "invalid_ltc_xpub";
             let result = Xpub::from_base58(invalid_xpub, COIN_TYPE);
             assert!(
@@ -270,7 +239,7 @@ mod test {
 
         /// Ensure hardened index derivation with xPub fails as per BIP44 rules.
         #[test]
-        fn test_ltc_bip44_hardened_index() {
+        fn test_bip44_ltc_hardened_index() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
             let result = xpub.derive_non_hardened(0x80000000);
             assert!(result.is_err(), "Hardened index derivation should fail");
@@ -299,7 +268,7 @@ mod test {
 
         /// Test BIP44 derivation for multiple addresses
         #[test]
-        fn test_bip44_multiple_addresses() {
+        fn test_bip44_doge_multiple_addresses() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 0, &None)
@@ -316,7 +285,7 @@ mod test {
 
         /// Test BIP44 address derivation for Dogecoin (DOGE) - internal.
         #[test]
-        fn test_doge_bip44_multiple_addresses_1() {
+        fn test_bip44_doge_multiple_addresses_1() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44_1, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 1, &None)
@@ -326,27 +295,6 @@ mod test {
                 assert_eq!(
                     addr, BIP44_EXPECTED_ADDRESS_DOGE_1[i],
                     "Multiple BIP44 addresses do not match expected"
-                );
-            }
-        }
-
-        /// Test Dogecoin-specific address format for BIP44 derivation
-        #[test]
-        fn test_bip44_address_format() {
-            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
-            let addresses = xpub
-                .derive_bip44_addresses(3, 0, &None)
-                .expect("BIP44 address format derivation failed");
-            for (i, addr) in addresses.iter().enumerate() {
-                assert!(
-                    addr.starts_with("D"),
-                    "Dogecoin BIP44 address at index {} should start with 'D'",
-                    i
-                );
-                assert_eq!(
-                    addr, BIP44_EXPECTED_ADDRESS_DOGE[i],
-                    "BIP44 address at index {} does not match expected",
-                    i
                 );
             }
         }
@@ -425,7 +373,7 @@ mod test {
 
         /// Test BIP44 derivation for a multiple legacy address and verify
         #[test]
-        fn test_bip44_multiple_legacy_address() {
+        fn test_bip44_bch_multiple_legacy_address() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 0, &Some(AddressFormat::Legacy))
@@ -439,7 +387,7 @@ mod test {
 
         /// Verify BIP44 derivation consistency across format
         #[test]
-        fn test_bip44_format_consistency() {
+        fn test_bip44_bch_format_consistency() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses_legacy = xpub
                 .derive_bip44_addresses(3, 0, &Some(AddressFormat::Legacy))
@@ -462,7 +410,7 @@ mod test {
 
         /// Test large-scale BIP44 derivation for (1000 addresses, Legacy)
         #[test]
-        fn test_bip44_large_scale_legacy_derivation() {
+        fn test_bip44_bch_large_scale_legacy_derivation() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let count = 1000;
             let addresses = xpub
@@ -485,7 +433,7 @@ mod test {
 
         /// Derive a single CashAddr address and verify
         #[test]
-        fn test_bip44_multiple_cashaddr_address() {
+        fn test_bip44_bch_multiple_cashaddr_address() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 0, &Some(AddressFormat::CashAddr))
@@ -499,7 +447,7 @@ mod test {
 
         // Derive multiple CashAddrWithPrefix addresses and verify
         #[test]
-        fn test_bip44_multiple_cashaddr_prefix_addresses() {
+        fn test_bip44_bch_multiple_cashaddr_prefix_addresses() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 0, &Some(AddressFormat::CashAddrWithPrefix))
@@ -516,7 +464,7 @@ mod test {
 
         /// Test BIP44 Bitcoin Cash xpub parsing with a short invalid xpub and checks if an error is returned
         #[test]
-        fn test_bip44_bhc_short_invalid_xpub() {
+        fn test_bip44_bch_short_invalid_xpub() {
             let invalid_xpub = "xpub123";
             let result = Xpub::from_base58(invalid_xpub, CoinType::BitcoinCash);
             assert!(result.is_err(), " Short xpub fail for BIP44 Bitcoin Cash");
@@ -524,7 +472,7 @@ mod test {
 
         /// Test BIP44 Bitcoin Cash address format to ensure it start with 'q' (CashAddr)
         #[test]
-        fn test_bip44_bhc_address_format() {
+        fn test_bip44_bch_address_format() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, CoinType::BitcoinCash).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 0, &Some(AddressFormat::CashAddr))
@@ -539,7 +487,7 @@ mod test {
 
         /// Ensure derive_bip44_addresses rejects invalid chain_type values.
         #[test]
-        fn test_bip44_btc_invalid_chain_type() {
+        fn test_bip44_bch_invalid_chain_type() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let result = xpub.derive_bip44_addresses(3, 2, &None);
             assert!(result.is_err(), "Invalid chain_type should fail");
@@ -547,7 +495,7 @@ mod test {
 
         /// Ensure hardened index derivation with xPub fails as per BIP44 rules.
         #[test]
-        fn test_bhc_bip44_hardened_index() {
+        fn test_bip44_bch_hardened_index() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
             let result = xpub.derive_non_hardened(0x80000000);
             assert!(result.is_err(), "Hardened index derivation should fail");
@@ -578,7 +526,7 @@ mod test {
 
         /// Test BIP44 address derivation for Bitcoin Cash (BHC / legacy) - internal.
         #[test]
-        fn test_bip44_multiple_legacy_address_1() {
+        fn test_bip44_bch_multiple_legacy_address_1() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44_1, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 1, &Some(AddressFormat::Legacy))
@@ -592,7 +540,7 @@ mod test {
 
         /// Test BIP44 address derivation for Bitcoin Cash (BHC / cashaddr) - internal.
         #[test]
-        fn test_bip44_multiple_cash_address_1() {
+        fn test_bip44_bch_multiple_cash_address_1() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44_1, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 1, &Some(AddressFormat::CashAddr))
@@ -606,7 +554,7 @@ mod test {
 
         /// Test BIP44 address derivation for Bitcoin Cash (BHC / cashaddr with prefix) - internal.
         #[test]
-        fn test_bip44_multiple_cash_prefix_address_1() {
+        fn test_bip44_bch_multiple_cash_prefix_address_1() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44_1, COIN_TYPE).unwrap();
             let addresses = xpub
                 .derive_bip44_addresses(3, 1, &Some(AddressFormat::CashAddrWithPrefix))
