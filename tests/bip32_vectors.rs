@@ -83,7 +83,7 @@ mod tests {
             assert!(result.is_err(), "Hardened index derivation should fail");
         }
 
-        /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin (BTC) 
+        /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin (BTC)
         #[test]
         fn test_bip32_btc_max_index() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
@@ -178,7 +178,7 @@ mod tests {
             assert!(result.is_err(), "Hardened index derivation should fail");
         }
 
-        /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Litecoin (LTC) 
+        /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Litecoin (LTC)
         #[test]
         fn test_bip32_ltc_max_index() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
@@ -259,7 +259,7 @@ mod tests {
             assert!(result.is_err(), "Hardened index derivation should fail");
         }
 
-        // Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Dogecoin (DOGE) 
+        /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Dogecoin (DOGE)
         #[test]
         fn test_bip32_doge_max_index() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
@@ -410,7 +410,7 @@ mod tests {
             assert!(result.is_err(), "Hardened index derivation should fail");
         }
 
-        /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin Cash (BCH) 
+        /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin Cash (BCH)
         #[test]
         fn test_bip32_bch_max_index() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
