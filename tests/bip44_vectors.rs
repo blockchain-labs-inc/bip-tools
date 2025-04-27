@@ -120,27 +120,37 @@ mod test {
         /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin (BTC) (chain type = 0)
         #[test]
         fn test_bip44_btc_max_index_chain_0() {
-            let xpub = Xpub::from_base58(XPUB_BTC_BIP44,COIN_TYPE).unwrap();                                      // Parse the BIP44 xPub for Bitcoin (assumed to be at m/44'/0'/0')
-            let chain_xpub = xpub.derive_non_hardened(0).expect("Failed to derive chain xPub");        // Derive the chain xPub for chain_type = 0 (external addresses)
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap(); // Parse the BIP44 xPub for Bitcoin (assumed to be at m/44'/0'/0')
+            let chain_xpub = xpub
+                .derive_non_hardened(0)
+                .expect("Failed to derive chain xPub"); // Derive the chain xPub for chain_type = 0 (external addresses)
             let max_index = 0x7FFFFFFF;
             let child_xpub = chain_xpub
                 .derive_non_hardened(max_index)
                 .expect("Failed to derive child max index");
             let address = child_xpub.to_address(&None);
-            assert!(address.starts_with("1"), "Bitcoin address should start with '1'");
+            assert!(
+                address.starts_with("1"),
+                "Bitcoin address should start with '1'"
+            );
         }
 
         /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin (BTC) (chain type = 1)
         #[test]
         fn test_bip44_btc_max_index_chain_1() {
-            let xpub = Xpub::from_base58(XPUB_BTC_BIP44,COIN_TYPE).unwrap();                                      // Parse the BIP44 xPub for Bitcoin (assumed to be at m/44'/0'/0')
-            let chain_xpub = xpub.derive_non_hardened(1).expect("Failed to derive chain xPub");        // Derive the chain xPub for chain_type = 1 (internal addresses)
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap(); // Parse the BIP44 xPub for Bitcoin (assumed to be at m/44'/0'/0')
+            let chain_xpub = xpub
+                .derive_non_hardened(1)
+                .expect("Failed to derive chain xPub"); // Derive the chain xPub for chain_type = 1 (internal addresses)
             let max_index = 0x7FFFFFFF;
             let child_xpub = chain_xpub
                 .derive_non_hardened(max_index)
                 .expect("Failed to derive child max index");
             let address = child_xpub.to_address(&None);
-            assert!(address.starts_with("1"), "Bitcoin address should start with '1'");
+            assert!(
+                address.starts_with("1"),
+                "Bitcoin address should start with '1'"
+            );
         }
     }
 
@@ -274,27 +284,37 @@ mod test {
         /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Litecoin (LTC) (chain type = 0)
         #[test]
         fn test_bip44_ltc_max_index_chain_0() {
-            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();                                     // Parse the BIP44 xPub for Litecoin (assumed to be at m/44'/0'/0')
-            let chain_xpub = xpub.derive_non_hardened(0).expect("Failed to derive chain xPub");        // Derive the chain xPub for chain_type = 0 (external addresses)
-            let max_index = 0x7FFFFFFF; 
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap(); // Parse the BIP44 xPub for Litecoin (assumed to be at m/44'/0'/0')
+            let chain_xpub = xpub
+                .derive_non_hardened(0)
+                .expect("Failed to derive chain xPub"); // Derive the chain xPub for chain_type = 0 (external addresses)
+            let max_index = 0x7FFFFFFF;
             let child_xpub = chain_xpub
                 .derive_non_hardened(max_index)
                 .expect("Failed to derive child max index");
             let address = child_xpub.to_address(&None);
-            assert!(address.starts_with("L"), "Litecoin address should start with 'L'");
+            assert!(
+                address.starts_with("L"),
+                "Litecoin address should start with 'L'"
+            );
         }
 
         /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Litecoin (LTC) (chain type = 1)
         #[test]
         fn test_bip44_ltc_max_index_chain_1() {
-            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();                                     // Parse the BIP44 xPub for Litecoin (assumed to be at m/44'/0'/0')
-            let chain_xpub = xpub.derive_non_hardened(1).expect("Failed to derive chain xPub");        // Derive the chain xPub for chain_type = 1 (internal addresses)
-            let max_index = 0x7FFFFFFF; 
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap(); // Parse the BIP44 xPub for Litecoin (assumed to be at m/44'/0'/0')
+            let chain_xpub = xpub
+                .derive_non_hardened(1)
+                .expect("Failed to derive chain xPub"); // Derive the chain xPub for chain_type = 1 (internal addresses)
+            let max_index = 0x7FFFFFFF;
             let child_xpub = chain_xpub
                 .derive_non_hardened(max_index)
                 .expect("Failed to derive child max index");
             let address = child_xpub.to_address(&None);
-            assert!(address.starts_with("L"), "Litecoin address should start with 'L'");
+            assert!(
+                address.starts_with("L"),
+                "Litecoin address should start with 'L'"
+            );
         }
     }
 
@@ -395,27 +415,37 @@ mod test {
         /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Litecoin (LTC) (chain type = 0)
         #[test]
         fn test_bip44_doge_max_index_chain0() {
-            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();                                      // Parse the BIP44 xPub for Dogecoin (assumed to be at m/44'/0'/0')
-            let chain_xpub = xpub.derive_non_hardened(0).expect("Failed to derive chain xPub");          // Derive the chain xPub for chain_type = 0 (external addresses)
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap(); // Parse the BIP44 xPub for Dogecoin (assumed to be at m/44'/0'/0')
+            let chain_xpub = xpub
+                .derive_non_hardened(0)
+                .expect("Failed to derive chain xPub"); // Derive the chain xPub for chain_type = 0 (external addresses)
             let max_index = 0x7FFFFFFF;
             let child_xpub = chain_xpub
                 .derive_non_hardened(max_index)
                 .expect("Failed to derive child max index");
             let address = child_xpub.to_address(&None);
-            assert!(address.starts_with("D"), "Dogecoin address should start with 'D'");
+            assert!(
+                address.starts_with("D"),
+                "Dogecoin address should start with 'D'"
+            );
         }
 
         /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Litecoin (LTC) (chain type = 1)
         #[test]
         fn test_bip44_doge_max_index_chain1() {
-            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();                                      // Parse the BIP44 xPub for Dogecoin (assumed to be at m/44'/0'/0')
-            let chain_xpub = xpub.derive_non_hardened(1).expect("Failed to derive chain xPub");          // Derive the chain xPub for chain_type = 1 (internal addresses)
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap(); // Parse the BIP44 xPub for Dogecoin (assumed to be at m/44'/0'/0')
+            let chain_xpub = xpub
+                .derive_non_hardened(1)
+                .expect("Failed to derive chain xPub"); // Derive the chain xPub for chain_type = 1 (internal addresses)
             let max_index = 0x7FFFFFFF;
             let child_xpub = chain_xpub
                 .derive_non_hardened(max_index)
                 .expect("Failed to derive child max index");
             let address = child_xpub.to_address(&None);
-            assert!(address.starts_with("D"), "Dogecoin address should start with 'D'");
+            assert!(
+                address.starts_with("D"),
+                "Dogecoin address should start with 'D'"
+            );
         }
     }
 
@@ -582,40 +612,55 @@ mod test {
         /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin Cash (BCH) (chain type = 0) - legacy
         #[test]
         fn test_bip44_bch_max_index_chain_0_legacy() {
-            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();                                      // Parse the BIP44 xPub for Bitcoin Cash (assumed to be at m/44'/0'/0')
-            let chain_xpub = xpub.derive_non_hardened(0).expect("Failed to derive chain xPub");        // Derive the chain xPub for chain_type = 0 (external addresses)
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap(); // Parse the BIP44 xPub for Bitcoin Cash (assumed to be at m/44'/0'/0')
+            let chain_xpub = xpub
+                .derive_non_hardened(0)
+                .expect("Failed to derive chain xPub"); // Derive the chain xPub for chain_type = 0 (external addresses)
             let max_index = 0x7FFFFFFF;
             let child_xpub = chain_xpub
                 .derive_non_hardened(max_index)
                 .expect("Failed to derive child max index");
             let address = child_xpub.to_address(&Some(AddressFormat::Legacy));
-            assert!(address.starts_with("1"), "Bitcoin Cash address should start with '1'");
+            assert!(
+                address.starts_with("1"),
+                "Bitcoin Cash address should start with '1'"
+            );
         }
 
         /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin Cash (BCH) (chain type = 0) - cashaddr
         #[test]
         fn test_bip44_bch_max_index_chain_0_cashaddr() {
-            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();                                      // Parse the BIP44 xPub for Bitcoin Cash (assumed to be at m/44'/0'/0')
-            let chain_xpub = xpub.derive_non_hardened(0).expect("Failed to derive chain xPub");        // Derive the chain xPub for chain_type = 0 (external addresses)
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap(); // Parse the BIP44 xPub for Bitcoin Cash (assumed to be at m/44'/0'/0')
+            let chain_xpub = xpub
+                .derive_non_hardened(0)
+                .expect("Failed to derive chain xPub"); // Derive the chain xPub for chain_type = 0 (external addresses)
             let max_index = 0x7FFFFFFF;
             let child_xpub = chain_xpub
                 .derive_non_hardened(max_index)
                 .expect("Failed to derive child max index");
             let address = child_xpub.to_address(&Some(AddressFormat::CashAddr));
-            assert!(address.starts_with("q"), "Bitcoin Cash address should start with 'q'");
+            assert!(
+                address.starts_with("q"),
+                "Bitcoin Cash address should start with 'q'"
+            );
         }
 
         /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin Cash (BCH) (chain type = 0) - cashaddr_prefix
         #[test]
         fn test_bip44_bch_max_index_chain_0_cashaddr_prefix() {
-            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();                                      // Parse the BIP44 xPub for Bitcoin Cash (assumed to be at m/44'/0'/0')
-            let chain_xpub = xpub.derive_non_hardened(0).expect("Failed to derive chain xPub");        // Derive the chain xPub for chain_type = 0 (external addresses)
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap(); // Parse the BIP44 xPub for Bitcoin Cash (assumed to be at m/44'/0'/0')
+            let chain_xpub = xpub
+                .derive_non_hardened(0)
+                .expect("Failed to derive chain xPub"); // Derive the chain xPub for chain_type = 0 (external addresses)
             let max_index = 0x7FFFFFFF;
             let child_xpub = chain_xpub
                 .derive_non_hardened(max_index)
                 .expect("Failed to derive child max index");
             let address = child_xpub.to_address(&Some(AddressFormat::CashAddrWithPrefix));
-            assert!(address.starts_with("bitcoincash:q"), "Bitcoin Cash address should start with 'bitcoincash:q'");
+            assert!(
+                address.starts_with("bitcoincash:q"),
+                "Bitcoin Cash address should start with 'bitcoincash:q'"
+            );
         }
 
         const XPUB_BCH_BIP44_1: &str = "xpub6D1S8ySBPc2nQtT6LBcfzGyaxvfBsBdFpy1NmNiHJJdBv68JaTyqKpJv7sNLPkZndjo1UcXZLBGxj2gxPdx6EMygzsR3MCEVoqcnqvN8hi5";
@@ -686,41 +731,55 @@ mod test {
         /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin Cash (BCH) (chain type = 1) - legacy
         #[test]
         fn test_bip44_bch_max_index_chain_1_legacy() {
-            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();                                      // Parse the BIP44 xPub for Bitcoin Cash (assumed to be at m/44'/0'/0')
-            let chain_xpub = xpub.derive_non_hardened(1).expect("Failed to derive chain xPub");        // Derive the chain xPub for chain_type = 1 (internal addresses)
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap(); // Parse the BIP44 xPub for Bitcoin Cash (assumed to be at m/44'/0'/0')
+            let chain_xpub = xpub
+                .derive_non_hardened(1)
+                .expect("Failed to derive chain xPub"); // Derive the chain xPub for chain_type = 1 (internal addresses)
             let max_index = 0x7FFFFFFF;
             let child_xpub = chain_xpub
                 .derive_non_hardened(max_index)
                 .expect("Failed to derive child max index");
             let address = child_xpub.to_address(&Some(AddressFormat::Legacy));
-            assert!(address.starts_with("1"), "Bitcoin Cash address should start with '1'");
+            assert!(
+                address.starts_with("1"),
+                "Bitcoin Cash address should start with '1'"
+            );
         }
 
         /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin Cash (BCH) (chain type = 1) - cashaddr
         #[test]
         fn test_bip44_bch_max_index_chain_1_cashaddr() {
-            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();                                      // Parse the BIP44 xPub for Bitcoin Cash (assumed to be at m/44'/0'/0')
-            let chain_xpub = xpub.derive_non_hardened(1).expect("Failed to derive chain xPub");        // Derive the chain xPub for chain_type = 1 (internal addresses)
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap(); // Parse the BIP44 xPub for Bitcoin Cash (assumed to be at m/44'/0'/0')
+            let chain_xpub = xpub
+                .derive_non_hardened(1)
+                .expect("Failed to derive chain xPub"); // Derive the chain xPub for chain_type = 1 (internal addresses)
             let max_index = 0x7FFFFFFF;
             let child_xpub = chain_xpub
                 .derive_non_hardened(max_index)
                 .expect("Failed to derive child max index");
             let address = child_xpub.to_address(&Some(AddressFormat::CashAddr));
-            assert!(address.starts_with("q"), "Bitcoin Cash address should start with 'q'");
+            assert!(
+                address.starts_with("q"),
+                "Bitcoin Cash address should start with 'q'"
+            );
         }
 
         /// Derive a child at the maximum non-hardened index (2^31 - 1) and verify the result for Bitcoin Cash (BCH) (chain type = 1) - cashaddr_prefix
         #[test]
         fn test_bip44_bch_max_index_chain_1_cashaddr_prefix() {
-            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();                                      // Parse the BIP44 xPub for Bitcoin Cash (assumed to be at m/44'/0'/0')
-            let chain_xpub = xpub.derive_non_hardened(1).expect("Failed to derive chain xPub");        // Derive the chain xPub for chain_type = 1 (internal addresses)
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap(); // Parse the BIP44 xPub for Bitcoin Cash (assumed to be at m/44'/0'/0')
+            let chain_xpub = xpub
+                .derive_non_hardened(1)
+                .expect("Failed to derive chain xPub"); // Derive the chain xPub for chain_type = 1 (internal addresses)
             let max_index = 0x7FFFFFFF;
             let child_xpub = chain_xpub
                 .derive_non_hardened(max_index)
                 .expect("Failed to derive child max index");
             let address = child_xpub.to_address(&Some(AddressFormat::CashAddrWithPrefix));
-            assert!(address.starts_with("bitcoincash:q"), "Bitcoin Cash address should start with 'bitcoincash:q'");
+            assert!(
+                address.starts_with("bitcoincash:q"),
+                "Bitcoin Cash address should start with 'bitcoincash:q'"
+            );
         }
-
     }
 }
