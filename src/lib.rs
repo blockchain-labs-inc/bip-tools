@@ -251,45 +251,15 @@ impl Xpub {
             .derive_non_hardened(chain_type)
             .map_err(|e| format!("Error deriving chain: {}", e))?;
 
+        // Generate sequential addresses
         for i in 0..count {
-            match chain.derive_non_hardened(i) {
-                Ok(child) => addresses.push(child.to_address(format)),
-                Err(e) => return Err(format!("Error deriving child {}: {}", i, e)),
-            }
+            let child = chain
+                .derive_non_hardened(i)
+                .map_err(|e| format!("Error deriving child {}: {}", i, e))?;
+            addresses.push(child.to_address(format));
         }
 
         Ok(addresses)
-    }
-
-    // Generates an address using a custom derivation path and chain type
-    pub fn derive_custom_path(
-        &self,
-        path: &[u32],
-        chain_type: u32,
-        format: &Option<AddressFormat>,
-    ) -> Result<String, String> {
-        let mut current = self.clone();
-
-        // If chain_type is 1, derive the change chain first (m/1)
-        if chain_type == 1 {
-            current = current
-                .derive_non_hardened(1)
-                .map_err(|e| format!("Error deriving change chain: {}", e))?;
-        } else if chain_type != 0 {
-            return Err(format!(
-                "Invalid chain type: {}. Use 0 for external or 1 for change.",
-                chain_type
-            ));
-        }
-
-        // Derive along the provided path
-        for &index in path {
-            current = current
-                .derive_non_hardened(index)
-                .map_err(|e| format!("Derivation error at index {}: {}", index, e))?;
-        }
-
-        Ok(current.to_address(format))
     }
 
     /// Calculates the fingerprint (first 4 bytes of HASH160) of the current public key.
