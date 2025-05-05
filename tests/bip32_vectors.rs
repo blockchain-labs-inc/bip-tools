@@ -90,6 +90,17 @@ mod tests {
             let result = xpub.derive_non_hardened(0x7FFFFFFF);
             assert!(result.is_ok(), "Max non-hardened index should succeed");
         }
+
+        /// This test checks the depth, index, and parent fingerprint of a derived child from an xpub according to BIP32 (for BTC)
+        #[test]
+        fn test_bip32_btc_depth_and_fingerprint() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
+            let child = xpub.derive_non_hardened(0).unwrap();
+            assert_eq!(child.depth, xpub.depth + 1, "Depth should increase by 1");
+            assert_eq!(child.child_number, 0, "Child number should match index");
+            assert_eq!(child.parent_fingerprint, xpub.fingerprint(), "Parent fingerprint mismatch");
+        }
+
     }
 
     /// Litecoin (LTC) BIP32 Test Module
@@ -185,6 +196,17 @@ mod tests {
             let result = xpub.derive_non_hardened(0x7FFFFFFF);
             assert!(result.is_ok(), "Max non-hardened index should succeed");
         }
+
+        /// This test checks the depth, index, and parent fingerprint of a derived child from an xpub according to BIP32 (for LTC)
+        #[test]
+        fn test_bip32_ltc_depth_and_fingerprint() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
+            let child = xpub.derive_non_hardened(0).unwrap();
+            assert_eq!(child.depth, xpub.depth + 1, "Depth should increase by 1");
+            assert_eq!(child.child_number, 0, "Child number should match index");
+            assert_eq!(child.parent_fingerprint, xpub.fingerprint(), "Parent fingerprint mismatch");
+        }
+
     }
 
     mod dogecoin_bip32 {
@@ -266,6 +288,17 @@ mod tests {
             let result = xpub.derive_non_hardened(0x7FFFFFFF);
             assert!(result.is_ok(), "Max non-hardened index should succeed");
         }
+
+        /// This test checks the depth, index, and parent fingerprint of a derived child from an xpub according to BIP32 (for DOGE)
+        #[test]
+        fn test_bip32_doge_depth_and_fingerprint() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
+            let child = xpub.derive_non_hardened(0).unwrap();
+            assert_eq!(child.depth, xpub.depth + 1, "Depth should increase by 1");
+            assert_eq!(child.child_number, 0, "Child number should match index");
+            assert_eq!(child.parent_fingerprint, xpub.fingerprint(), "Parent fingerprint mismatch");
+        }
+
     }
 
     // Bitcoin Cash (BCH) BIP32 Test Module
@@ -416,6 +449,16 @@ mod tests {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
             let result = xpub.derive_non_hardened(0x7FFFFFFF);
             assert!(result.is_ok(), "Max non-hardened index should succeed");
+        }
+
+        /// This test checks the depth, index, and parent fingerprint of a derived child from an xpub according to BIP32 (for BCH)
+        #[test]
+        fn test_bip32_bch_depth_and_fingerprint() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
+            let child = xpub.derive_non_hardened(0).unwrap();
+            assert_eq!(child.depth, xpub.depth + 1, "Depth should increase by 1");
+            assert_eq!(child.child_number, 0, "Child number should match index");
+            assert_eq!(child.parent_fingerprint, xpub.fingerprint(), "Parent fingerprint mismatch");
         }
     }
 }
