@@ -98,9 +98,12 @@ mod tests {
             let child = xpub.derive_non_hardened(0).unwrap();
             assert_eq!(child.depth, xpub.depth + 1, "Depth should increase by 1");
             assert_eq!(child.child_number, 0, "Child number should match index");
-            assert_eq!(child.parent_fingerprint, xpub.fingerprint(), "Parent fingerprint mismatch");
+            assert_eq!(
+                child.parent_fingerprint,
+                xpub.fingerprint(),
+                "Parent fingerprint mismatch"
+            );
         }
-
     }
 
     /// Litecoin (LTC) BIP32 Test Module
@@ -204,9 +207,12 @@ mod tests {
             let child = xpub.derive_non_hardened(0).unwrap();
             assert_eq!(child.depth, xpub.depth + 1, "Depth should increase by 1");
             assert_eq!(child.child_number, 0, "Child number should match index");
-            assert_eq!(child.parent_fingerprint, xpub.fingerprint(), "Parent fingerprint mismatch");
+            assert_eq!(
+                child.parent_fingerprint,
+                xpub.fingerprint(),
+                "Parent fingerprint mismatch"
+            );
         }
-
     }
 
     mod dogecoin_bip32 {
@@ -296,9 +302,12 @@ mod tests {
             let child = xpub.derive_non_hardened(0).unwrap();
             assert_eq!(child.depth, xpub.depth + 1, "Depth should increase by 1");
             assert_eq!(child.child_number, 0, "Child number should match index");
-            assert_eq!(child.parent_fingerprint, xpub.fingerprint(), "Parent fingerprint mismatch");
+            assert_eq!(
+                child.parent_fingerprint,
+                xpub.fingerprint(),
+                "Parent fingerprint mismatch"
+            );
         }
-
     }
 
     // Bitcoin Cash (BCH) BIP32 Test Module
@@ -458,7 +467,11 @@ mod tests {
             let child = xpub.derive_non_hardened(0).unwrap();
             assert_eq!(child.depth, xpub.depth + 1, "Depth should increase by 1");
             assert_eq!(child.child_number, 0, "Child number should match index");
-            assert_eq!(child.parent_fingerprint, xpub.fingerprint(), "Parent fingerprint mismatch");
+            assert_eq!(
+                child.parent_fingerprint,
+                xpub.fingerprint(),
+                "Parent fingerprint mismatch"
+            );
         }
     }
 }
