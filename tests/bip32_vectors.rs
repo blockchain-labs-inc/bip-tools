@@ -104,6 +104,19 @@ mod tests {
                 "Parent fingerprint mismatch"
             );
         }
+
+        // Tests that serializing and then deserializing a BIP32 xpub preserves its data
+        #[test]
+        fn test_bip32_btc_serialization_round_trip() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
+            let serialized = xpub.to_base58();
+            let deserialized = Xpub::from_base58(&serialized, COIN_TYPE).unwrap();
+            assert_eq!(
+                xpub.to_base58(),
+                deserialized.to_base58(),
+                "Serialization round trip failed"
+            );
+        }
     }
 
     /// Litecoin (LTC) BIP32 Test Module
@@ -213,6 +226,19 @@ mod tests {
                 "Parent fingerprint mismatch"
             );
         }
+
+        // Tests that serializing and then deserializing a BIP32 xpub preserves its data
+        #[test]
+        fn test_bip32_ltc_serialization_round_trip() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
+            let serialized = xpub.to_base58();
+            let deserialized = Xpub::from_base58(&serialized, COIN_TYPE).unwrap();
+            assert_eq!(
+                xpub.to_base58(),
+                deserialized.to_base58(),
+                "Serialization round trip failed"
+            );
+        }
     }
 
     mod dogecoin_bip32 {
@@ -306,6 +332,19 @@ mod tests {
                 child.parent_fingerprint,
                 xpub.fingerprint(),
                 "Parent fingerprint mismatch"
+            );
+        }
+
+        // Tests that serializing and then deserializing a BIP32 xpub preserves its data
+        #[test]
+        fn test_bip32_doge_serialization_round_trip() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
+            let serialized = xpub.to_base58();
+            let deserialized = Xpub::from_base58(&serialized, COIN_TYPE).unwrap();
+            assert_eq!(
+                xpub.to_base58(),
+                deserialized.to_base58(),
+                "Serialization round trip failed"
             );
         }
     }
@@ -471,6 +510,19 @@ mod tests {
                 child.parent_fingerprint,
                 xpub.fingerprint(),
                 "Parent fingerprint mismatch"
+            );
+        }
+
+        // Tests that serializing and then deserializing a BIP32 xpub preserves its data
+        #[test]
+        fn test_bip32_bch_serialization_round_trip() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
+            let serialized = xpub.to_base58();
+            let deserialized = Xpub::from_base58(&serialized, COIN_TYPE).unwrap();
+            assert_eq!(
+                xpub.to_base58(),
+                deserialized.to_base58(),
+                "Serialization round trip failed"
             );
         }
     }
