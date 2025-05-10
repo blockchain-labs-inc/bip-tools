@@ -179,6 +179,20 @@ mod test {
                 "Serialization round-trip failed"
             );
         }
+
+        // Tests that derived BIP44 public keys are in compressed (33-byte) format
+        #[test]
+        fn test_bip44_btc_compression() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
+            let child_xpub = xpub
+                .derive_non_hardened(0)
+                .expect("Failed to derive child xPub");
+            assert_eq!(
+                child_xpub.public_key.serialize().len(),
+                33,
+                "Derived public key should be compressed (33 bytes)"
+            );
+        }
     }
 
     /// Litecoin (LTC) BIP44 Tests
@@ -370,6 +384,20 @@ mod test {
                 "Serialization round-trip failed"
             );
         }
+
+        // Tests that derived BIP44 public keys are in compressed (33-byte) format
+        #[test]
+        fn test_bip44_ltc_compression() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
+            let child_xpub = xpub
+                .derive_non_hardened(0)
+                .expect("Failed to derive child xPub");
+            assert_eq!(
+                child_xpub.public_key.serialize().len(),
+                33,
+                "Derived public key should be compressed (33 bytes)"
+            );
+        }
     }
 
     /// Dogecoin (DOGE) BIP44 Tests
@@ -526,6 +554,20 @@ mod test {
                 xpub.to_base58(),
                 deserialized.to_base58(),
                 "Serialization round-trip failed"
+            );
+        }
+
+        // Tests that derived BIP44 public keys are in compressed (33-byte) format
+        #[test]
+        fn test_bip44_doge_compression() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
+            let child_xpub = xpub
+                .derive_non_hardened(0)
+                .expect("Failed to derive child xPub");
+            assert_eq!(
+                child_xpub.public_key.serialize().len(),
+                33,
+                "Derived public key should be compressed (33 bytes)"
             );
         }
     }
@@ -768,6 +810,20 @@ mod test {
                 xpub.to_base58(),
                 deserialized.to_base58(),
                 "Serialization round-trip failed"
+            );
+        }
+
+        // Tests that derived BIP44 public keys are in compressed (33-byte) format
+        #[test]
+        fn test_bip44_bch_compression() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
+            let child_xpub = xpub
+                .derive_non_hardened(0)
+                .expect("Failed to derive child xPub");
+            assert_eq!(
+                child_xpub.public_key.serialize().len(),
+                33,
+                "Derived public key should be compressed (33 bytes)"
             );
         }
 
