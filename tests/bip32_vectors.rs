@@ -114,7 +114,7 @@ mod tests {
             assert_eq!(
                 xpub.to_base58(),
                 deserialized.to_base58(),
-                "Serialization round trip failed"
+                "Serialization round-trip failed"
             );
         }
     }
@@ -236,7 +236,7 @@ mod tests {
             assert_eq!(
                 xpub.to_base58(),
                 deserialized.to_base58(),
-                "Serialization round trip failed"
+                "Serialization round-trip failed"
             );
         }
     }
@@ -344,7 +344,7 @@ mod tests {
             assert_eq!(
                 xpub.to_base58(),
                 deserialized.to_base58(),
-                "Serialization round trip failed"
+                "Serialization round-trip failed"
             );
         }
     }
@@ -522,7 +522,7 @@ mod tests {
             assert_eq!(
                 xpub.to_base58(),
                 deserialized.to_base58(),
-                "Serialization round trip failed"
+                "Serialization round-trip failed"
             );
         }
     }
