@@ -117,6 +117,18 @@ mod tests {
                 "Serialization round-trip failed"
             );
         }
+
+        // Tests that derived BIP32 public keys are in compressed (33-byte) format
+        #[test]
+        fn test_bip32_btc_public_key_compression() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
+            let child = xpub.derive_non_hardened(0).unwrap();
+            assert_eq!(
+                child.public_key.serialize().len(),
+                33,
+                "Public key should be compressed"
+            );
+        }
     }
 
     /// Litecoin (LTC) BIP32 Test Module
@@ -239,6 +251,18 @@ mod tests {
                 "Serialization round-trip failed"
             );
         }
+
+        // Tests that derived BIP32 public keys are in compressed (33-byte) format
+        #[test]
+        fn test_bip32_ltc_public_key_compression() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
+            let child = xpub.derive_non_hardened(0).unwrap();
+            assert_eq!(
+                child.public_key.serialize().len(),
+                33,
+                "Public key should be compressed"
+            );
+        }
     }
 
     mod dogecoin_bip32 {
@@ -345,6 +369,18 @@ mod tests {
                 xpub.to_base58(),
                 deserialized.to_base58(),
                 "Serialization round-trip failed"
+            );
+        }
+
+        // Tests that derived BIP32 public keys are in compressed (33-byte) format
+        #[test]
+        fn test_bip32_doge_public_key_compression() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
+            let child = xpub.derive_non_hardened(0).unwrap();
+            assert_eq!(
+                child.public_key.serialize().len(),
+                33,
+                "Public key should be compressed"
             );
         }
     }
@@ -523,6 +559,18 @@ mod tests {
                 xpub.to_base58(),
                 deserialized.to_base58(),
                 "Serialization round-trip failed"
+            );
+        }
+
+        // Tests that derived BIP32 public keys are in compressed (33-byte) format
+        #[test]
+        fn test_bip32_bch_public_key_compression() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
+            let child = xpub.derive_non_hardened(0).unwrap();
+            assert_eq!(
+                child.public_key.serialize().len(),
+                33,
+                "Public key should be compressed"
             );
         }
     }
