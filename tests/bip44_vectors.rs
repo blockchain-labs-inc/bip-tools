@@ -152,6 +152,20 @@ mod test {
                 "Bitcoin address should start with '1'"
             );
         }
+
+        // Tests that BIP44 derivation correctly increments depth and sets parent fingerprint
+        #[test]
+        fn test_bip44_btc_depth_progression() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
+            let chain = xpub
+                .derive_non_hardened(0)
+                .unwrap();
+            let child = chain
+                .derive_non_hardened(0)
+                .unwrap();
+            assert_eq!(child.depth, xpub.depth + 2, "Depth should be 2");
+            assert_eq!(child.parent_fingerprint, chain.fingerprint(), "Parent fingerprint missmatch");
+        }
     }
 
     /// Litecoin (LTC) BIP44 Tests
@@ -316,6 +330,20 @@ mod test {
                 "Litecoin address should start with 'L'"
             );
         }
+
+        // Tests that BIP44 derivation correctly increments depth and sets parent fingerprint
+        #[test]
+        fn test_bip44_ltc_depth_progression() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
+            let chain = xpub
+                .derive_non_hardened(0)
+                .unwrap();
+            let child = chain
+                .derive_non_hardened(0)
+                .unwrap();
+            assert_eq!(child.depth, xpub.depth + 2, "Depth should be 2");
+            assert_eq!(child.parent_fingerprint, chain.fingerprint(), "Parent fingerprint missmatch");
+        }
     }
 
     /// Dogecoin (DOGE) BIP44 Tests
@@ -446,6 +474,20 @@ mod test {
                 address.starts_with("D"),
                 "Dogecoin address should start with 'D'"
             );
+        }
+
+        // Tests that BIP44 derivation correctly increments depth and sets parent fingerprint
+        #[test]
+        fn test_bip44_doge_depth_progression() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
+            let chain = xpub
+                .derive_non_hardened(0)
+                .unwrap();
+            let child = chain
+                .derive_non_hardened(0)
+                .unwrap();
+            assert_eq!(child.depth, xpub.depth + 2, "Depth should be 2");
+            assert_eq!(child.parent_fingerprint, chain.fingerprint(), "Parent fingerprint missmatch");
         }
     }
 
@@ -661,6 +703,20 @@ mod test {
                 address.starts_with("bitcoincash:q"),
                 "Bitcoin Cash address should start with 'bitcoincash:q'"
             );
+        }
+
+        // Tests that BIP44 derivation correctly increments depth and sets parent fingerprint
+        #[test]
+        fn test_bip44_bch_depth_progression() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
+            let chain = xpub
+                .derive_non_hardened(0)
+                .unwrap();
+            let child = chain
+                .derive_non_hardened(0)
+                .unwrap();
+            assert_eq!(child.depth, xpub.depth + 2, "Depth should be 2");
+            assert_eq!(child.parent_fingerprint, chain.fingerprint(), "Parent fingerprint missmatch");
         }
 
         const XPUB_BCH_BIP44_1: &str = "xpub6D1S8ySBPc2nQtT6LBcfzGyaxvfBsBdFpy1NmNiHJJdBv68JaTyqKpJv7sNLPkZndjo1UcXZLBGxj2gxPdx6EMygzsR3MCEVoqcnqvN8hi5";
