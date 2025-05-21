@@ -1,4 +1,3 @@
-use bs58;
 use ripemd::Ripemd160;
 use secp256k1::PublicKey;
 use sha2::{Digest, Sha256};
