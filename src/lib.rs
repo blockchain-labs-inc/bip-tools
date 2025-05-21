@@ -1,4 +1,4 @@
-use base58::{FromBase58, ToBase58};
+use bs58;
 use ripemd::Ripemd160;
 use secp256k1::PublicKey;
 use sha2::{Digest, Sha256};
@@ -49,8 +49,8 @@ impl Xpub {
 
     /// Converts a Base58 encoded xpub string into an Xpub instance.
     pub fn from_base58(xpub: &str, coin_type: CoinType) -> Result<Self, String> {
-        let decoded = xpub
-            .from_base58()
+        let decoded = bs58::decode(xpub)
+            .into_vec()
             .map_err(|e| format!("Base58 decode error: {:?}", e))?;
         if decoded.len() != 82 {
             return Err("Invalid xpub length".to_string());
@@ -121,7 +121,7 @@ impl Xpub {
         final_data[..78].copy_from_slice(&serialized);
         final_data[78..82].copy_from_slice(&checksum[..4]);
 
-        final_data.to_base58()
+        bs58::encode(final_data).into_string()
     }
 
     /// Generates a legacy P2PKH (Pay to Public Key Hash) Bitcoin address from the public key
@@ -138,7 +138,7 @@ impl Xpub {
 
         match self.coin_type {
             CoinType::BitcoinCash => {
-                let format = format.as_ref().unwrap_or(&AddressFormat::Legacy);
+                let format = format.as_ref().unwrap_or(&AddressFormat::CashAddr);
                 CashAddress::from_pubkey(&self.public_key.serialize(), format)
             }
             _ => {
@@ -152,7 +152,7 @@ impl Xpub {
                 address_bytes[1..21].copy_from_slice(&hash160);
                 let checksum = Sha256::digest(Sha256::digest(&address_bytes[..21]));
                 address_bytes[21..25].copy_from_slice(&checksum[..4]);
-                address_bytes.to_base58()
+                bs58::encode(address_bytes).into_string()
             }
         }
     }

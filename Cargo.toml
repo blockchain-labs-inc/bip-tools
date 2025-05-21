@@ -18,9 +18,7 @@ secp256k1 = "0.29"
 hmac = "0.12"
 sha2 = "0.10"
 ripemd = "0.1"
-base58 = "0.2"
 clap = { version = "4.5.16", features = ["derive"] }
-lazy_static = "1.5.0"
 bs58 = "0.5.1"
 
 [package.metadata.bin]
