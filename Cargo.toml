@@ -9,10 +9,6 @@ description = "A Rust library and CLI tool for Bitcoin address generation and ma
 name = "bip-tools"
 path = "src/main.rs"
 
-[package.metadata.llvm-cov]
-output-dir = "coverage"
-html = true
-
 [dependencies]
 secp256k1 = "0.29"
 hmac = "0.12"
@@ -20,6 +16,3 @@ sha2 = "0.10"
 ripemd = "0.1"
 clap = { version = "4.5.16", features = ["derive"] }
 bs58 = "0.5.1"
-
-[package.metadata.bin]
-commitlint-rs = { version = "0.1.11", bins = ["commitlint"] }
