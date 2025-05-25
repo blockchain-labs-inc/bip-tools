@@ -66,7 +66,7 @@ impl Xpub {
         // bytes [4]: depth
         // bytes [5..9]: parent fingerprint
         // bytes [9..13]: child number
-        // bytes [13..45]: chain cod
+        // bytes [13..45]: chain code
         // bytes [45..78]: public key
         let depth = decoded[4];
         let parent_fingerprint = u32::from_be_bytes(decoded[5..9].try_into().unwrap());
