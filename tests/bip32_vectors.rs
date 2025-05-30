@@ -27,7 +27,7 @@ mod tests {
             );
         }
 
-        /// Test consistency of BIP32 derivation
+        /// Ensure BIP32 derivation for BTC is deterministic (same input yields same output)
         #[test]
         fn test_bip32_btc_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
@@ -39,7 +39,7 @@ mod tests {
             );
         }
 
-        /// Test BIP32 derivation consistency
+        /// Test BIP32 derivation for BTC over a large index range
         #[test]
         fn test_bip32_btc_large_index_range() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
@@ -173,7 +173,7 @@ mod tests {
             );
         }
 
-        /// Test consistency of BIP32 derivation
+        /// Ensure BIP32 derivation for LTC is deterministic (same input yields same output)
         #[test]
         fn test_bip32_ltc_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
@@ -185,7 +185,7 @@ mod tests {
             );
         }
 
-        /// Test BIP32 derivation consistency
+        /// Test BIP32 derivation for LTC over a large index range
         #[test]
         fn test_bip32_ltc_large_index_range() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
@@ -320,7 +320,7 @@ mod tests {
             }
         }
 
-        /// Test consistency of BIP32 derivation
+        /// Ensure BIP32 derivation for DOGE is deterministic (same input yields same output)
         #[test]
         fn test_bip32_doge_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
@@ -332,7 +332,7 @@ mod tests {
             );
         }
 
-        /// Test BIP32 derivation consistency
+        /// Test BIP32 derivation for DOGE over a large index range
         #[test]
         fn test_bip32_doge_large_index_range() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
@@ -511,7 +511,7 @@ mod tests {
             );
         }
 
-        /// Test consistency of BIP32 derivation
+        /// Ensure BIP32 derivation for BCH is deterministic (same input yields same output)
         #[test]
         fn test_bip32_bch_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
@@ -523,7 +523,7 @@ mod tests {
             );
         }
 
-        /// Test BIP32 derivation consistency
+        /// Test BIP32 derivation for BCH over a large index range
         #[test]
         fn test_bip32_bch_large_index_range() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
