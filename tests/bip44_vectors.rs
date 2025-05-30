@@ -53,7 +53,7 @@ mod test {
             }
         }
 
-        /// Test consisteny of BIP44 derivation
+        /// Ensure BIP44 derivation for BTC is deterministic (same input yields same output)
         #[test]
         fn test_bip44_btc_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
@@ -76,7 +76,7 @@ mod test {
             );
         }
 
-        /// Test BIP44 derivation with large index range
+        /// Test BIP44 derivation for BTC over a large index range
         #[test]
         fn test_bip44_btc_large_index_range() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
@@ -270,7 +270,7 @@ mod test {
             }
         }
 
-        /// Test consisteny of BIP44 derivation (Litecoin)
+        /// Ensure BIP44 derivation for LTC is deterministic (same input yields same output)
         #[test]
         fn test_bip44_ltc_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
@@ -293,7 +293,7 @@ mod test {
             );
         }
 
-        /// Test BIP44 derivation with large index range
+        /// Test BIP44 derivation for LTC over a large index range
         #[test]
         fn test_bip44_ltc_large_index_range() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
@@ -498,7 +498,7 @@ mod test {
             }
         }
 
-        /// Test consisteny of BIP44 derivation (Litecoin)
+        /// Ensure BIP44 derivation for DOGE is deterministic (same input yields same output)
         #[test]
         fn test_bip44_doge_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
@@ -510,7 +510,7 @@ mod test {
             );
         }
 
-        /// Test generating zero BIP44 addresses (Litecoin)
+        /// Test generating zero BIP44 addresses (DOGE)
         #[test]
         fn test_bip44_doge_zero_address() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
@@ -521,7 +521,7 @@ mod test {
             );
         }
 
-        /// Test BIP44 derivation with large index range
+        /// Test BIP44 derivation for DOGE over a large index range
         #[test]
         fn test_bip44_doge_large_index_range() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
@@ -783,7 +783,7 @@ mod test {
             }
         }
 
-        /// Test consisteny of BIP44 derivation (Litecoin)
+        /// Ensure BIP44 derivation for BCH is deterministic (same input yields same output) - chain type = 0 (external addresses)
         #[test]
         fn test_bip44_bch_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
@@ -795,7 +795,29 @@ mod test {
             );
         }
 
-        /// Test generating zero BIP44 addresses (Litecoin)
+        /// Test BIP44 derivation for BCH over a large index range
+        #[test]
+        fn test_bip44_bch_large_index_range() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
+            let count = 10000;
+            let addresses = xpub
+                .derive_bip44_addresses(count, 0, &None)
+                .expect("BIP44 large index derivation failed");
+            assert_eq!(
+                addresses.len(),
+                count as usize,
+                "Should generate 10000 addresses"
+            );
+            for (i, addr) in addresses.iter().take(3).enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_BCH_CASHADDR[i],
+                    "BIP44 address at index {} does not match expected",
+                    i
+                );
+            }
+        }
+
+        /// Test generating zero BIP44 addresses (BCH)
         #[test]
         fn test_bip44_bch_zero_address() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
