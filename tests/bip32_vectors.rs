@@ -39,6 +39,21 @@ mod tests {
             );
         }
 
+        /// Test BIP32 derivation consistency
+        #[test]
+        fn test_bip32_btc_large_index_range() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
+            let count = 1000;
+            let addresses = xpub
+                .derive_bip32_addresses(count, &None)
+                .expect("BIP32 large index derivation failed");
+            assert_eq!(
+                addresses.len(),
+                count as usize,
+                "Should generate 1000 addresses"
+            );
+        }
+
         /// Test BIP44 Bitcoin xpub parsing with a short invalid xpub and checks if an error is returned
         #[test]
         fn test_bip32_btc_short_invalid_xpub() {
@@ -317,6 +332,21 @@ mod tests {
             );
         }
 
+        /// Test BIP32 derivation consistency
+        #[test]
+        fn test_bip32_doge_large_index_range() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
+            let count = 1000;
+            let addresses = xpub
+                .derive_bip32_addresses(count, &None)
+                .expect("BIP32 large index derivation failed");
+            assert_eq!(
+                addresses.len(),
+                count as usize,
+                "Should generate 1000 addresses"
+            );
+        }
+
         /// Test BIP32 Dogecoin xpub parsing with a short invalid xpub and checks if an error is returned
         #[test]
         fn test_bip32_doge_short_invalid_xpub() {
@@ -490,6 +520,21 @@ mod tests {
             assert_eq!(
                 addresses1, addresses2,
                 "BIP32 addresses should be consistent across derivations"
+            );
+        }
+
+        /// Test BIP32 derivation consistency
+        #[test]
+        fn test_bip32_bch_large_index_range() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
+            let count = 1000;
+            let addresses = xpub
+                .derive_bip32_addresses(count, &None)
+                .expect("BIP32 large index derivation failed");
+            assert_eq!(
+                addresses.len(),
+                count as usize,
+                "Should generate 1000 addresses"
             );
         }
 
