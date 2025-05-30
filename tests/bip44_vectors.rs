@@ -76,6 +76,28 @@ mod test {
             );
         }
 
+        /// Test BIP44 derivation with large index range
+        #[test]
+        fn test_bip44_btc_large_index_range() {
+            let xpub = Xpub::from_base58(XPUB_BTC_BIP44, COIN_TYPE).unwrap();
+            let count = 10000;
+            let addresses = xpub
+                .derive_bip44_addresses(count, 0, &None)
+                .expect("BIP44 large index derivation failed");
+            assert_eq!(
+                addresses.len(),
+                count as usize,
+                "Should generate 10000 addresses"
+            );
+            for (i, addr) in addresses.iter().take(3).enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_BTC[i],
+                    "BIP44 address at index {} does not match expected",
+                    i
+                );
+            }
+        }
+
         /// Test BIP44 Bitcoin xpub parsing with a short invalid xpub and checks if an errors is returned
         #[test]
         fn test_bip44_btc_short_invalid_xpub() {
@@ -248,18 +270,41 @@ mod test {
             }
         }
 
+        /// Test consisteny of BIP44 derivation (Litecoin)
+        #[test]
+        fn test_bip44_ltc_derivation_consistency() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
+            let addresses1 = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
+            let addresses2 = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
+            assert_eq!(
+                addresses1, addresses2,
+                "BIP44 addresses should be consistent"
+            );
+        }
+
+        /// Test generating zero BIP44 addresses (Litecoin)
+        #[test]
+        fn test_bip44_ltc_zero_address() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip44_addresses(0, 0, &None).unwrap();
+            assert!(
+                addresses.is_empty(),
+                "Should return an empty vector for zero addresses"
+            );
+        }
+
         /// Test BIP44 derivation with large index range
         #[test]
         fn test_bip44_ltc_large_index_range() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP44, COIN_TYPE).unwrap();
-            let count = 1000;
+            let count = 10000;
             let addresses = xpub
                 .derive_bip44_addresses(count, 0, &None)
                 .expect("BIP44 large index derivation failed");
             assert_eq!(
                 addresses.len(),
                 count as usize,
-                "Should generate 1000 addresses"
+                "Should generate 10000 addresses"
             );
             for (i, addr) in addresses.iter().take(3).enumerate() {
                 assert_eq!(
@@ -453,6 +498,51 @@ mod test {
             }
         }
 
+                /// Test consisteny of BIP44 derivation (Litecoin)
+        #[test]
+        fn test_bip44_doge_derivation_consistency() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
+            let addresses1 = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
+            let addresses2 = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
+            assert_eq!(
+                addresses1, addresses2,
+                "BIP44 addresses should be consistent"
+            );
+        }
+
+        /// Test generating zero BIP44 addresses (Litecoin)
+        #[test]
+        fn test_bip44_doge_zero_address() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip44_addresses(0, 0, &None).unwrap();
+            assert!(
+                addresses.is_empty(),
+                "Should return an empty vector for zero addresses"
+            );
+        }
+
+        /// Test BIP44 derivation with large index range
+        #[test]
+        fn test_bip44_doge_large_index_range() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
+            let count = 10000;
+            let addresses = xpub
+                .derive_bip44_addresses(count, 0, &None)
+                .expect("BIP44 large index derivation failed");
+            assert_eq!(
+                addresses.len(),
+                count as usize,
+                "Should generate 10000 addresses"
+            );
+            for (i, addr) in addresses.iter().take(3).enumerate() {
+                assert_eq!(
+                    addr, BIP44_EXPECTED_ADDRESS_DOGE[i],
+                    "BIP44 address at index {} does not match expected",
+                    i
+                );
+            }
+        }
+
         /// Test BIP44 Dogecoin xpub parsing with a short invalid xpub and checks if an error is returned
         #[test]
         fn test_bip44_doge_short_invalid_xpub() {
@@ -488,7 +578,7 @@ mod test {
 
         /// Ensure hardened index derivation with xPub fails as per BIP44 rules.
         #[test]
-        fn test_doge_bip44_hardened_index() {
+        fn test_bip44_doge_hardened_index() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
             let result = xpub.derive_non_hardened(0x80000000);
             assert!(result.is_err(), "Hardened index derivation should fail");
@@ -691,6 +781,29 @@ mod test {
                     i
                 )
             }
+        }
+
+                /// Test consisteny of BIP44 derivation (Litecoin)
+        #[test]
+        fn test_bip44_bch_derivation_consistency() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
+            let addresses1 = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
+            let addresses2 = xpub.derive_bip44_addresses(3, 0, &None).unwrap();
+            assert_eq!(
+                addresses1, addresses2,
+                "BIP44 addresses should be consistent"
+            );
+        }
+
+        /// Test generating zero BIP44 addresses (Litecoin)
+        #[test]
+        fn test_bip44_bch_zero_address() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();
+            let addresses = xpub.derive_bip44_addresses(0, 0, &None).unwrap();
+            assert!(
+                addresses.is_empty(),
+                "Should return an empty vector for zero addresses"
+            );
         }
 
         /// Test BIP44 Bitcoin Cash xpub parsing with a short invalid xpub and checks if an error is returned
