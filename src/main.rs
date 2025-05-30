@@ -3,7 +3,7 @@ use clap::{Args, Parser, Subcommand};
 
 #[derive(Debug, Parser)]
 #[command(
-    name = "bip_tools",                   // Name of the CLI application
+    name = "bip_tools",                    // Name of the CLI application
     arg_required_else_help(true),          // Show help if no arguments provided
     version,                               // Enables automatic version flag
     about,                                 // Short description from Cargo.toml

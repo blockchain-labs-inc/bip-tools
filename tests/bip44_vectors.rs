@@ -498,7 +498,7 @@ mod test {
             }
         }
 
-                /// Test consisteny of BIP44 derivation (Litecoin)
+        /// Test consisteny of BIP44 derivation (Litecoin)
         #[test]
         fn test_bip44_doge_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_DOGE_BIP44, COIN_TYPE).unwrap();
@@ -783,7 +783,7 @@ mod test {
             }
         }
 
-                /// Test consisteny of BIP44 derivation (Litecoin)
+        /// Test consisteny of BIP44 derivation (Litecoin)
         #[test]
         fn test_bip44_bch_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_BCH_BIP44, COIN_TYPE).unwrap();

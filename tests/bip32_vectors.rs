@@ -173,7 +173,7 @@ mod tests {
             );
         }
 
-                /// Test consistency of BIP32 derivation
+        /// Test consistency of BIP32 derivation
         #[test]
         fn test_bip32_ltc_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
