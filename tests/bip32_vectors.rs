@@ -29,7 +29,7 @@ mod tests {
 
         /// Test consistency of BIP32 derivation
         #[test]
-        fn test_bip32_derivation_consistency() {
+        fn test_bip32_btc_derivation_consistency() {
             let xpub = Xpub::from_base58(XPUB_BTC_BIP32, COIN_TYPE).unwrap();
             let addresses1 = xpub.derive_bip32_addresses(1, &None).unwrap();
             let addresses2 = xpub.derive_bip32_addresses(1, &None).unwrap();
@@ -155,6 +155,18 @@ mod tests {
             assert_eq!(
                 addresses[0], BIP32_EXPECTED_ADDRESS_LTC[0],
                 "Multiple BIP32 addresses do not match expected"
+            );
+        }
+
+                /// Test consistency of BIP32 derivation
+        #[test]
+        fn test_bip32_ltc_derivation_consistency() {
+            let xpub = Xpub::from_base58(XPUB_LTC_BIP32, COIN_TYPE).unwrap();
+            let addresses1 = xpub.derive_bip32_addresses(1, &None).unwrap();
+            let addresses2 = xpub.derive_bip32_addresses(1, &None).unwrap();
+            assert_eq!(
+                addresses1, addresses2,
+                "BIP32 addresses should be consistent across derivations"
             );
         }
 
@@ -291,6 +303,18 @@ mod tests {
                     "Multiple BIP32 addresses do not match expected"
                 );
             }
+        }
+
+        /// Test consistency of BIP32 derivation
+        #[test]
+        fn test_bip32_doge_derivation_consistency() {
+            let xpub = Xpub::from_base58(XPUB_DOGE_BIP32, COIN_TYPE).unwrap();
+            let addresses1 = xpub.derive_bip32_addresses(1, &None).unwrap();
+            let addresses2 = xpub.derive_bip32_addresses(1, &None).unwrap();
+            assert_eq!(
+                addresses1, addresses2,
+                "BIP32 addresses should be consistent across derivations"
+            );
         }
 
         /// Test BIP32 Dogecoin xpub parsing with a short invalid xpub and checks if an error is returned
@@ -454,6 +478,18 @@ mod tests {
             assert_eq!(
                 addresses[0], BIP32_EXPECTED_ADDRESS_BCH_CASHADDR_PREFIX[0],
                 "Multiple BIP32 addresses do not match expected"
+            );
+        }
+
+        /// Test consistency of BIP32 derivation
+        #[test]
+        fn test_bip32_bch_derivation_consistency() {
+            let xpub = Xpub::from_base58(XPUB_BCH_BIP32, COIN_TYPE).unwrap();
+            let addresses1 = xpub.derive_bip32_addresses(1, &None).unwrap();
+            let addresses2 = xpub.derive_bip32_addresses(1, &None).unwrap();
+            assert_eq!(
+                addresses1, addresses2,
+                "BIP32 addresses should be consistent across derivations"
             );
         }
 
