@@ -124,6 +124,16 @@ Child 2: qram84egkfm...
 - `--help`: Display help information
 - `--version`: Display version information
 
+### Using Docker
+
+You can run bip-tools using Docker without installing Rust or any dependencies locally.
+
+#### Building the Docker image
+
+```bash
+docker build -t bip-tools .
+
+
 ## Technical Details
 
 ### Implementation Notes
