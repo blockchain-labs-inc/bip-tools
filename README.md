@@ -124,17 +124,17 @@ Child 2: qram84egkfm...
 - `--help`: Display help information
 - `--version`: Display version information
 
-### Using Docker
+## Using Docker
 
 You can run bip-tools using Docker without installing Rust or any dependencies locally.
 
-#### Building the Docker image
+### Building the Docker image
 
 ```bash
 docker build -t bip-tools .
 ```
 
-### BIP32 Address Generation (for Docker)
+#### BIP32 Address Generation (for Docker)
 
 Generate BIP32 Addresses:
 ```bash
@@ -146,7 +146,7 @@ Example:
 docker run bip32 "xpub6CUGRUo..." 5 bitcoin 0
 ```
 
-### BIP44 Address Generation (for Docker)
+#### BIP44 Address Generation (for Docker)
 
 ```bash
 docker run bip44 <XPUB> <COUNT> <COIN> [OPTIONS] <0|1>
