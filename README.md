@@ -187,7 +187,7 @@ biptools/
 │ └── bip44_vectors.rs     # Test vectors and validation tests for BIP44 standard
 ├── Cargo.toml             # Project dependencies and metadata
 └── README.md              # This file
-```
+
 
 ## Contributing
 
