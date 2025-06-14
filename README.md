@@ -132,7 +132,7 @@ You can run bip-tools using Docker without installing Rust or any dependencies l
 
 ```bash
 docker build -t bip-tools .
-
+```
 
 ## Technical Details
 
@@ -171,7 +171,6 @@ Benchmark results on standard hardware (Intel i5, 8GB RAM):
 
 ## Project Structure
 
-```
 biptools/
 |
 |── docs/
