@@ -119,7 +119,7 @@ Child 2: qram84egkfm...
 - `<XPUB>`: Your extended public key in Base58 format
 - `<COUNT>`: Number of addresses to generate
 - `<COIN>`: Specifies which cryptocurrency to generate addresses for (bitcoin, litecoin, dogecoin, bitcoincash).
-- `<0|1>`: Determines address type - 0 for receiving addresses, 1 for change addresses
+- `<0|1>`: Determines address type - Constant 0 is used for external chain and constant 1 for internal chain (also known as change addresses).
 - `--format`:  Selects address format for Bitcoin Cash (legacy for old-style, cashaddr for new format, cashaddr-p for new format with prefix).
 - `--help`: Display help information
 - `--version`: Display version information
