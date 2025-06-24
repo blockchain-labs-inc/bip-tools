@@ -27,3 +27,5 @@ target/
 
 coverage/
 *.profraw
+
+.devcontainer/
